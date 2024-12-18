@@ -31,7 +31,7 @@ SAE Manager est une application web de gestion des projets de SAE (Situations d�
 1. **Cloner le dépôt** :
    ```bash
    git clone https://github.com/nezou1/SAE3.2-Manager.git
-   cd sae-manager
+   cd sae3.2-manager
    ```
 
 ## Utilisation
