@@ -8,26 +8,25 @@ class Site {
     private $menu;
 
 	public function __construct() {
-		$this->moduleNom = isset($_GET['module']) ? $_GET['module'] : "responsable";
+		$this->moduleNom = isset($_GET['module']) ? $_GET['module'] : "soutenance";
 
 		switch ($this->moduleNom) {
-			case "etudiant" :
-				//require_once "composants/menu/composant_menu_etudiant.php";
-			case "responsable" :
-				require_once "composants/menu/composant_menu_responsable.php";
-                $menu = new ComposantMenuResponsable();
-			case "intervenant" :
-                //require_once "composants/menu/composant_menu_intervenant.php";
-			case "connexion" :
-				require_once "modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
+			// case "etudiant" :
+				//require_once "composants/menu/etudiant/composant_menu_etudiant.php";
+			case "soutenance" :                
+				require_once "C:/wamp64/www/SAE3.2-Manager/modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
 				break;
+			// case "intervenant" :
+                //require_once "composants/menu/intervenants/composant_menu_intervenant.php";
+			// case "connexion" :
+			// 	break;
 			default :
 				die ("Module inexistant");
 		}
 	}
 	
 	public function exec_module() {
-		$module_class = "Mod".$this->moduleNom;
+		$module_class = "Mod".ucfirst($this->moduleNom);
 		$this->module = new $module_class();
 		$this->module->exec();
 	}

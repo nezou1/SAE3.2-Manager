@@ -6,7 +6,7 @@
     <title>Inscription - SAE Manager</title>
     <!-- Lien vers Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- <style>
+    <style>
         body {
             margin: 0;
             font-family: Arial, sans-serif;
@@ -30,7 +30,27 @@
         button:hover {
             background-color: #5a6268;
         }
-    </style> -->
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -48,4 +68,7 @@
             <footer>
                 <?php echo $footer->getAffichage();?>
             </footer>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

@@ -1,6 +1,6 @@
 <?php
 
-require_once "composants/menu/vue_menu_responsable.php";
+require_once "C:/wamp64/www/SAE3.2-Manager/composants/menu/responsable/vue_menu_responsable.php";
 
 
 class ControleurCompMenuResponsable {
@@ -12,7 +12,7 @@ class ControleurCompMenuResponsable {
 	}
 
 	public function exec () {
-		$this->vue->vue_menu();
+		$this->vue->vue_menu_responsable();
 	}
 	
 	public function getVue() {
