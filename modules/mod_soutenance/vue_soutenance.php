@@ -8,31 +8,32 @@ class VueSoutenance extends VueGenerique{
 
     public function get_soutenances($soutenances) {
     ?>
-        <section>
-            <h1>Soutenances</h1>
-            <?= $this->get_table_soutenance($soutenances)?>
-            <a href="index.php?module=soutenance&action=form_ajout">
-                <button class="btn btn-primary w-100">Ajouter une Soutenance</button>
-            </a>
+        <h1>Soutenances</h1>
+                <?= $this->get_table_soutenance($soutenances)?>
+                <a href="index.php?module=soutenance&action=form_ajout">
+                    <button class="btn btn-primary w-100">Ajouter une Soutenance</button>
+                </a>
             </div>
-            </div> 
-        </section>
+        </section> 
+        
 <?php
     }
     public function get_liste_soutenances($soutenances) {
     ?>      
-        <section>
-            <?= $this->get_table_soutenance($soutenances)?>
+        <div class="container">
+            <div class="row">
+                        <?= $this->get_table_soutenance($soutenances)?>
+                    </div>
+                </section>
             </div>
-            </div>
-        </section>        
+        </div>       
     <?php
         }
 
     public function get_table_soutenance($soutenances) {
 ?>      
         <!-- Liste des soutenances -->
-        <div class="col-md-6">
+        <section class="col-md-6">
             <div class="table-container">
                 <!-- <h3>Liste des soutenances</h3> -->
                 <table class="table table-striped">
@@ -80,12 +81,12 @@ class VueSoutenance extends VueGenerique{
 
     public function form_ajout($errors) {
         ?>
+        <h1>Ajouter une Soutenance</h1>
         <div class="container">
             <div class="row">
                 <!-- Formulaire d'ajout de soutenance -->
-                <div class="col-md-6">
+                <section class="col-md-6">
                     <div class="form-container">
-                        <h3>Ajouter une Soutenance</h3>
                             <form action="index.php?module=soutenance&action=ajout" method="POST" novalidate>
                             <!-- Nom du Groupe -->
                             <div class="mb-3">
@@ -145,7 +146,7 @@ class VueSoutenance extends VueGenerique{
                             </div>
                             <!-- Jurys -->
                             <div class="mb-3">
-                                <label for="jurys">Jurys :</label>
+                                <label for="jurys" class="form-label">Jurys</label>
                                 <select name="jurys[]" id="jurys" multiple>
                                     <?php foreach ($jurys as $jury): ?>
                                         <option value="<?= htmlspecialchars($jury['idEns']) ?>">
@@ -159,7 +160,7 @@ class VueSoutenance extends VueGenerique{
                             </div>
                             <input type="submit" class="btn btn-primary w-100" value="Ajouter">
                     </form>
-                </div>
+                </section>
             </div>
         </div>
 <?php
