@@ -20,6 +20,7 @@ $menu = new ComposantMenuResponsable();
 $footer = new ComposantFooter();
 
 $module_html = $site->get_module()->get_affichage();
+$module_title = $site->get_module()->get_title();
 include_once "C:/wamp64/www/SAE3.2-Manager/templates/template.php";
 
 ?>
