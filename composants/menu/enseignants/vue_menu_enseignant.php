@@ -1,5 +1,5 @@
 <?php
-class VueCompMenuResponsable extends VueCompGenerique {
+class VueCompMenuEnseignant extends VueCompGenerique {
 
 	public function __construct(){
 		$this->affichage .=
