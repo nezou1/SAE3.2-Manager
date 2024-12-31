@@ -35,7 +35,7 @@
     <div class="container">
         <div class="card shadow p-4">
             <div class="text-center">
-                <img src="../../../../assets/logo.png" alt="SAE Manager Logo" class="logo">
+                <img src="/SAE3.2-Manager/assets/logo.png" alt="SAE Manager Logo" class="logo">
                 <h2 class="mb-4">Inscription</h2>
             </div>
             <form action="/public/index.php?action=register" method="POST">
