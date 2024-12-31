@@ -10,12 +10,64 @@
             background-color: #F7F1E9;
             font-family: Arial, sans-serif;
         }
+        /* Navbar */
         .navbar {
-            background-color: #6c757d;
+            background-color: #94A79E; /* Couleur de fond */
+            padding: 10px 20px;
         }
-        .navbar a {
+
+        .navbar-brand img {
+            max-height: 40px; /* Taille du logo */
+        }
+
+        .navbar-nav .nav-link {
+            color: white; /* Couleur des liens */
+            font-size: 16px;
+            margin-right: 20px;
+        }
+
+        .navbar-nav .nav-link:hover {
+            text-decoration: underline;
+            color: #dcdcdc; /* Couleur au survol */
+        }
+
+        .form-control {
+            border-radius: 20px; /* Design arrondi */
+            padding-left: 40px;
+            background-color: #f0f0f0;
+        }
+
+        .form-control::placeholder {
+            color: #a3a3a3;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #a3a3a3;
+        }
+
+        /* Icônes de droite */
+        .navbar-icons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .navbar-icons i {
+            font-size: 20px;
             color: white;
-            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .navbar-icons img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
         }
         .dashboard-container {
             display: flex;
@@ -55,16 +107,33 @@
 </head>
 <body>
     <!-- Barre de navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
+    <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Bonjour</a>
-            <div>
+            <!-- Logo -->
+            <a class="navbar-brand" href="#">
+                <img src="/SAE3.2-Manager/assets/logo.png" alt="Logo SAE Manager">
+            </a>
+
+            <!-- Liens de navigation -->
+            <div class="navbar-nav">
                 <a class="nav-link" href="#">Mes SAE</a>
-                <a class="nav-link" href="#">Lien</a>
-                <a class="nav-link" href="#">Lien</a>
+                <a class="nav-link" href="#">Lien 1</a>
+                <a class="nav-link" href="#">Lien 2</a>
+                <a class="nav-link" href="#">Lien 3</a>
             </div>
 
-            <input type="search" placeholder="Rechercher" class="form-control me-2">
+            <!-- Barre de recherche -->
+            <form class="d-flex position-relative mx-auto" style="max-width: 300px;">
+                <i class="bi bi-search search-icon"></i> <!-- Icône de recherche -->
+                <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+            </form>
+
+            <!-- Icônes à droite -->
+            <div class="navbar-icons">
+                <i class="bi bi-bell"></i> <!-- Icône Notification -->
+                <i class="bi bi-chat-dots"></i> <!-- Icône Message -->
+                <img src="assets/profile.jpg" alt="Profil"> <!-- Icône Profil -->
+            </div>
         </div>
     </nav>
 
