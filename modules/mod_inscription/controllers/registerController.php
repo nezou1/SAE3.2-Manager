@@ -14,7 +14,7 @@ class RegisterController {
             $email = $_POST['email'] ?? '';
             $profil = $_POST['profil'] ?? 'etudiant';
             $activation_key = $_POST['activation_key'] ?? null;
-            $password = 'defaultPassword123'; // Par défaut, tu peux modifier ça
+            $password = $_POST['password'] ?? ''; // Récupération du mot de passe
 
             if (empty($nom) || empty($prenom) || empty($email)) {
                 echo "Tous les champs doivent être remplis.";
@@ -27,7 +27,7 @@ class RegisterController {
             }
 
             $this->userModel->inscrire($nom, $prenom, $email, $password, $profil, $activation_key);
-            header('Location: /public/index.php?action=success');
+            header('Location: ./index.php?action=success');
             exit;
         }
 

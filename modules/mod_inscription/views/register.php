@@ -38,7 +38,7 @@
                 <img src="/SAE3.2-Manager/assets/logo.png" alt="SAE Manager Logo" class="logo">
                 <h2 class="mb-4">Inscription</h2>
             </div>
-            <form action="/public/index.php?action=register" method="POST">
+            <form action="./index.php?action=register" method="POST">
                 <div class="mb-3">
                     <label for="nom" class="form-label">Nom</label>
                     <input type="text" id="nom" name="nom" class="form-control" placeholder="Nom" required>
@@ -50,6 +50,11 @@
                 <div class="mb-3">
                     <label for="email" class="form-label">Adresse email</label>
                     <input type="email" id="email" name="email" class="form-control" placeholder="Adresse email" required>
+                </div>
+                <!-- Mot de passe -->
+                <div class="mb-3">
+                    <label for="password" class="form-label">Mot de passe</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Mot de passe" required>
                 </div>
                   <!-- Profil et Clé d'activation alignés -->
                   <div class="row gx-2 mb-3">
