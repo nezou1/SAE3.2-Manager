@@ -76,7 +76,7 @@
                 </div>
                 <!-- Lien Connexion -->
                 <div class="text-center mt-3">
-                    <a href="index.html" class="text-decoration-none text-primary">Vous avez déjà un compte ? Connectez-vous !</a>
+                    <a href="./index.php?action=login" class="text-decoration-none text-primary">Vous avez déjà un compte ? Connectez-vous !</a>
                 </div>
             </form>
         </div>
