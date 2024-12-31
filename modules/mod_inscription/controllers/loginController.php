@@ -20,7 +20,7 @@ class loginController {
                 session_start();
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['user_name'] = $user['nom'];
-                header('Location: /public/index.php?action=dashboard');
+                header('Location: ./index.php?action=dashboard');
                 exit;
             } else {
                 echo "<p style='color:red; text-align:center;'>Identifiant ou mot de passe incorrect.</p>";

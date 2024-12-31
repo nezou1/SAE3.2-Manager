@@ -2,12 +2,15 @@
 require '../models/user.php';
 require '../controllers/registerController.php';
 require '../controllers/loginController.php';
+require '../controllers/ForgotPasswordController.php';
+
 
 $pdo = new PDO('mysql:host=localhost;dbname=sae_manager', 'root', 'root');
 
 $userModel = new User($pdo);
 $registerController = new RegisterController($userModel);
 $loginController = new loginController($userModel);
+$forgotPasswordController = new ForgotPasswordController($userModel);
 
 $action = $_GET['action'] ?? 'register';
 
@@ -24,8 +27,11 @@ switch ($action) {
     case 'logout':
         $loginController->logout();
         break;
+    case 'forgot_password':
+        $forgotPasswordController->handleRequest();
+        break;
     case 'dashboard':
-        echo "<h1>Bienvenue dans le tableau de bord</h1>";
+        require '../views/dashboard.php';
         break;
     default:
         echo "<h1>Page introuvable</h1>";

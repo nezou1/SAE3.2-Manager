@@ -26,4 +26,19 @@ class User {
         $query->execute(['email' => $email]);
         return $query->fetch();
     }
+
+    public function saveResetToken($userId, $token) {
+        $query = $this->db->prepare("UPDATE utilisateurs SET reset_token = :token WHERE id = :id");
+        $query->execute([
+            'token' => $token,
+            'id' => $userId
+        ]);
+    }
+    
+    public function getUserByResetToken($token) {
+        $query = $this->db->prepare("SELECT * FROM utilisateurs WHERE reset_token = :token");
+        $query->execute(['token' => $token]);
+        return $query->fetch();
+    }    
+    
 }

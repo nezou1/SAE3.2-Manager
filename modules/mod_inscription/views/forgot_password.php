@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion - SAE Manager</title>
+    <title>Mot de passe oublié - SAE Manager</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -22,11 +22,11 @@
             width: 150px;
             margin: 0 auto 20px;
         }
-        .btn-primary {
+        .btn-secondary {
             background-color: #6c757d;
             color: white;
         }
-        .btn-primary:hover {
+        .btn-secondary:hover {
             background-color: #5a6268;
         }
     </style>
@@ -37,21 +37,14 @@
             <div class="text-center">
                 <img src="/SAE3.2-Manager/assets/logo.png" alt="SAE Manager Logo" class="logo">
             </div>
-            <form action="./index.php?action=login" method="POST">
+            <form action="./index.php?action=forgot_password" method="POST">
                 <div class="mb-3">
-                    <label for="email" class="form-label">Identifiant</label>
-                    <input type="text" id="email" name="email" class="form-control" placeholder="Identifiant" required>
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="Votre adresse email" required>
                 </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">Mot de passe</label>
-                    <input type="password" id="password" name="password" class="form-control" placeholder="Mot de passe" required>
-                </div>
-                <div class="d-grid">
-                    <button type="submit" class="btn btn-primary">Connexion</button>
-                </div>
-                <div class="text-center mt-3">
-                    <a href="./index.php?action=register" class="text-decoration-none text-primary">Vous n’avez pas de compte ? Inscrivez-vous !</a><br>
-                    <a href="./index.php?action=forgot_password" class="text-decoration-none text-primary">Mot de passe oublié ?</a>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a href="./index.php?action=login" class="btn btn-light">Cancel</a>
+                    <button type="submit" class="btn btn-secondary">Reset Password</button>
                 </div>
             </form>
         </div>
