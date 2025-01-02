@@ -9,12 +9,12 @@ class User {
 
     public function inscrire($nom, $prenom, $email, $password, $profil, $activation_key) {
         $hash = password_hash($password, PASSWORD_DEFAULT);
-        $query = $this->db->prepare("INSERT INTO utilisateurs (nom, prenom, email, password, profil, activation_key) 
-                                     VALUES (:nom, :prenom, :email, :password, :profil, :activation_key)");
+        $query = $this->db->prepare("INSERT INTO Utilisateur (nom, prenom, login, password, profil, activation_key) 
+                                     VALUES (:nom, :prenom, :login, :password, :profil, :activation_key)");
         $query->execute([
             'nom' => $nom,
             'prenom' => $prenom,
-            'email' => $email,
+            'login' => $email,
             'password' => $hash,
             'profil' => $profil,
             'activation_key' => $activation_key
@@ -22,13 +22,13 @@ class User {
     }
 
     public function getUserByEmail($email) {
-        $query = $this->db->prepare("SELECT * FROM utilisateurs WHERE email = :email");
-        $query->execute(['email' => $email]);
+        $query = $this->db->prepare("SELECT * FROM Utilisateur WHERE login = :login");
+        $query->execute(['login' => $email]);
         return $query->fetch();
     }
 
     public function saveResetToken($userId, $token) {
-        $query = $this->db->prepare("UPDATE utilisateurs SET reset_token = :token WHERE id = :id");
+        $query = $this->db->prepare("UPDATE Utilisateur SET reset_token = :token WHERE id = :id");
         $query->execute([
             'token' => $token,
             'id' => $userId
@@ -36,7 +36,7 @@ class User {
     }
     
     public function getUserByResetToken($token) {
-        $query = $this->db->prepare("SELECT * FROM utilisateurs WHERE reset_token = :token");
+        $query = $this->db->prepare("SELECT * FROM Utilisateur WHERE reset_token = :token");
         $query->execute(['token' => $token]);
         return $query->fetch();
     }    

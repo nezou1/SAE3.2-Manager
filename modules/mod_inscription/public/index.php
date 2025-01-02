@@ -3,9 +3,10 @@ require '../models/user.php';
 require '../controllers/registerController.php';
 require '../controllers/loginController.php';
 require '../controllers/ForgotPasswordController.php';
+require '../../../config.php';
 
 
-$pdo = new PDO('mysql:host=localhost;dbname=sae_manager', 'root', 'root');
+$pdo = new PDO('mysql:host='. DB_HOST. ';dbname='. DB_NAME, DB_USER, DB_PASS);
 
 $userModel = new User($pdo);
 $registerController = new RegisterController($userModel);
