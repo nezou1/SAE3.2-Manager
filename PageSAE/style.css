@@ -119,6 +119,49 @@ body {
     background-color: #8c9e8d;
 }
 
+.upload-form-container {
+    text-align: center;
+    margin-top: 50px;
+    background-color: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.upload-form-container h2 {
+    font-size: 28px;
+    font-weight: 600;
+    color: #333;
+}
+
+.upload-label {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.upload-input {
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+}
+
+.upload-button {
+    background-color: #9fb6a6;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.upload-button:hover {
+    background-color: #8c9e8d;
+}
+
 .course-list, .resource-list {
     display: flex;
     flex-direction: column;
