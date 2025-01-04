@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cours de la SAE</title>
+    <title>Ressources de la SAE</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -28,26 +28,26 @@
     </header>
 
     <div class="hero">
-        <h1>Cours de la SAE : Nom de la SAE</h1>
-        <p class="description">Voici la liste des cours mis à votre disposition pour cette SAE. Vous pouvez les télécharger ci-dessous.</p>
+        <h1>Ressources de la SAE : Nom de la SAE</h1>
+        <p class="description">Voici la liste des ressources mises à votre disposition pour cette SAE. Vous pouvez les télécharger ci-dessous.</p>
     </div>
 
     <div class="back-button-container">
         <a href="index.php" class="back-button">Retour à la page principale</a>
     </div>
 
-    <div class="course-list">
-        <div class="course-item">
-            <h2>Cours 1: Introduction à la programmation</h2>
-            <a href="uploads/cours_1.pdf" class="download-link" download>Télécharger le cours</a>
+    <div class="resource-list">
+        <div class="resource-item">
+            <h2>Ressource 1: Document sur l'algorithmique</h2>
+            <a href="uploads/ressource_1.pdf" class="download-link" download>Télécharger la ressource</a>
         </div>
-        <div class="course-item">
-            <h2>Cours 2: Algorithmes et structures de données</h2>
-            <a href="uploads/cours_2.pdf" class="download-link" download>Télécharger le cours</a>
+        <div class="resource-item">
+            <h2>Ressource 2: Introduction aux bases de données</h2>
+            <a href="uploads/ressource_2.pdf" class="download-link" download>Télécharger la ressource</a>
         </div>
-        <div class="course-item">
-            <h2>Cours 3: Bases de données</h2>
-            <a href="uploads/cours_3.pdf" class="download-link" download>Télécharger le cours</a>
+        <div class="resource-item">
+            <h2>Ressource 3: Concepts avancés de programmation</h2>
+            <a href="uploads/ressource_3.pdf" class="download-link" download>Télécharger la ressource</a>
         </div>
     </div>
 </body>
