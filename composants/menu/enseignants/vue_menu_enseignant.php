@@ -14,16 +14,16 @@ class VueCompMenuEnseignant extends VueCompGenerique {
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="index.php?module=mes_saes">Mes SAE</a>
+                            <a class="nav-link" href="index.php?menu=enseignant&module=sae">Mes SAE</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="index.php?module=creer_sae">Créer une SAE</a>
+                            <a class="nav-link" href="index.php?menu=enseignant&module=sae&action=form_creer_sae">Créer une SAE</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="index.php?module=soutenance">Mes Soutenances</a>
+                            <a class="nav-link" href="index.php?menu=enseignant&module=soutenance">Mes Soutenances</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="index.php?module=connexion&action=deconnexion">Déconnexion</a>
+                            <a class="nav-link" href="index.php?menu=enseignant&module=connexion&action=deconnexion">Déconnexion</a>
                         </li>
                     </ul>
                 </div>

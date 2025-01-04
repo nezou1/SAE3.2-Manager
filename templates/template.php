@@ -6,6 +6,10 @@
         <title>SAE Manager - <?=$module_title?></title>
         <!-- Lien vers Bootstrap -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+        Bootstrap Select CSS -->
+        <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet"> -->
+
         <style>
             body {
                 margin: 0;
@@ -91,5 +95,9 @@
             <?php echo $footer->getAffichage();?>
         </footer>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Bootstrap JS -->
+        <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+        Bootstrap Select JS -->
+        <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap-select/dist/js/bootstrap-select.min.js"></script> -->
     </body>
 </html>

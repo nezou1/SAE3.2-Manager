@@ -28,6 +28,7 @@ class Site {
 
 		switch ($this->moduleNom) {
 			case "accueil":
+			case "sae":
 			case "soutenance" :                
 				require_once "C:/wamp64/www/SAE3.2-Manager/modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
 				break;
