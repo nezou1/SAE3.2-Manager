@@ -1,0 +1,137 @@
+/* Style global */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f8f2e4; /* Beige sur toute la page */
+}
+
+/* Barre de navigation */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #9fb6a6; /* Vert pour la barre de navigation */
+    padding: 10px 20px;
+}
+
+.navbar-left .profile-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.navbar-center nav a {
+    text-decoration: none;
+    color: white;
+    margin: 0 15px;
+    font-weight: bold;
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Espace entre les éléments */
+}
+
+.navbar-right .search-input {
+    padding: 5px;
+    border: none;
+    border-radius: 4px;
+    outline: none;
+}
+
+.navbar-right .icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
+/* Section formulaire - Créer une SAE */
+.form-container {
+    text-align: center;
+    padding: 50px;
+    background-color: #f8f2e4; /* Même beige */
+}
+
+.form-container h1 {
+    margin: 0;
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+.form-container form {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    display: inline-block;
+    width: 100%;
+    max-width: 750px;  /* Augmenter la largeur du formulaire */
+}
+
+.form-label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px;  /* Plus d'espace pour les champs de saisie */
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+}
+
+.form-input:focus {
+    outline-color: #9fb6a6;
+    border-color: #9fb6a6;
+}
+
+.file-upload-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;  /* Ajout d'un espace entre les éléments */
+    margin-bottom: 20px;
+}
+
+.file-upload {
+    width: 45%;  /* Assurer que les champs de fichier sont alignés côte à côte */
+    text-align: center;
+    background-color: #f8f2e4;
+    padding: 20px;
+    border-radius: 8px;
+    border: 2px dashed #ccc;
+}
+
+.file-upload input[type="file"] {
+    display: none;
+}
+
+.file-label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin-top: 10px;
+    display: block;
+}
+
+.submit-button {
+    background-color: #9fb6a6; /* Vert pour le bouton */
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.submit-button:hover {
+    background-color: #8c9e8d; /* Un vert légèrement plus foncé au survol */
+}
