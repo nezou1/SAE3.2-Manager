@@ -7,37 +7,36 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Barre de navigation -->
     <header class="navbar">
         <div class="navbar-left">
             <img src="profile-icon.png" alt="Profile Icon" class="profile-icon">
         </div>
         <div class="navbar-center">
             <nav>
-                <a href="#">Mes SAE</a>
+                <a href="index.php">Mes SAE</a>
                 <a href="#">Trello</a>
                 <a href="#">Github</a>
                 <a href="#">Déconnexion</a>
             </nav>
         </div>
         <div class="navbar-right">
-            <input type="text" placeholder="Search">
+            <input type="text" placeholder="Search" class="search-input">
             <img src="bell-icon.png" alt="Notifications" class="icon">
             <img src="message-icon.png" alt="Messages" class="icon">
         </div>
     </header>
 
-    <!-- Section principale -->
     <div class="hero">
         <h1>NOM DE LA SAE</h1>
         <div class="description-container">
-            <p class="description">courte description</p>
+            <p class="description">Courte description de la SAE</p>
         </div>
     </div>
 
-    <!-- Section des cercles -->
     <div class="circles">
-        <div class="circle">Cours</div>
+        <a href="cours.php">
+            <div class="circle">Cours</div>
+        </a>
         <div class="circle">Ressource</div>
         <div class="circle">Dépôt</div>
     </div>
