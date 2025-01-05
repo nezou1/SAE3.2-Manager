@@ -21,7 +21,7 @@ class VueInscription extends VueGenerique {
         <?php
     }
 
-    public function formInscription() {
+   public function formInscription() {
         ?>
         <form action="./index.php?action=inscrire" method="POST">
             <div class="mb-3">

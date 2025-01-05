@@ -2,7 +2,7 @@
 
 require "modele_inscription.php";
 require "vue_inscription.php";
-require "modele_connexion.php";
+//require "modele_connexion.php";
 
 class ControleurInscription {
     private $modele;

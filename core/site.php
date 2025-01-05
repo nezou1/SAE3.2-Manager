@@ -18,6 +18,9 @@ class Site {
 			case "connexion" :
 				require_once "../modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
 				break;
+			case "mdpOublie" :
+				require_once "../modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
+				break;
 			default :
 				die ("Module inexistant");
 		}

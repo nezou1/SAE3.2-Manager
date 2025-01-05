@@ -14,14 +14,15 @@ class VueConnexion extends VueGenerique {
                 <div class="text-center">
                     <img src="../assets/logo.png" alt="SAE Manager Logo" class="logo">
                     <h2 class="mb-4">Connexion</h2>
+                    <?php $this->formConnexion(); ?> 
                 </div>
-                <?php $this->formConnexion(); ?>
+                
             </div>
         </div>
         <?php
     }
     
-    public function formConnexion() {
+   public function formConnexion() {
         ?>
         <form action="./index.php?action=connexion" method="POST">
             <div class="mb-3">
@@ -43,7 +44,7 @@ class VueConnexion extends VueGenerique {
             </div>
             <div class="text-center mt-3">
                 <a href="./index.php?module=inscription&action=form" class="text-decoration-none text-primary">Vous n’avez pas de compte ? Inscrivez-vous !</a><br>
-                <a href="./index.php?action=forgot_password" class="text-decoration-none text-primary">Mot de passe oublié ?</a>
+                <a href="./index.php?module=mdpOublie&action=mdpOublie" class="text-decoration-none text-primary">Mot de passe oublié ?</a>
             </div>
         </form>
         <?php
