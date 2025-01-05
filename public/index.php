@@ -22,11 +22,6 @@ $footer = new ComposantFooter();
 $module_html = $site->get_module()->get_affichage();
 $module_title = $site->get_module()->get_title();
 
-/*if($module_html == 'connexion' || $module_html == 'inscription'|| $module_html == 'loginSuccess') {
-    include_once "../templates/templateConnexion.php";
-} else {
-    include_once "../templates/template.php";
-}*/
 include_once "../templates/templateConnexion.php";
 
 ?>

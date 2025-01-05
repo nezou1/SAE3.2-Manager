@@ -3,7 +3,7 @@ class VueCompMenuEtudiant extends VueCompGenerique {
 
 	public function __construct() {
 		$this->affichage = '
-		<nav class="navbar navbar-expand-lg navbar-light ">
+		
 			<div class="container-fluid">
 				<!-- Logo -->
 				<a class="navbar-brand fw-bold text-uppercase" href="index.php?module=dashboard">
@@ -44,7 +44,6 @@ class VueCompMenuEtudiant extends VueCompGenerique {
 					</ul>
 				</div>
 			</div>
-		</nav>
 		';
 	}
 	
