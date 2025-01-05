@@ -62,7 +62,7 @@ class ControleurInscription {
 
             if ($this->modele->getUserByEmail($email)) {
                 $errors['email'] = "Cet email est déjà utilisé.";
-                $this->vue->formInscription($errors);
+                $this->showInscriptionError("Cet email est déjà utilisé.");
                 return;
             }
 
@@ -73,5 +73,9 @@ class ControleurInscription {
             error_log("Erreur lors de l'inscription : " . $e->getMessage());
             $this->vue->formInscription(['db_error' => "Une erreur est survenue. Veuillez réessayer plus tard."]);
         }
+    }
+
+    public function showInscriptionError($message) {
+        $this->vue->formInscription(['form' => $message]);
     }
 }
