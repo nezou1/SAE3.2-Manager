@@ -61,7 +61,7 @@
         <header>
             <?php 
             // Afficher la navbar sauf si le module est "connexion" ou "inscription"
-            if (!isset($_GET['module']) || ($_GET['module'] !== 'connexion' && $_GET['module'] !== 'inscription')) {
+            if (!isset($_GET['module']) || ($_GET['module'] !== 'connexion' && $_GET['module'] !== 'inscription' && $_GET['module'] !== 'mdpOublie')) {
                 ?>
                 <nav class="navbar navbar-expand-lg">
                     <?php 
@@ -85,10 +85,6 @@
                     ?>
                 </nav>
                 <?php
-            }else{
-                include('../composants/menu/connexion/composant_menu_connexion.php');
-                $menu = new ComposantMenuConnexion();
-                echo $menu->getAffichage();
             }
             ?>
         </header>

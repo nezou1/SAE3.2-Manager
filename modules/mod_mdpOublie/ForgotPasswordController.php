@@ -51,7 +51,9 @@ class ControleurMdpOublie {
 
             // Générer un lien de réinitialisation (simulé ici par une redirection)
             // Simule l'envoi d'email (à remplacer par une vraie fonction d'envoi d'email)
-            echo "<p style='color:green; text-align:center;'>Un email de réinitialisation a été envoyé à $email.</p>";
+            echo "<p style='color:green; text-align:center;'>Un email de réinitialisation a été envoyé à $email.</p> <br>";
+            echo "<a href='./index.php?module=connexion&action=login'>Retourner à la connexion</a> <br>";
+            header("Refresh: 5; URL=./index.php?module=connexion&action=login");
         } else {
             $this->vue->formMotDePasseOublie();
         }

@@ -32,7 +32,6 @@ class ControleurConnexion {
             case 'success':
                 $this->vue->loginSuccess(); // Affiche un message de succès
             default:
-                echo 'default';
                 $this->vue->get_connexion(); // Affiche le formulaire par défaut
                 break;
         }

@@ -14,11 +14,6 @@ class ModeleConnexion extends Connexion {
                 $user = $this->getUserByLogin($login);
 
                 if ($user) {
-                    echo "Hash en base : " . $user['password'] . "<br>";
-                    echo "Mot de passe saisi : $password<br>";
-                    echo "Vérification : " . password_verify($password, $user['password'])? "true" : "false";
-                    echo "Profil : " . $user['profil'] . "<br>";
-
                     if (!password_verify($password, $user['password'])) {
                         echo "Le mot de passe est correct.";
                         if (session_status() === PHP_SESSION_NONE) {
@@ -49,7 +44,7 @@ class ModeleConnexion extends Connexion {
     private function showLoginError($message) {
         echo "<div class='alert alert-danger'>" . htmlspecialchars($message) . "</div>";
         echo "<a href='./index.php?module=connexion&action=login'>Retourner à la connexion</a>";
-        header("Refresh: 50; URL=./index.php?module=connexion&action=login");
+        header("Refresh: 5; URL=./index.php?module=connexion&action=login");
     }
 
     public function getUserByLogin($login) {
