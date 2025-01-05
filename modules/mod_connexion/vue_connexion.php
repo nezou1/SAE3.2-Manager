@@ -24,10 +24,10 @@ class VueConnexion extends VueGenerique {
     
    public function formConnexion() {
         ?>
-        <form action="./index.php?action=connexion" method="POST">
+        <form action="./index.php?module=connexion&action=login" method="POST">
             <div class="mb-3">
                 <label for="email" class="form-label">Identifiant</label>
-                <input type="text" id="email" name="email" class="form-control" placeholder="Identifiant" required>
+                <input type="text" id="email" name="login" class="form-control" placeholder="Identifiant" required>
                 <?php if (isset($errors['email'])): ?>
                     <small class="error-message"><?= htmlspecialchars($errors['email']) ?></small>
                 <?php endif; ?>
@@ -40,8 +40,8 @@ class VueConnexion extends VueGenerique {
                 <?php endif; ?>
             </div>
             <div class="d-grid">
-                <button type="submit" class="btn btn-dark ">
-                    <a href="./index.php?module=dashboard&action=exec" class="text-decoration-none text-black">Connexion</a><br>
+                <button type="submit" class="btn btn-dark text-black"> Connexion
+                    <!--<a href="./index.php?module=dashboard&action=exec" method="POST" class="text-decoration-none text-black">Connexion</a><br>-->
                 </button>
             </div>
             <div class="text-center mt-3">
@@ -77,6 +77,21 @@ class VueConnexion extends VueGenerique {
                 <hr>
                 <p class="mb-0">
                     <a href="./index.php?action=login" class="btn btn-primary">Retourner à la page de connexion</a>
+                </p>
+            </div>
+        </div>
+        <?php
+    }
+
+    public function loginSuccess() {
+        ?>
+        <div class="container mt-5">
+            <div class="alert alert-success" role="alert">
+                <h4 class="alert-heading">Connexion réussie !</h4>
+                <p>Vous êtes maintenant connecté.</p>
+                <hr>
+                <p class="mb-0">
+                    <a href="./index.php?module=dashboard&action=exec" class="btn btn-primary">Accéder au tableau de bord</a>
                 </p>
             </div>
         </div>

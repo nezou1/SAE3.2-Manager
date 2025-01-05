@@ -17,18 +17,14 @@ class ControleurDashboard {
     public function exec() {
         switch ($this->action) {
             case 'exec':
-                if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                    $this->modele->get_dashboard();
-                    $this->vue->get_dashboard();
-                } else {
-                    $this->vue->get_dashboard();
-                }
+                $this->modele->afficherDashboard();
+                $this->vue->get_dashboard($_SESSION['role'], $_SESSION['prenom'], $_SESSION['nom']);
                 break;
             case 'logout':
                 $this->logout();
                 break;
             default:
-                $this->vue->get_dashboard(); // Affiche le formulaire par défaut
+            $this->vue->get_dashboard($_SESSION['role'], $_SESSION['prenom'], $_SESSION['nom']);
                 break;
         }
     }

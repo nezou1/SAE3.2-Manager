@@ -1,5 +1,4 @@
 <?php
-require_once 'VueGenerique.php';
 
 class VueDashboard extends VueGenerique {
 
