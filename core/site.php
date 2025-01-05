@@ -21,6 +21,9 @@ class Site {
 			case "mdpOublie" :
 				require_once "../modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
 				break;
+			case "dashboard" :
+				require_once "../modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
+				break;
 			default :
 				die ("Module inexistant");
 		}
