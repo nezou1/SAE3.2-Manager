@@ -40,11 +40,13 @@ class VueConnexion extends VueGenerique {
                 <?php endif; ?>
             </div>
             <div class="d-grid">
-                <button type="submit" class="btn btn-primary">Connexion</button>
+                <button type="submit" class="btn btn-primary ">
+                    <a href="./index.php?module=dashboard&action=dashboard" class="text-decoration-none text-black">Connexion</a><br>
+                </button>
             </div>
             <div class="text-center mt-3">
-                <a href="./index.php?module=inscription&action=form" class="text-decoration-none text-primary">Vous n’avez pas de compte ? Inscrivez-vous !</a><br>
-                <a href="./index.php?module=mdpOublie&action=mdpOublie" class="text-decoration-none text-primary">Mot de passe oublié ?</a>
+                <a href="./index.php?module=inscription&action=form" class=" text-black">Vous n’avez pas de compte ? Inscrivez-vous !</a><br>
+                <a href="./index.php?module=mdpOublie&action=mdpOublie" class=" text-black">Mot de passe oublié ?</a>
             </div>
         </form>
         <?php

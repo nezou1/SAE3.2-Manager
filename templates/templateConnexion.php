@@ -44,6 +44,11 @@
             background-color: #5a6268;
         }
 
+        .btn{
+            background-color: #E6E6E6;
+            border : solid 1px #767676;
+        }
+
         .connexion {
             display: flex;
             justify-content: center;
