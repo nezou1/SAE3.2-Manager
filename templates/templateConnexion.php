@@ -85,6 +85,10 @@
                     ?>
                 </nav>
                 <?php
+            }else{
+                include('../composants/menu/connexion/composant_menu_connexion.php');
+                $menu = new ComposantMenuConnexion();
+                echo $menu->getAffichage();
             }
             ?>
         </header>

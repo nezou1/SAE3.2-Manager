@@ -11,22 +11,6 @@ class ModeleConnexion extends Connexion {
 
                 $user = $this->getUserByLogin($login);
 
-                var_dump($user);
-
-                echo "Mot de passe saisi : " . $password;
-echo "Hash stocké : " . $user['password'];
-echo "Résultat de password_verify : " . (password_verify($password, $user['password']) ? 'true' : 'false');
-
-$motDePasseSaisi = "root";
-$hashEnBase = '$2y$10$czN7bbimGosPEMdBS19LS.VBt/B3DUH3XANJNa0MScAr/XJbaHndi';
-
-if (password_verify($motDePasseSaisi, $hashEnBase)) {
-    echo "Mot de passe correct !";
-} else {
-    echo "Mot de passe incorrect !";
-}
-
-
                 if ($user) {
                     if (password_verify($password, $user['password'])) {
                         session_start();
