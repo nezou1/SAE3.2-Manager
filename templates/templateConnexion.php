@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
     <head>
@@ -44,9 +43,9 @@
             background-color: #5a6268;
         }
 
-        .btn{
+        .btn {
             background-color: #E6E6E6;
-            border : solid 1px #767676;
+            border: solid 1px #767676;
         }
 
         .connexion {
@@ -60,15 +59,38 @@
     </head>
     <body> 
         <header>
-            <nav class="navbar navbar-expand-lg">
-                <?php echo $menu->getAffichage();?>
-            </nav>
+            <?php 
+            // Afficher la navbar sauf si le module est "connexion" ou "inscription"
+            if (!isset($_GET['module']) || ($_GET['module'] !== 'connexion' && $_GET['module'] !== 'inscription')) {
+                ?>
+                <nav class="navbar navbar-expand-lg">
+                    <?php 
+                    if (isset($_SESSION['profil'])) {
+                        // Affichage selon le profil
+                        if ($_SESSION['profil'] === 'enseignant') {
+                            include('../composants/menu/enseignants/composant_menu_enseignant.php');
+                            $menu = new ComposantMenuEnseignant();
+                            echo $menu->getAffichage();
+                        } else {
+                            include('../composants/menu/etudiants/composant_menu_etudiant.php');
+                            $menu = new ComposantMenuEtudiant();
+                            echo $menu->getAffichage();
+                        }
+                    } else {
+                        include('../composants/menu/etudiants/composant_menu_etudiant.php');
+                            $menu = new ComposantMenuEtudiant();
+                            echo $menu->getAffichage();
+                        //echo "<p class='text-center text-white'>Erreur : aucun profil détecté.</p>";
+                    }
+                    ?>
+                </nav>
+                <?php
+            }
+            ?>
         </header>
-        <main class = "connexion">
-        <?= $module_html ?>
+        <main class="connexion">
+            <?= $module_html ?>
         </main>     
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>
-
-

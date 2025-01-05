@@ -1,6 +1,6 @@
 <?php
 
-require_once "C:/wamp64/www/FULL_PROJECT/composants/menu/etudiant/vue_menu_etudiant.php";
+require_once "vue_menu_etudiant.php";
 
 
 class ControleurCompMenuEtudiant {

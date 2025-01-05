@@ -77,6 +77,13 @@
                 background-color: #6c757d;
                 color: white;
             }
+            button {
+            background-color: #6c757d;
+            color: white;
+            }
+            button:hover {
+                background-color: #5a6268;
+            }
             .btn-primary:hover {
                 background-color: #5a6268;
             }
@@ -99,7 +106,25 @@
     <body>
         <header>
             <nav class="navbar navbar-expand-lg">
-                <?php echo $menu->getAffichage();?>
+                <?php 
+                if (isset($_SESSION['profil'])) {
+                    // Affichage selon le profil
+                    if ($_SESSION['profil'] === 'enseignant') {
+                        include('../composants/menu/enseignants/composant_menu_enseignant.php');
+                        $menu = new ComposantMenuEnseignant();
+                        echo $menu->getAffichage();
+                    } else {
+                        include('../composants/menu/etudiants/composant_menu_etudiant.php');
+                        $menu = new ComposantMenuEtudiant();
+                        echo $menu->getAffichage();
+                    }
+                } else {
+                    include('../composants/menu/etudiants/composant_menu_etudiant.php');
+                        $menu = new ComposantMenuEtudiant();
+                        echo $menu->getAffichage();
+                    //echo "<p class='text-center text-white'>Erreur : aucun profil détecté.</p>";
+                }
+                ?>
             </nav>
         </header>
         <main>

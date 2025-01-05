@@ -38,6 +38,12 @@ class ControleurConnexion {
         }
     }
 
+    public function logout() {
+        session_destroy();
+        header('Location: ./index.php/?module=connexion&action=logout');
+        exit();
+    }
+
 
 }
 ?>
