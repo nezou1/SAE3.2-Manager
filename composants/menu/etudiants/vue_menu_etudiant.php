@@ -27,9 +27,6 @@ class VueCompMenuEtudiant extends VueCompGenerique {
 						<li class="nav-item">
 							<a class="nav-link" href="index.php?module=soutenance">Mes Soutenances</a>
 						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="index.php?module=connexion&action=login">Déconnexion</a>
-						</li>
 						';
 	
 		// Ajouter le bouton Déconnexion si l'utilisateur est connecté

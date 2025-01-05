@@ -5,7 +5,7 @@ require_once('/Users/nezhaelfayez/Desktop/IUT/S3/PHP/local_html/SAE3.2-Manager/c
 class ModeleInscription extends Connexion {
 
     public function inscrire($nom, $prenom, $email, $password, $profil, $activation_key) {
-        $hash = password_hash($password, PASSWORD_DEFAULT);
+        $hash = password_hash($password, PASSWORD_BCRYPT);
         $req = "INSERT INTO Utilisateur (nom, prenom, login, password, profil, activation_key) 
                 VALUES (:nom, :prenom, :login, :password, :profil, :activation_key)";
         $pdo_req = self::$bdd->prepare($req);
