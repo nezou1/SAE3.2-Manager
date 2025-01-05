@@ -1,4 +1,7 @@
 <?php
+
+require_once('/Users/nezhaelfayez/Desktop/IUT/S3/PHP/local_html/SAE3.2-Manager/core/connexion.php');
+
 class ModeleInscription extends Connexion {
 
     public function inscrire($nom, $prenom, $email, $password, $profil, $activation_key) {
@@ -24,3 +27,4 @@ class ModeleInscription extends Connexion {
         return $pdo_req->fetch();
     }
 }
+

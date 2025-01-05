@@ -11,17 +11,13 @@ class Site {
 		$this->moduleNom = isset($_GET['module']) ? $_GET['module'] : "inscription";
 
 		switch ($this->moduleNom) {
-			// case "etudiant" :
-				//require_once "composants/menu/etudiant/composant_menu_etudiant.php";
+		
 			case "inscription" :                
 				require_once "../modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
 				break;
-			// case "intervenant" :
-                //require_once "composants/menu/intervenants/composant_menu_intervenant.php";
 			case "connexion" :
 				require_once "../modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
 				break;
-			// 	break;
 			default :
 				die ("Module inexistant");
 		}

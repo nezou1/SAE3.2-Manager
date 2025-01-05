@@ -83,7 +83,7 @@ class VueInscription extends VueGenerique {
                 <p>Votre compte a été créé avec succès.</p>
                 <hr>
                 <p class="mb-0">
-                    <a href="index.php?action=login" class="btn btn-primary">Se connecter</a>
+                    <a href="index.php?module=connexion&action=login" class="btn btn-primary">Se connecter</a>
                 </p>
             </div>
         </div>
