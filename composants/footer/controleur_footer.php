@@ -1,6 +1,6 @@
 <?php
 
-require_once "C:/wamp64/www/SAE3.2-Manager/composants/footer/vue_footer.php";
+require_once PROJECT_ROOT . "/composants/footer/vue_footer.php";
 
 class ControleurCompFooter {
 

@@ -15,10 +15,10 @@ class Site {
 
 		switch($this->menuNom) {
 			case "enseignant":
-				require_once "C:/wamp64/www/SAE3.2-Manager/composants/menu/enseignants/composant_menu_enseignant.php";
+				require_once PROJECT_ROOT . "/composants/menu/enseignants/composant_menu_enseignant.php";
 				break;
 			case "etudiant":
-				require_once "C:/wamp64/www/SAE3.2-Manager/composants/menu/etudiants/composant_menu_etudiant.php";
+				require_once PROJECT_ROOT . "/composants/menu/etudiants/composant_menu_etudiant.php";
 				break;
 			default:
 				die("Profil inexistant");
@@ -30,7 +30,7 @@ class Site {
 			case "accueil":
 			case "sae":
 			case "soutenance" :                
-				require_once "C:/wamp64/www/SAE3.2-Manager/modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
+				require_once PROJECT_ROOT . "/modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
 				break;
 			default :
 				die ("Module inexistant");

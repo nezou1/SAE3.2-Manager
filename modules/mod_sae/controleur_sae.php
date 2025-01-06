@@ -1,7 +1,7 @@
 <?php
 
-require_once "C:/wamp64/www/SAE3.2-Manager/modules/mod_sae/modele_sae.php";
-require_once "C:/wamp64/www/SAE3.2-Manager/modules/mod_sae/vue_sae.php";
+require_once PROJECT_ROOT . "/modules/mod_sae/modele_sae.php";
+require_once PROJECT_ROOT . "/modules/mod_sae/vue_sae.php";
 
 class ControleurSae {
 

@@ -1,7 +1,7 @@
 <?php
 
-require_once "C:/wamp64/www/SAE3.2-Manager/modules/mod_accueil/modele_accueil.php";
-require_once "C:/wamp64/www/SAE3.2-Manager/modules/mod_accueil/vue_accueil.php";
+require_once PROJECT_ROOT . "/modules/mod_accueil/modele_accueil.php";
+require_once PROJECT_ROOT . "/modules/mod_accueil/vue_accueil.php";
 
 class ControleurAccueil {
 
