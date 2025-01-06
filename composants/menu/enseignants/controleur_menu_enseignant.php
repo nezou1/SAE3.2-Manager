@@ -1,6 +1,6 @@
 <?php
 
-require_once "C:/wamp64/www/SAE3.2-Manager/composants/menu/enseignants/vue_menu_enseignant.php";
+require_once PROJECT_ROOT . "/composants/menu/enseignants/vue_menu_enseignant.php";
 
 
 class ControleurCompMenuEnseignant {

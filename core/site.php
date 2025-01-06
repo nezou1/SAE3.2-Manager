@@ -14,7 +14,7 @@ class Site {
 			// case "etudiant" :
 				//require_once "composants/menu/etudiant/composant_menu_etudiant.php";
 			case "soutenance" :                
-				require_once "C:/wamp64/www/SAE3.2-Manager/modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
+				require_once PROJECT_ROOT ."/modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
 				break;
 			// case "intervenant" :
                 //require_once "composants/menu/intervenants/composant_menu_intervenant.php";
