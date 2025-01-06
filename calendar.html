@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <title>Calendrier Simple</title>
     <style>
         .calendar-container {
@@ -92,16 +91,6 @@
     const today = new Date();
     createCalendar(today.getFullYear(), today.getMonth());
 </script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<input type="text" id="calendar" placeholder="Choisissez une date">
-
-<script>
-    flatpickr("#calendar", {
-        enableTime: false,
-        dateFormat: "Y-m-d"
-    });
-</script>
-
 
 </body>
 </html>

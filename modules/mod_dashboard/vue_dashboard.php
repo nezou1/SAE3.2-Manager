@@ -88,51 +88,43 @@ class VueDashboard extends VueGenerique {
                 <!-- Colonne droite : Calendrier et Alertes -->
                 <div class="col-lg-4">
                     <h4>Calendrier</h4>
-                    <div id="calendar"></div>
-    
+                    <?php $this->calendrier(); ?>
                     <h4 class="mt-4">Alertes</h4>
-                    <div class="card mb-3">
-                        <div class="card-body d-flex justify-content-between align-items-center">
-                            <div><strong>Jeudi 12 Septembre</strong> - Dépôt TP3</div>
-                            <a href="depot.php" class="btn btn-outline-primary btn-sm">Déposer</a>
-                        </div>
-                    </div>
-                    <div class="card mb-3">
-                        <div class="card-body d-flex justify-content-between align-items-center">
-                            <div><strong>Dimanche 15 Septembre</strong> - User Story</div>
-                            <a href="depot.php" class="btn btn-outline-primary btn-sm">Déposer</a>
-                        </div>
-                    </div>
-                    <div class="card mb-3">
-                        <div class="card-body d-flex justify-content-between align-items-center">
-                            <div><strong>Prochaine échéance :</strong> R3.01 - Dépôt TP4</div>
-                            <a href="depot.php" class="btn btn-outline-primary btn-sm">Déposer</a>
-                        </div>
-                    </div>
+                    <?php
+                    for ($i = 0; $i < 3; $i++) {
+                        $this->alerte("R3.01 - Dépôt TP4", "Jeudi 17 Septembre");
+                    } 
+                    ?>                    
                 </div>
             </div>
         </div>
-    
-        <!-- FullCalendar JS -->
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const calendarEl = document.getElementById('calendar');
-                if (calendarEl) {
-                    const calendar = new FullCalendar.Calendar(calendarEl, {
-                        initialView: 'dayGridMonth',
-                        locale: 'fr',
-                        events: [
-                            { title: 'Dépôt TP3', start: '2024-09-12' },
-                            { title: 'User Story', start: '2024-09-15' },
-                            { title: 'R3.01 - Dépôt TP4', start: '2024-09-20' }
-                        ]
-                    });
-                    calendar.render();
-                } else {
-                    console.error("Erreur : Élément #calendar introuvable.");
-                }
-            });
-        </script>
+
+        <?php
+    }
+
+    private function calendrier(){
+    ?>
+    <link rel="stylesheet" href="../assets/css/styleCalendrier.css"> 
+    <script src="../assets/script/scriptCalendrier.js"></script>
+
+    <div class="calendar-container">
+        <div class="calendar-header">
+            <h3 id="calendar-title">Septembre 2024</h3>
+        </div>
+        <div class="calendar-body" id="calendar-body"></div>
+    </div>
+    <?php
+
+    }
+
+    private function alerte($message, $date){
+        ?>
+        <div class="card mb-3">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div><strong> <?= $date ?> </strong> - <?= $message?> </div>
+                <a href="depot.php" class="btn btn-outline-primary btn-sm">Déposer</a>
+            </div>
+        </div>
         <?php
     }
     
