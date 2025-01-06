@@ -61,34 +61,9 @@
     </head>
     <body> 
         <header>
-            <?php 
-            // Afficher la navbar sauf si le module est "connexion" ou "inscription"
-            if (!isset($_GET['module']) || ($_GET['module'] !== 'connexion' && $_GET['module'] !== 'inscription' && $_GET['module'] !== 'mdpOublie')) {
-                ?>
-                <nav class="navbar navbar-expand-lg">
-                    <?php 
-                    if (isset($_SESSION['profil'])) {
-                        // Affichage selon le profil
-                        if ($_SESSION['profil'] === 'enseignant') {
-                            include('../composants/menu/enseignants/composant_menu_enseignant.php');
-                            $menu = new ComposantMenuEnseignant();
-                            echo $menu->getAffichage();
-                        } else {
-                            include('../composants/menu/etudiants/composant_menu_etudiant.php');
-                            $menu = new ComposantMenuEtudiant();
-                            echo $menu->getAffichage();
-                        }
-                    } else {
-                        include('../composants/menu/etudiants/composant_menu_etudiant.php');
-                            $menu = new ComposantMenuEtudiant();
-                            echo $menu->getAffichage();
-                        //echo "<p class='text-center text-white'>Erreur : aucun profil détecté.</p>";
-                    }
-                    ?>
-                </nav>
-                <?php
-            }
-            ?>
+            <nav class="navbar navbar-expand-lg">
+                <?php echo $menu->getAffichage();?>
+            </nav>
         </header>
         <main class="connexion">
             <?= $module_html ?>

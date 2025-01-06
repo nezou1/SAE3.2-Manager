@@ -6,13 +6,30 @@ class Site {
 	private $moduleNom;
 
     private $menu;
+	private $menuNom;
 
 	public function __construct() {
 		$this->moduleNom = isset($_GET['module']) ? $_GET['module'] : "inscription";
+		$this->menuNom = isset($_GET['menu']) ? $_GET['menu'] : "etudiant";
+
+		switch($this->menuNom) {
+			case "enseignant":
+				require_once "../composants/menu/enseignants/composant_menu_enseignant.php";
+				break;
+			case "etudiant":
+				require_once "../composants/menu/etudiants/composant_menu_etudiant.php";
+				break;
+			case "connexion":
+				require_once "../composants/menu/connexion/composant_menu_connexion.php";
+		}
+		$menu_class = "ComposantMenu".ucfirst($this->menuNom);
+		$this->menu = new $menu_class();
+	
+
 
 		switch ($this->moduleNom) {
 		
-			case "inscription" :                
+			case "inscription" :  
 				require_once "../modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
 				break;
 			case "connexion" :
@@ -21,13 +38,15 @@ class Site {
 			case "mdpOublie" :
 				require_once "../modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
 				break;
-			case "dashboard" :
+			case "dashboard" :	
 				require_once "../modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
 				break;
 			default :
 				die ("Module inexistant");
 		}
+
 	}
+	
 	
 	public function exec_module() {
 		$module_class = "Mod".ucfirst($this->moduleNom);

@@ -16,11 +16,13 @@ Connexion::initConnexion();
 $site = new Site();
 $site->exec_module();
 
-$menu = new ComposantMenuEnseignant();
+$menu = $site->get_menu();
 $footer = new ComposantFooter();
+
 
 $module_html = $site->get_module()->get_affichage();
 $module_title = $site->get_module()->get_title();
+
 
 include_once "../templates/templateConnexion.php";
 

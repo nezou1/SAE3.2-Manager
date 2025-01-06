@@ -9,12 +9,12 @@ class VueDashboard extends VueGenerique {
     // Méthode principale pour afficher le tableau de bord en fonction du rôle
     public function get_dashboard() {
         
-        $this->afficherEtudiant();
+        //$this->afficherEtudiant();
         
     }
 
     // Vue pour le dashboard étudiant
-    private function afficherEtudiant() {
+    public function afficherEtudiant() {
         ?>
         <style>
             .carousel-item img {
@@ -102,7 +102,7 @@ class VueDashboard extends VueGenerique {
         <?php
     }
 
-    private function calendrier(){
+    public function calendrier(){
     ?>
     <link rel="stylesheet" href="../assets/css/styleCalendrier.css"> 
     <script src="../assets/script/scriptCalendrier.js"></script>
@@ -130,7 +130,7 @@ class VueDashboard extends VueGenerique {
     
 
     // Vue pour le dashboard enseignant
-    private function afficherEnseignant() {
+    public function afficherEnseignant() {
         ?>
         <h1>Dashboard Enseignant</h1>
         <p>Bienvenue,!</p>

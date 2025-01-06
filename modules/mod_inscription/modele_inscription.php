@@ -6,6 +6,19 @@ class ModeleInscription extends Connexion {
 
     public function inscrire($nom, $prenom, $email, $password, $profil, $activation_key) {
         $hash = password_hash($password, PASSWORD_BCRYPT);
+        if($profil == 'etudiant'){
+            $req = "INSERT INTO Etudiant (nom, prenom, email) 
+                VALUES (:nom, :prenom, :email)";
+        }else{
+            $req = "INSERT INTO Enseignant (nom, prenom, email) 
+                VALUES (:nom, :prenom, :email)";
+        }
+        $pdo_req = self::$bdd->prepare($req);
+        $pdo_req->execute([
+            'nom' => $nom,
+            'prenom' => $prenom,
+            'email' => $email
+        ]);
         $req = "INSERT INTO Utilisateur (nom, prenom, login, password, profil, activation_key) 
                 VALUES (:nom, :prenom, :login, :password, :profil, :activation_key)";
         $pdo_req = self::$bdd->prepare($req);
@@ -17,6 +30,7 @@ class ModeleInscription extends Connexion {
             'profil' => $profil,
             'activation_key' => $activation_key
         ]);
+        
     }
 
     public function getUserByEmail($email) {
