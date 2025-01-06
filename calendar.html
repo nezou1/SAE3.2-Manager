@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <title>Calendrier Simple</title>
+    <style>
+        .calendar-container {
+            max-width: 300px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .calendar-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .calendar-body {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+        .day {
+            text-align: center;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f1f1f1;
+        }
+        .day.current-day {
+            background-color: #91A89B;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body style="background-color: #F7F1E9; font-family: Arial, sans-serif;">
+
+<div class="calendar-container">
+    <div class="calendar-header">
+        <h3 id="calendar-title">Septembre 2024</h3>
+    </div>
+    <div class="calendar-body" id="calendar-body"></div>
+</div>
+
+<script>
+    function createCalendar(year, month) {
+        const calendarBody = document.getElementById('calendar-body');
+        const calendarTitle = document.getElementById('calendar-title');
+        calendarBody.innerHTML = '';
+
+        const monthNames = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+        const currentDate = new Date();
+        const firstDay = new Date(year, month, 1).getDay();
+        const lastDay = new Date(year, month + 1, 0).getDate();
+
+        calendarTitle.textContent = `${monthNames[month]} ${year}`;
+
+        // Affichage des jours de la semaine
+        const weekDays = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+        weekDays.forEach(day => {
+            const dayElement = document.createElement('div');
+            dayElement.textContent = day;
+            dayElement.style.fontWeight = 'bold';
+            dayElement.style.textAlign = 'center';
+            calendarBody.appendChild(dayElement);
+        });
+
+        // Affichage des cases vides pour les jours avant le 1er
+        for (let i = 0; i < firstDay; i++) {
+            const emptyDiv = document.createElement('div');
+            calendarBody.appendChild(emptyDiv);
+        }
+
+        // Affichage des jours du mois
+        for (let day = 1; day <= lastDay; day++) {
+            const dayElement = document.createElement('div');
+            dayElement.textContent = day;
+            dayElement.classList.add('day');
+
+            if (year === currentDate.getFullYear() && month === currentDate.getMonth() && day === currentDate.getDate()) {
+                dayElement.classList.add('current-day'); // Ajouter une classe spéciale pour le jour actuel
+            }
+
+            calendarBody.appendChild(dayElement);
+        }
+    }
+
+    // Initialiser le calendrier pour le mois en cours
+    const today = new Date();
+    createCalendar(today.getFullYear(), today.getMonth());
+</script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<input type="text" id="calendar" placeholder="Choisissez une date">
+
+<script>
+    flatpickr("#calendar", {
+        enableTime: false,
+        dateFormat: "Y-m-d"
+    });
+</script>
+
+
+</body>
+</html>
