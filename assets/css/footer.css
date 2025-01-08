@@ -1,0 +1,21 @@
+/* Pied de page */
+footer {
+    background-color: var(--main-bg-color);
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 30px;
+    position: flex;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+}
+
+footer a {
+    color: white;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}

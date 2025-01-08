@@ -4,14 +4,14 @@ class Site {
 
 	private $module;
 	private $moduleNom;
-	private $menuNom;
 
     private $menu;
+	private $menuNom;
 	private $footer;
 
 	public function __construct() {
-		$this->menuNom = isset($_GET['menu']) ? $_GET['menu'] : "enseignant";
-		$this->moduleNom = isset($_GET['module']) ? $_GET['module'] : "soutenance";
+		$this->moduleNom = isset($_GET['module']) ? $_GET['module'] : "connexion";
+		$this->menuNom = isset($_GET['menu']) ? $_GET['menu'] : "connexion";
 
 		switch($this->menuNom) {
 			case "enseignant":
@@ -20,14 +20,29 @@ class Site {
 			case "etudiant":
 				require_once PROJECT_ROOT . "/composants/menu/etudiants/composant_menu_etudiant.php";
 				break;
-			default:
-				die("Profil inexistant");
+			case "connexion":
+				require_once "../composants/menu/connexion/composant_menu_connexion.php";
 		}
 		$menu_class = "ComposantMenu".ucfirst($this->menuNom);
 		$this->menu = new $menu_class();
 
+	
+
+
 		switch ($this->moduleNom) {
-			case "accueil":
+		
+			case "inscription" :  
+				require_once "../modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
+				break;
+			case "connexion" :
+				require_once "../modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
+				break;
+			case "mdpOublie" :
+				require_once "../modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
+				break;
+			case "dashboard" :	
+				require_once "../modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
+				break;
 			case "sae":
 			case "soutenance" :                
 				require_once PROJECT_ROOT . "/modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
@@ -35,13 +50,14 @@ class Site {
 			default :
 				die ("Module inexistant");
 		}
-		$module_class = "Mod".ucfirst($this->moduleNom);
-		$this->module = new $module_class();
 
-		$this->footer = new ComposantFooter();
 	}
 	
+	
 	public function exec_module() {
+		$module_class = "Mod".ucfirst($this->moduleNom);
+		$this->module = new $module_class();
+		$this->footer = new ComposantFooter();
 		$this->module->exec();
 	}
 
