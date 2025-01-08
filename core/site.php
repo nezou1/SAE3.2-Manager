@@ -10,7 +10,7 @@ class Site {
 	private $footer;
 
 	public function __construct() {
-		$this->moduleNom = isset($_GET['module']) ? $_GET['module'] : "connexion";
+		$this->moduleNom = isset($_GET['module']) ? $_GET['module'] : "inscription";
 		$this->menuNom = isset($_GET['menu']) ? $_GET['menu'] : "connexion";
 
 		switch($this->menuNom) {
