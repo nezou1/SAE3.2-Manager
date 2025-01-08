@@ -1,0 +1,42 @@
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #9fb6a6; 
+    padding: 10px 20px; 
+    font-size: 14px; }
+
+.navbar-left .profile-icon {
+    width: 30px; 
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.navbar-center nav a {
+    text-decoration: none;
+    color: white;
+    margin: 0 10px; 
+    font-weight: bold;
+    font-size: 14px; 
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+}
+
+.navbar-right input {
+    padding: 5px;
+    border: none;
+    border-radius: 4px;
+    outline: none;
+    font-size: 12px; }
+
+.navbar-right .icon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
