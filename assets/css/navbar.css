@@ -1,17 +1,4 @@
-/* Couleurs principales */
-:root {
-    --main-bg-color: #91A89B; /* Vert doux */
-    --hover-bg-color: #778c7b; /* Vert foncé */
-    --light-bg-color: #f8f4eb; /* Beige clair */
-}
 
-/* Style général */
-body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    background-color: var(--light-bg-color);
-}
 
 /* Barre de navigation */
 .navbar {
