@@ -55,6 +55,8 @@ class ControleurSae {
 		$description = isset($_POST["description"]) ? $_POST["description"] : null;
 		$annee = isset($_POST["annee"]) ? $_POST["annee"] : null;
 		$semestre = isset($_POST["semestre"]) ? $_POST["semestre"] : null;
+		$date_depot = isset($_POST["date_depot"]) ? $_POST["date_depot"] : null;
+		$heure_depot = isset($_POST["heure_depot"]) ? $_POST["heure_depot"] : null;
 		$intervenants = isset($_POST["intervenants"]) ? $_POST["intervenants"] : null;
 		$ressources = isset($_POST["ressources"]) ? $_POST["ressources"] : null;
 		$highlights = isset($_POST["highlight"]) ? $_POST["highlight"] : [];
@@ -64,7 +66,17 @@ class ControleurSae {
 		// 	return;
 		// }
 
-		$erreurs = $this->modele->creer_sae($titre, $description, $annee, $semestre, $intervenants, $ressources, $highlights);
+		$erreurs = $this->modele->creer_sae(
+			$titre, 
+			$description, 
+			$annee, 
+			$semestre, 
+			$date_depot, 
+			$heure_depot, 
+			$intervenants, 
+			$ressources, 
+			$highlights
+		);
 
 		if (is_array($erreurs) && !empty($erreurs)) {
 			$this->vue->form_creer_sae($erreurs); // Réaffiche le formulaire avec les erreurs et les données déjà saisies

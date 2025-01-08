@@ -11,7 +11,7 @@ class ModeleSae extends Connexion {
 
     // CREER UNE SAE
     
-    public function creer_sae($titre, $description, $annee, $semestre, $intervenants, $highlights) {
+    public function creer_sae($titre, $description, $annee, $semestre, $date_depot, $heure_depot, $intervenants, $highlights) {
         $errors = [];
 
         if ($this->titre_existe($titre))
