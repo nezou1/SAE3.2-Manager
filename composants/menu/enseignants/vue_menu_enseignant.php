@@ -5,7 +5,7 @@ class VueCompMenuEnseignant extends VueCompGenerique {
 		$this->affichage .=
 			'<div class="container-fluid">
                 <!-- Logo -->
-                <a class="navbar-brand" href="index.php?menu=enseignant&module=accueil">LOGO SITE</a>
+                <a class="navbar-brand" href="index.php?menu=enseignant&module=dashboard">LOGO SITE</a>
 
                 <!-- Navigation principale -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
