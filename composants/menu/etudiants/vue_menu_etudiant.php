@@ -1,33 +1,49 @@
 <?php
 class VueCompMenuEtudiant extends VueCompGenerique {
 
-	public function __construct(){
-		$this->affichage .=
-			'<div class="container-fluid">
+    public function __construct() {
+        $this->affichage .= '
+        <nav class="navbar navbar-expand-lg" style="background-color: #91A89B; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+            <div class="container-fluid">
                 <!-- Logo -->
-                <a class="navbar-brand" href="index.php?module=accueil">LOGO SITE</a>
+                <a class="navbar-brand text-white" href="index.php?module=accueil" style="font-weight: bold;">
+                    <img src="/SAE3.2-Manager/assets/profile-icon.png" alt="Profile" style="width: 40px; height: 40px; border-radius: 50%;">
+                </a>
+
+                <!-- Bouton pour mobile -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon" style="background-color: white;"></span>
+                </button>
 
                 <!-- Navigation principale -->
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav me-auto">
+                    <ul class="navbar-nav mx-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="index.php?menu=etudiant&module=sae">Mes SAE</a>
+                            <a class="nav-link text-white" href="index.php?menu=etudiant&module=sae">Mes SAE</a>
                         </li>
                         <li class="nav-item">
-							<a class="nav-link" href="index.php?menu=etudiant&module=deposer_rendu">Deposer un rendu</a>
+                            <a class="nav-link text-white" href="#">Trello</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="index.php?menu=etudiant&module=soutenance">Mes Soutenances</a>
+                            <a class="nav-link text-white" href="#">Github</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="index.php?menu=etudiant&module=connexion&action=deconnexion">Déconnexion</a>
+                            <a class="nav-link text-white" href="index.php?menu=etudiant&module=soutenance">Mes Soutenances</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="index.php?menu=etudiant&module=connexion&action=deconnexion">Déconnexion</a>
                         </li>
                     </ul>
+
+                    <!-- Recherche et icônes -->
+                    <div class="d-flex align-items-center">
+                        <input type="text" class="form-control me-2" placeholder="Search" style="max-width: 200px; border-radius: 5px;">
+                        <img src="/SAE3.2-Manager/assets/bell-icon.png" alt="Notifications" style="width: 24px; height: 24px; margin-right: 10px; cursor: pointer;">
+                        <img src="/SAE3.2-Manager/assets/message-icon.png" alt="Messages" style="width: 24px; height: 24px; cursor: pointer;">
+                    </div>
                 </div>
-            </div>';
-	}
-} 
+            </div>
+        </nav>';
+    }
+}
 ?>
