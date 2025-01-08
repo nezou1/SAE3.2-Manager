@@ -44,6 +44,7 @@ class Site {
 				require_once "../modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
 				break;
 			case "sae":
+			case "depot":
 			case "soutenance" :                
 				require_once PROJECT_ROOT . "/modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
 				break;
