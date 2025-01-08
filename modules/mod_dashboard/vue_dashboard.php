@@ -127,28 +127,10 @@ class VueDashboard extends VueGenerique {
         </div>
         <?php
     }
-    
-
-    // Vue pour le dashboard enseignant
-   /* public function afficherEnseignant() {
-        ?>
-        <h1>Dashboard Enseignant</h1>
-        <p>Bienvenue,!</p>
-        <div class="nav-bar">
-            <a href="index.php">Accueil</a>
-            <a href="cours.php">Mes Cours</a>
-            <a href="etudiants.php">Gestion des étudiants</a>
-            <a href="creation_sae.php">Création de SAE</a>
-        </div>
-        <div class="content">
-            <h2>Gestion des cours</h2>
-            <p>Accédez à vos cours, gérez vos SAE, et consultez les travaux déposés par les étudiants.</p>
-        </div>
-        <?php
-    }*/
 
     public function afficherEnseignant() {
         ?>
+        <link rel="stylesheet" href="../assets/css/styleDashboardEnseignant.css">
         <div class="container-fluid mt-4">
             <div class="row">
                 <!-- Section Cours gérés par l'enseignant -->

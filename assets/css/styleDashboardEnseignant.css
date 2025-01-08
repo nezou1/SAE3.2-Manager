@@ -1,0 +1,32 @@
+.course-container {
+    display: flex;
+    overflow-x: auto;
+    gap: 15px;
+    padding-bottom: 10px;
+}
+
+.course-card {
+    min-width: 180px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    padding: 20px;
+    flex-shrink: 0;
+}
+
+.course-card img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+}
+
+.course-card h6 {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.course-card p {
+    font-size: 12px;
+    color: gray;
+}
