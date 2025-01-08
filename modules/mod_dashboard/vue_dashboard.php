@@ -130,7 +130,7 @@ class VueDashboard extends VueGenerique {
     
 
     // Vue pour le dashboard enseignant
-    public function afficherEnseignant() {
+   /* public function afficherEnseignant() {
         ?>
         <h1>Dashboard Enseignant</h1>
         <p>Bienvenue,!</p>
@@ -145,7 +145,137 @@ class VueDashboard extends VueGenerique {
             <p>Accédez à vos cours, gérez vos SAE, et consultez les travaux déposés par les étudiants.</p>
         </div>
         <?php
+    }*/
+
+    public function afficherEnseignant() {
+        ?>
+        <div class="container-fluid mt-4">
+            <div class="row">
+                <!-- Section Cours gérés par l'enseignant -->
+                <div class="col-lg-12">
+                    <?php $this->afficherCours(); ?>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <!-- Colonne gauche : Projets et ressources -->
+                <div class="col-lg-8">
+                    <?php
+                    $this->afficherProjets();  // Section Projets SAE
+                    $this->afficherRessources();  // Section Ressources
+                    ?>
+                </div>
+                <!-- Colonne droite : Rendus et alertes -->
+                <div class="col-lg-4">
+                    <?php
+                    $this->afficherRendus();  // Section Rendus en attente
+                    $this->afficherAlertes();  // Section Alertes
+                    ?>
+                </div>
+            </div>
+        </div>
+        <?php
     }
 
+    // Section Mes Cours (sous forme de cartes horizontales défilantes)
+    private function afficherCours() {
+        ?>
+        <h4 class="mb-3">Pages récemment consultées</h4>
+        <div class="course-container d-flex overflow-auto gap-3 p-2">
+            <?php
+            $cours = [
+                ["Tableau de bord", "18 déc. 2024", "coffee-icon.png"],
+                ["Maison", "28 déc. 2024", "home-icon.png"],
+                ["Alternance", "24 sept. 2024", "grade-icon.png"],
+                ["Équipe", "13 oct. 2024", "team-icon.png"],
+                ["Construction Maison", "20 nov. 2024", "build-icon.png"],
+                ["Cours", "4 déc. 2024", "book-icon.png"],
+            ];
 
+            foreach ($cours as $coursItem) {
+                ?>
+                <div class="course-card p-3 rounded shadow-sm text-center">
+                    <img src="../assets/icons/<?= $coursItem[2] ?>" alt="<?= $coursItem[0] ?>" class="icon mb-2">
+                    <h6><?= htmlspecialchars($coursItem[0]) ?></h6>
+                    <p class="text-muted mb-0"><?= $coursItem[1] ?></p>
+                </div>
+                <?php
+            }
+            ?>
+        </div>
+        <?php
+    }
+
+    // Section Projets SAE
+    private function afficherProjets() {
+        ?>
+        <h4 class="mt-5">Projets SAE Créés</h4>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5>SAE Manager</h5>
+                        <p>Deadline : 20/03/2025</p>
+                        <a href="projet_gestion.php" class="btn btn-outline-dark">Gérer le projet</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5>Refactoring & Design Pattern</h5>
+                        <p>Deadline : 25/03/2025</p>
+                        <a href="projet_gestion.php" class="btn btn-outline-dark">Gérer le projet</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php
+    }
+
+    // Autres sections (Alertes, Rendus, Ressources) restent inchangées
+    private function afficherRessources() {
+        ?>
+        <h4>Ressources</h4>
+        <div class="card text-center">
+            <div class="card-body">
+                <h5>Documentation pour le module</h5>
+                <a href="ressources.php" class="btn btn-outline-primary">Consulter</a>
+            </div>
+        </div>
+        <?php
+    }
+
+    private function afficherRendus() {
+        ?>
+        <h4>Rendus en attente</h4>
+        <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Dépôt TP1 - Étudiant A
+                <a href="corriger.php" class="btn btn-outline-primary btn-sm">Corriger</a>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                User Story - Étudiant B
+                <a href="corriger.php" class="btn btn-outline-primary btn-sm">Corriger</a>
+            </li>
+        </ul>
+        <?php
+    }
+
+    private function afficherAlertes() {
+        ?>
+        <h4 class="mt-4">Alertes</h4>
+        <div class="card mb-3">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div><strong>Mercredi 15 Février</strong> - Réunion pédagogique</div>
+                <a href="details.php" class="btn btn-outline-secondary btn-sm">Détails</a>
+            </div>
+        </div>
+        <div class="card mb-3">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div><strong>Vendredi 18 Février</strong> - Fin des évaluations SAE 3.1</div>
+                <a href="details.php" class="btn btn-outline-secondary btn-sm">Détails</a>
+            </div>
+        </div>
+        <?php
+    }
 }
