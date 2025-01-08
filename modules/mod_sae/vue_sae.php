@@ -108,7 +108,23 @@ class VueSae extends VueGenerique{
 								<label for="semestre" class="form-label">Semestre</label>
 								<input type="number" id="semestre" name="semestre" class="form-control" placeholder="Semestre" required>
 								<?php if (isset($errors['semestre'])): ?>
-									<small class="error-message"><?= $errors['annee'] ?></small>
+									<small class="error-message"><?= $errors['semestre'] ?></small>
+								<?php endif; ?>
+							</div>
+							<!-- Date de dépôt -->
+							<div>
+								<label for="date_depot" class="form-label">Date de Dépôt</label>
+								<input type="date" id="date_depot" name="date_depot" class="form-input" placeholder="Date de Dépôt" required>
+								<?php if (isset($errors['date_depot'])): ?>
+									<small class="error-message"><?= $errors['date_depot'] ?></small>
+								<?php endif; ?>
+							</div>
+							<!-- Heure de dépôt -->
+							<div>
+							<label for="heure_depot" class="form-label">Heure de Dépôt</label>
+							<input type="time" id="heure_depot" name="heure_depot" class="form-input" placeholder="Heure de Dépôt" required>
+								<?php if (isset($errors['heure_depot'])): ?>
+									<small class="error-message"><?= $errors['heure_depot'] ?></small>
 								<?php endif; ?>
 							</div>
 							<!-- Intervenants -->
@@ -153,7 +169,7 @@ class VueSae extends VueGenerique{
             </div>
         </div>
 		<script>
-			document.getElementById('add-ressource').addEventListener('click', function() {
+		/*  document.getElementById('add-ressource').addEventListener('click', function() {
 				const container = document.getElementById('ressource-container');
 				const inputFile = document.createElement('div');
 				inputFile.classList.add('mb-3');
@@ -165,7 +181,7 @@ class VueSae extends VueGenerique{
 					</div>`;
 				container.appendChild(inputFile);
 			});
-
+		*/
 			document.addEventListener("DOMContentLoaded", function () {
 				const select = document.querySelector('.selectpicker');
 				if (select) {
