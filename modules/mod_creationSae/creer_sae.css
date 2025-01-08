@@ -1,0 +1,125 @@
+/* Style général */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f5;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Barre de navigation */
+.navbar {
+    width: 100%;
+    background-color: #007bff;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+.navbar a:hover {
+    text-decoration: underline;
+}
+
+.navbar .profile-icon,
+.navbar .icon {
+    width: 24px;
+    height: 24px;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.navbar .search-input {
+    padding: 5px;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+}
+
+/* Conteneur principal */
+.form-container {
+    background-color: #ffffff;
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    width: 400px;
+    max-width: 90%;
+}
+
+/* Titre amélioré */
+.page-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #007bff;
+    text-align: center;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.page-title::before,
+.page-title::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 50px;
+    height: 2px;
+    background-color: #007bff;
+}
+
+.page-title::before {
+    left: -70px;
+}
+
+.page-title::after {
+    right: -70px;
+}
+
+/* Champs de saisie */
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="number"],
+input[type="time"],
+input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+/* Bouton de soumission */
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}

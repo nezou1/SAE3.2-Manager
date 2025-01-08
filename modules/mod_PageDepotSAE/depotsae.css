@@ -1,0 +1,116 @@
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f8f2e4; 
+}
+
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #9fb6a6; 
+    padding: 10px 20px;
+}
+
+.navbar-left .profile-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.navbar-center nav a {
+    text-decoration: none;
+    color: white;
+    margin: 0 15px;
+    font-weight: bold;
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 15px; 
+}
+
+.navbar-right .search-input {
+    padding: 5px;
+    border: none;
+    border-radius: 4px;
+    outline: none;
+}
+
+.navbar-right .icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
+
+.hero {
+    text-align: center;
+    padding: 50px;
+    background-color: #f8f2e4; 
+}
+
+.hero h1 {
+    margin: 0;
+    font-size: 36px;
+    font-weight: bold;
+}
+
+
+.form-container {
+    margin-top: 20px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    display: inline-block;
+    width: 100%;
+    max-width: 600px;
+}
+
+
+.status-section,
+.file-upload-section {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.form-input:focus {
+    outline-color: #9fb6a6;
+    border-color: #9fb6a6;
+}
+
+
+.submit-button {
+    background-color: #9fb6a6; 
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.submit-button:hover {
+    background-color: #8c9e8d; 
+}
