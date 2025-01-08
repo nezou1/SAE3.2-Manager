@@ -7,6 +7,7 @@ class Site {
 
     private $menu;
 	private $menuNom;
+	private $footer;
 
 	public function __construct() {
 		$this->moduleNom = isset($_GET['module']) ? $_GET['module'] : "inscription";
@@ -24,6 +25,7 @@ class Site {
 		}
 		$menu_class = "ComposantMenu".ucfirst($this->menuNom);
 		$this->menu = new $menu_class();
+
 	
 
 
@@ -41,13 +43,10 @@ class Site {
 			case "dashboard" :	
 				require_once "../modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
 				break;
-			case "accueil":
-				case "sae":
-				case "soutenance" :                
-					require_once PROJECT_ROOT . "/modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
-					break;
-				default :
-					die ("Module inexistant");
+			case "sae":
+			case "soutenance" :                
+				require_once PROJECT_ROOT . "/modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
+				break;
 			default :
 				die ("Module inexistant");
 		}
@@ -58,6 +57,7 @@ class Site {
 	public function exec_module() {
 		$module_class = "Mod".ucfirst($this->moduleNom);
 		$this->module = new $module_class();
+		$this->footer = new ComposantFooter();
 		$this->module->exec();
 	}
 

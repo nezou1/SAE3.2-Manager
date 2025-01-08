@@ -1,4 +1,4 @@
-# FULL_PROJECT
+# SAE3.2-MANAGER
 
 ## Description
 SAE Manager est une application web de gestion des projets de SAE (Situations d’Apprentissage et d’Évaluation). Son objectif principal est de centraliser et de simplifier le suivi des projets pour les étudiants et les enseignants. Ce site web facilite la gestion des rendus, des évaluations et des ressources associées à chaque projet.
@@ -30,8 +30,8 @@ SAE Manager est une application web de gestion des projets de SAE (Situations d�
 
 1. **Cloner le dépôt** :
    ```bash
-   git clone https://github.com/nezou1/FULL_PROJECT.git
-   cd FULL_PROJECT
+   git clone https://github.com/nezou1/SAE3.2-MANAGER.git
+   cd SAE3.2-MANAGER
    ```
 
 ## Utilisation
