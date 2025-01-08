@@ -52,7 +52,22 @@ class VueSae extends VueGenerique{
 	}
 
 	public function acceder_sae($sae) {
-		
+?>		
+	<!-- Section principale -->
+	<div class="hero">
+			<h1>NOM DE LA SAE</h1>
+			<div class="description-container">
+				<p class="description">courte description</p>
+			</div>
+		</div>
+
+		<!-- Section des cercles -->
+		<div class="circles">
+			<div class="circle">Cours</div>
+			<div class="circle">Ressource</div>
+			<div class="circle">Dépôt</div>
+		</div>
+<?php
 	}
 
 	public function form_creer_sae() {

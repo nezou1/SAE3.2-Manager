@@ -32,7 +32,9 @@ class ControleurSae {
 				}
 				break;
 			case "acceder_sae":
-				$this->acceder_sae($_GET['projet']);
+				if(isset($_GET['projet'])){
+					$this->acceder_sae($_GET['projet']);
+				}
 			default : 
 				die ("Action inexistante");
 		}
