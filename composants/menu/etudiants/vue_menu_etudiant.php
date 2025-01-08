@@ -3,12 +3,9 @@ class VueCompMenuEtudiant extends VueCompGenerique {
 
     public function __construct() {
         $this->affichage .= '
-        <nav class="navbar navbar-expand-lg" style="background-color: #91A89B; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
             <div class="container-fluid">
                 <!-- Logo -->
-                <a class="navbar-brand text-white" href="index.php?module=accueil" style="font-weight: bold;">
-                    <img src="/SAE3.2-Manager/assets/profile-icon.png" alt="Profile" style="width: 40px; height: 40px; border-radius: 50%;">
-                </a>
+                <a class="navbar-brand text-white" href="index.php?menu=etudiant&module=accueil">LOGO SITE</a>
 
                 <!-- Bouton pour mobile -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,8 +39,7 @@ class VueCompMenuEtudiant extends VueCompGenerique {
                         <img src="/SAE3.2-Manager/assets/message-icon.png" alt="Messages" style="width: 24px; height: 24px; cursor: pointer;">
                     </div>
                 </div>
-            </div>
-        </nav>';
+            </div>';
     }
 }
 ?>
