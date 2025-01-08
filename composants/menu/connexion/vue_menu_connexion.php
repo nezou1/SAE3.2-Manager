@@ -24,7 +24,6 @@ class VueCompMenuConnexion extends VueCompGenerique {
 						<li class="nav-item">
 							<a class="nav-link" href="index.php?module=inscription&action=inscription">Inscrire</a>
 						</li>
-						;
 					</ul>
 				</div>
 			</div>

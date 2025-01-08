@@ -32,7 +32,7 @@ class ControleurInscription {
                 }
                 break;
             default:
-                header('Location: ./index.php?module=mod_inscription&action=form');
+                header('Location: ./index.php?module=inscription&action=form');
                 exit;
         }
     }
