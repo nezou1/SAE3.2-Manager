@@ -9,7 +9,7 @@ class ModeleDepot extends Connexion {
             'idProjet' => $idProjet,
             'idGroupe' => $idGroupe
         ]);
-        return $stmt->fetchAll();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function addDepot($idProjet, $idGroupe, $descriptif, $dateEnvoyee) {
@@ -26,18 +26,7 @@ class ModeleDepot extends Connexion {
     public function getProjetDetails($idProjet) {
         $sql = "SELECT * FROM projet WHERE idProjet = :idProjet";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([
-            'idProjet' => $idProjet
-        ]);
-        return $stmt->fetch();
-    }
-
-    public function getGroupesByProjet($idProjet) {
-        $sql = "SELECT * FROM groupe WHERE idProjet = :idProjet";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([
-            'idProjet' => $idProjet
-        ]);
-        return $stmt->fetchAll();
+        $stmt->execute(['idProjet' => $idProjet]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }

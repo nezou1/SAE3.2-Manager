@@ -11,7 +11,7 @@ class Site {
 
 	public function __construct() {
 		$this->moduleNom = isset($_GET['module']) ? $_GET['module'] : "inscription";
-		$this->menuNom = isset($_GET['menu']) ? $_GET['menu'] : "connexion";
+		$this->menuNom = isset($_GET['menu']) ? $_GET['menu'] : "etudiant";
 
 		switch($this->menuNom) {
 			case "enseignant":
@@ -45,6 +45,7 @@ class Site {
 				break;
 			case "sae":
 			case "depot":
+			case "groupe":	
 			case "soutenance" :                
 				require_once PROJECT_ROOT . "/modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
 				break;

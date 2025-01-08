@@ -11,7 +11,7 @@ class ControleurDepot {
     public function __construct() {
         $this->modele = new ModeleDepot();
         $this->vue = new VueDepot();
-        $this->action = $_GET['action'] ?? 'view';
+        $this->action = $_GET['action'] ?? 'add';
     }
 
     public function exec() {
@@ -47,14 +47,13 @@ class ControleurDepot {
         $idProjet = $_POST['idProjet'] ?? null;
         $idGroupe = $_SESSION['idGroupe'] ?? null;
         $descriptif = $_POST['descriptif'] ?? null;
-        $dateEnvoyee = date('Y-m-d');
 
         if (!$idProjet || !$idGroupe || !$descriptif) {
             $this->vue->afficherErreur("Tous les champs sont requis pour ajouter un dépôt.");
             return;
         }
 
-        $this->modele->addDepot($idProjet, $idGroupe, $descriptif, $dateEnvoyee);
+        $this->modele->addDepot($idProjet, $idGroupe, $descriptif, date('Y-m-d'));
         $this->vue->afficherMessage("Dépôt ajouté avec succès.");
         $this->afficherDepots();
     }
