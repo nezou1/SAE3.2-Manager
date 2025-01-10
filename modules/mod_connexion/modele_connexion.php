@@ -24,7 +24,7 @@ class ModeleConnexion extends Connexion {
                         $_SESSION['profil'] = $user['profil'];
                         $_SESSION['login'] = $user['login'];
 
-                        header('Location: ./index.php?module=dashboard&action=exec');
+                        header('Location: ./index.php?menu='. $_SESSION['profil'].'&module=dashboard&action=exec');
                         exit();
                     } else {
                         $this->showLoginError("Mot de passe incorrect.");

@@ -5,8 +5,9 @@ class VueCompMenuEtudiant extends VueCompGenerique {
         $this->affichage .= '
             <div class="container-fluid">
                 <!-- Logo -->
-                <a class="navbar-brand text-white" href="index.php?menu=etudiant&module=dashboard">LOGO SITE</a>
-
+                <a class="navbar-brand fw-bold text-uppercase" href="index.php?menu=etudiant&module=dashboard">
+					<img src="../assets/logo.png" alt="Logo Site" style="height: 40px;" class="me-2">
+				</a>
                 <!-- Bouton pour mobile -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon" style="background-color: white;"></span>
