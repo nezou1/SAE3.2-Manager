@@ -1,0 +1,39 @@
+.container {
+    margin-top: 30px;
+    padding: 10px 20px;
+}
+
+/* Recherche */
+.form-control {
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.form-container {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    height: 100%; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.table-container {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    height: 100%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+    background-color: #91A89B;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #778c7b;
+}
+
+.form-label {
+    font-weight: bold;
+}
