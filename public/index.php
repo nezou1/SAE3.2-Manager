@@ -11,6 +11,8 @@ require_once PROJECT_ROOT . "/core/vue_composant_generique.php";
 require_once PROJECT_ROOT . "/modules/module_generique.php";
 
 require_once PROJECT_ROOT . "/composants/composant_generique.php";
+
+require_once PROJECT_ROOT . "/composants/menu/enseignants/composant_menu_enseignant.php";
 require_once PROJECT_ROOT . "/composants/footer/composant_footer.php";
 
 Connexion::initConnexion();
