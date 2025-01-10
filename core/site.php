@@ -38,10 +38,6 @@ class Site {
 			case "soutenance" :
 			case "depot":                
 				require_once PROJECT_ROOT . "/modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
-			// case "etudiant" :
-				//require_once "composants/menu/etudiant/composant_menu_etudiant.php";
-			case "soutenance" :                
-				require_once PROJECT_ROOT ."/modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
 				break;
 			default :
 				die ("Module inexistant");
