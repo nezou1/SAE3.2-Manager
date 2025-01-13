@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require_once "../config/config.php";
+require_once "../core/config.php";
 
 require_once PROJECT_ROOT . "/core/connexion.php";
 require_once PROJECT_ROOT . "/core/site.php";

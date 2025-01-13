@@ -39,7 +39,7 @@ class ControleurConnexion {
 
     public function logout() {
         session_destroy();
-        header('Location: ./index.php/?module=connexion&action=logout');
+        header('Location: ./index.php?menu=connexion&module=connexion&action=login');
         exit();
     }
 

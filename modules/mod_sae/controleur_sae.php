@@ -22,14 +22,15 @@ class ControleurSae {
 				$this->mes_saes();
 				break;
 			case "form_creer_sae" :
-				$this->form_creer_sae();
+				$enseignants = $this->modele->liste_enseignants($_SESSION['login']);
+				$this->form_creer_sae($enseignants);
 				break;
 			case "creer_sae" :
-				if(isset($_POST["tokenCSRF"]) && $_POST["tokenCSRF"] == $_SESSION['token']){
+				// if(isset($_POST["tokenCSRF"]) && $_POST["tokenCSRF"] == $_SESSION['token']){
 					$this->creer_sae();
-				} else {
+				/* } else {
 					die("token incorrecte");
-				}
+				}*/
 				break;
 			case "acceder_sae":
 				if(isset($_GET['projet'])){
@@ -45,21 +46,22 @@ class ControleurSae {
 		$this->vue->mes_saes($liste);
 	}
 
-	public function form_creer_sae() {
+	public function form_creer_sae($enseignants) {
 		$erreurs = [];
-		$this->vue->form_creer_sae($erreurs);
+		$this->vue->form_creer_sae($enseignants,$erreurs);
 	}
 
 	public function creer_sae() {
-		$titre = isset($_POST["titre"]) ? $_POST["titre"] : null;
-		$description = isset($_POST["description"]) ? $_POST["description"] : null;
-		$annee = isset($_POST["annee"]) ? $_POST["annee"] : null;
-		$semestre = isset($_POST["semestre"]) ? $_POST["semestre"] : null;
-		$date_depot = isset($_POST["date_depot"]) ? $_POST["date_depot"] : null;
-		$heure_depot = isset($_POST["heure_depot"]) ? $_POST["heure_depot"] : null;
+		$titre = $_POST["titre"];
+		$description = $_POST["description"];
+		$annee = $_POST["annee"];
+		$semestre = $_POST["semestre"];
+		$date_depot = $_POST["date_depot"];
 		$intervenants = isset($_POST["intervenants"]) ? $_POST["intervenants"] : null;
-		$ressources = isset($_POST["ressources"]) ? $_POST["ressources"] : null;
-		$highlights = isset($_POST["highlight"]) ? $_POST["highlight"] : [];
+
+		var_dump($_POST["intervenants"]);
+		$ressources = isset($_FILES["ressources"]) ? $_FILES["ressources"] : null;
+		$highlights = isset($_POST["highlight"]) ? $_POST["highlight"] : null;
 
 		// if (!$titre || !$description || !$annee || !$semestre || !$intervenants || !$ressources) {
 		// 	$this->vue->erreurParametresManquants();
@@ -72,16 +74,16 @@ class ControleurSae {
 			$annee, 
 			$semestre, 
 			$date_depot, 
-			$heure_depot, 
 			$intervenants, 
 			$ressources, 
 			$highlights
 		);
 
 		if (is_array($erreurs) && !empty($erreurs)) {
-			$this->vue->form_creer_sae($erreurs); // Réaffiche le formulaire avec les erreurs et les données déjà saisies
+			$enseignants = $this->modele->liste_enseignants($_SESSION['login']);
+			$this->vue->form_creer_sae($enseignants,$erreurs); // Réaffiche le formulaire avec les erreurs et les données déjà saisies
 		} else {
-			$this->vue->confirmeAjout();
+			// $this->vue->confirmeAjout();
 		}
 	}
 

@@ -1,6 +1,14 @@
 <?php
 
+require_once PROJECT_ROOT . "/modules/mod_sae/requete_sae.php";
+
 class ModeleSae extends Connexion {
+
+    private $requetes;
+
+    public function __construct() {
+        $this->requetes = RequetesSQL::$queries;
+    }
 
     // MES SAES
 
@@ -10,34 +18,37 @@ class ModeleSae extends Connexion {
     }
 
     // CREER UNE SAE
+
+    public function liste_enseignants($email_responsable) {
+        $req = $this->requetes['liste_enseignant'];
+        $pdo_req = self::$bdd->prepare($req);
+        $pdo_req->bindParam("email_resp", $email_responsable);
+        $pdo_req->execute();
+        return $pdo_req->fetchAll();
+    }
+
+    private function get_id_intervenant($email) {
+        $req = $this->requetes['id_intervenant'];
+        $pdo_req = self::$bdd->prepare($req);
+        $pdo_req->execute([$email]);
+        return $pdo_req->fetch();
+    }
+
     
-    public function creer_sae($titre, $description, $annee, $semestre, $date_depot, $heure_depot, $intervenants, $highlights) {
+    public function creer_sae($titre, $description, $annee, $semestre, $date_depot, $intervenants, $ressources, $highlights) {
         $errors = [];
 
         if ($this->titre_existe($titre))
             $errors['nom_groupe'] = "Ce titre est déjà attribuer à une autre SAE.";
-        else 
-            $titre = $this->get_titre($titre)['titre'];
-
-        if (!$this->date_valide($annee))
-            $errors['annee'] = "L'année est déjà passée.";
-        else
-            $annee = $this->get_annee($annee)['annee'];
-
-        if($semestre < 1 || $semestre > 6)
-            $errors['annee'] = "Saississez un semestre compris entre 1 et 6.";
-        else
-            $semestre = $this->get_semestre($semestre)['$semestre'];
-
-        foreach ($intervenants as $email_intervenant) {
-            if (!$this->intervenant_existe($email_intervenant)) {
-                $errors['intervenants'] = "Un des intervenants sélectionnés n'existe pas.";
-                break;
-            }
-        }
 
         if (!empty($errors))
             return $errors;
+
+        if (is_array($semestre)) {
+            $semestre = $semestre[0];  // Extrait la première valeur du tableau
+        }
+        $semestre = (int)$semestre;
+        $annee = (int)$annee;
 
         $id_projet = $this->addProjet($titre, $description, $annee, $semestre);
 
@@ -45,46 +56,58 @@ class ModeleSae extends Connexion {
         $this->addRessources($highlights, $id_projet);    
     }
 
-    private function get_id_intervenant($email) {
-        $req = "SELECT idEns FROM Enseignant WHERE email = ?";
-        $pdo_req = self::$bdd->query($req);
-        $pdo_req->execute([$email]);
+    private function titre_existe($titre) {
+        $req = $this->requetes['get_titre_sae'];
+        $pdo_req = self::$bdd->prepare($req);
+        $pdo_req->execute([$titre]);
         return $pdo_req->fetch();
     }
 
+
     private function addProjet($titre, $description, $annee, $semestre) {
-        $req = "INSERT INTO Projet VALUES (?, ?, ?, ?)";
-        $pdo_req = self::$bdd->query($req);
+        $req = $this->requetes['inserer_projet'];
+        $pdo_req = self::$bdd->prepare($req);
         $pdo_req->execute([$titre, $description, $annee, $semestre]);
         return self::$bdd->lastInsertId();
     }
 
     private function addIntervenants($intervenants, $idProjet) {
-        $req = "INSERT INTO estAssigneComme VALUES (?, ?, \"intervenant\")";
-        $pdo_req = self::$bdd->query($req);
-        foreach ($intervenants as $email_intervenant){
+        $req = $this->requetes['inserer_intervenant'];
+        $pdo_req = self::$bdd->prepare($req);
+        foreach ($intervenants as  $email_intervenant){
             $id_intervenant = $this->get_id_intervenant($email_intervenant);
-            $pdo_req->execute([$idProjet, $id_intervenant]);
+            $pdo_req->execute([$id_intervenant, $idProjet]);
         }
     }
 
     
-    private function addRessource($highlight, $idProjet) {
-        foreach ($_FILES['ressources']['name'] as $key => $file) {
-            $file_basename = pathinfo($file, PATHINFO_FILENAME);
-            $file_extension = pathinfo($file, PATHINFO_EXTENSION);
-            $name_ressource = $file_basename . '_' . date("Ymd_His") . '.' . $file_extension;
-            $is_highlighted = in_array($key, $highlight) ? true : false;
-    
-            // Insertion dans la base de données
-            $req = "INSERT INTO Ressource VALUES (?, ?, ?, ?, ?)";
-            $pdo_req = self::$bdd->prepare($req);
-            $pdo_req->execute([$name_ressource, $file_extension, $url_ressource, $is_highlighted, $idProjet]);
-    
-            // Sauvegarde du fichier sur le serveur
-            // $target_dir = "uploads/ressources/";
-            // $target_file = $target_dir . $name_ressource;
-            // move_uploaded_file($_FILES['ressources']['tmp_name'][$key], $target_file);
+    private function addRessources($highlight, $idProjet) {
+        if (isset($_FILES['ressources'])) {
+            $files = $_FILES['ressources'];
+
+            foreach ($files['name'] as $key => $file) {
+                $file_basename = pathinfo($file, PATHINFO_FILENAME);
+                $file_extension = pathinfo($file, PATHINFO_EXTENSION);
+                $name_ressource = $file_basename . '_' . date("Ymd_His") . '.' . $file_extension;
+
+                $uploadDir = 'uploads/';
+                $destination = $uploadDir . basename($fileName);
+                if (move_uploaded_file($files['tmp_name'][$key], $destination)) {
+                    $url_ressource = 'http://' . $_SERVER['HTTP_HOST'] . '/' . $destination;
+
+                    // Vérifiez si le fichier doit être mis en avant
+                    $is_highlighted = in_array($key, $highlight) ? true : false;
+
+                    // Insertion dans la base de données
+                    $req = $this->requetes['inserer_ressource'];
+                    $pdo_req = self::$bdd->prepare($req);
+                    $pdo_req->execute([$name_ressource, $file_extension, $url_ressource, $is_highlighted, $idProjet]);
+
+                    // echo "Le fichier $fileName a été téléchargé avec succès. Mis en avant : $isHighlighted<br>";
+                } else {
+                    echo "Erreur lors du déplacement du fichier $fileName.<br>";
+                }
+            }            
         }
     }
 

@@ -37,3 +37,41 @@
 .form-label {
     font-weight: bold;
 }
+/* Style des badges affichés dans le champ */
+.form-control.multiselect {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    height: auto;
+    cursor: pointer;
+  }
+
+  .form-control.multiselect span {
+    margin-right: 5px;
+  }
+
+  .dropdown-menu {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+
+  .dropdown-item input[type="checkbox"] {
+    margin-right: 10px;
+  }
+
+  .custom-badge {
+    background-color: #91A89B;
+    color: white;
+  }
+  .drop-area {
+    transition: background-color 0.3s;
+}
+
+.drop-area.hover {
+    background-color: #f0f0f0;
+}
+
+.delete-button {
+    cursor: pointer;
+    color: darkgray;
+}

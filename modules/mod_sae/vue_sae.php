@@ -13,7 +13,7 @@ class VueSae extends VueGenerique{
 			<div class="row">
 				<?= $this->get_saes($saes)?>
 <?php				if ($_GET["menu"] == "enseignant") {?>
-					<a href="index.php?module=sae&action=form_creer_sae">
+					<a href="index.php?menu=enseignant&module=sae&action=form_creer_sae">
 						<button class="btn btn-primary w-100">Creer une SAE</button>
 					</a>
 <?php				}?>
@@ -26,7 +26,7 @@ class VueSae extends VueGenerique{
 		if ($saes){
 			foreach($saes as $sae){
 	?>			<div class="col-md-4">
-					<a href="index.php?module=sae&action=acceder_sae&projet=<?=htmlspecialchars($sae)?>">
+					<a href="index.php?menu=enseignant&module=sae&action=acceder_sae&projet=<?=htmlspecialchars($sae)?>">
 						<div class="card">
 							<!-- <img src="https://via.placeholder.com/350x200" class="card-img-top" alt="Bangkok"> -->
 							<div class="card-body">
@@ -70,7 +70,7 @@ class VueSae extends VueGenerique{
 <?php
 	}
 
-	public function form_creer_sae() {
+	public function form_creer_sae($liste_enseignant, $erreurs) {
 ?>
         <h1>Créer une SAE</h1>
         <div class="container">
@@ -78,143 +78,157 @@ class VueSae extends VueGenerique{
                 <!-- Formulaire d'ajout de SAE -->
                 <section class="col-md-6">
                     <div class="form-container">
-						<form action="index.php?module=sae&action=creer_sae" method="POST" enctype="multipart/form-data" novalidate>
+						<form action="index.php?menu=enseignant&module=sae&action=creer_sae" method="POST" enctype="multipart/form-data"> <!--nonvalide -->
 							<!-- Titre -->
 							<div class="mb-3">
 								<label for="titre" class="form-label">Titre</label>
 								<input type="text" id="titre" name="titre" class="form-control" placeholder="Titre" required>
-								<?php if (isset($errors['titre'])): ?>
-									<small class="error-message"><?= $errors['titre'] ?></small>
+								<?php if (isset($erreurs['titre'])): ?>
+									<small class="error-message"><?= $erreurs['titre'] ?></small>
 								<?php endif; ?>
 							</div>
 							<!-- Description -->
 							<div class="mb-3">
 								<label for="description" class="form-label">Description</label>
 								<input type="text" id="description" name="description" class="form-control" placeholder="Description" required>
-								<?php if (isset($errors['description'])): ?>
-									<small class="error-message"><?= $errors['description'] ?></small>
-								<?php endif; ?>
-							</div>
-							<!-- Annee -->
-							<div class="mb-3">
-								<label for="annee" class="form-label">Annee</label>
-								<input type="number" id="annee" name="annee" class="form-control" placeholder="Annee" required>
-								<?php if (isset($errors['annee'])): ?>
-									<small class="error-message"><?= $errors['annee'] ?></small>
+								<?php if (isset($erreurs['description'])): ?>
+									<small class="error-message"><?= $erreurs['description'] ?></small>
 								<?php endif; ?>
 							</div>
 							<!-- Semestre -->
 							<div class="mb-3">
 								<label for="semestre" class="form-label">Semestre</label>
-								<input type="number" id="semestre" name="semestre" class="form-control" placeholder="Semestre" required>
-								<?php if (isset($errors['semestre'])): ?>
-									<small class="error-message"><?= $errors['semestre'] ?></small>
-								<?php endif; ?>
-							</div>
-							<!-- Date de dépôt -->
-							<div>
-								<label for="date_depot" class="form-label">Date de Dépôt</label>
-								<input type="date" id="date_depot" name="date_depot" class="form-input" placeholder="Date de Dépôt" required>
-								<?php if (isset($errors['date_depot'])): ?>
-									<small class="error-message"><?= $errors['date_depot'] ?></small>
-								<?php endif; ?>
-							</div>
-							<!-- Heure de dépôt -->
-							<div>
-							<label for="heure_depot" class="form-label">Heure de Dépôt</label>
-							<input type="time" id="heure_depot" name="heure_depot" class="form-input" placeholder="Heure de Dépôt" required>
-								<?php if (isset($errors['heure_depot'])): ?>
-									<small class="error-message"><?= $errors['heure_depot'] ?></small>
-								<?php endif; ?>
-							</div>
-							<!-- Intervenants -->
-							<div class="mb-3">
-								<label for="intervenants" class="form-label">Intervenants</label>
-								<?php if (!empty($intervenants)) : ?>
-									<select name="intervenants[]" id="intervenants" class="form-select selectpicker" multiple data-live-search="true" data-selected-text-format="count">
-										<?php foreach ($intervenants as $intervenant): ?>
-											<option value="<?= htmlspecialchars($intervenant['idEns']) ?>">
-												<?= htmlspecialchars($intervenant['email']) ?>
+								<select name="semestre[]" id="semestre" class="form-select selectpicker" data-live-search="true" data-selected-text-format="count" required>
+									<option value="" disabled selected>Sélectionner</option>
+										<?php for ($semestre = 1 ; $semestre <= 6 ; $semestre++): ?>
+											<option value="<?= $semestre?>">
+												<?= $semestre ?>
 											</option>
-										<?php endforeach; ?>
+										<?php endfor; ?>
 									</select>
-									<?php if (isset($errors['intervenants'])): ?>
-										<div class="text-danger mt-1"><small><?= $errors['intervenants'] ?></small></div>
-									<?php endif; ?>
-								<?php else : ?>
-									<p>Aucun enseignant</p>
-							<?php endif?>
-							</div>
-							<!-- Ressources -->	
-							<div class="mb-3">
-								<label for="ressources" class="form-label">Ressources</label>
-								<div id="ressource-container">
-									<!-- Champ de saisie initial -->
-									<div class="ressource-item mb-2">
-										<input type="file" name="ressources[]" class="form-control" accept=".pdf,.docx,.png,.jpeg">
-									</div>
-								</div>
-								<!-- Boutons pour ajouter ou supprimer des champs -->
-								<button type="button" id="add-ressource" class="btn btn-primary btn-sm mt-2">Ajouter une ressource</button>
-								<button type="button" id="remove-ressource" class="btn btn-danger btn-sm mt-2">Supprimer une ressource</button>
-							</div>
-
-							<!-- Boutons -->
+								<?php if (isset($erreurs['semestre'])): ?>
+									<small class="error-message"><?= $erreurs['semestre'] ?></small>
+								<?php endif; ?>
+							</div>	
+<?php 						$this->vue_annee();
+							$this->vue_date_depot();
+							$this->vue_intervenants($liste_enseignant);
+							$this->vue_depot_ressources();
+?>							
 							<div class="d-flex justify-content-between">
 								<input type="submit" class="btn btn-primary" value="Créer">
 							</div>
-
-                    	</form>
+						</form>
                 </section>
             </div>
         </div>
+<?php
+	}
+
+	public function confirmeAjout() {
+?>		<div class="container d-flex justify-content-center align-items-center vh-100">
+			<div class="card shadow-lg p-4 text-center">
+				<div class="card-body">
+					<h1 class="text-success">Confirmation réussie</h1>
+					<p class="mt-3 mb-4">Votre SAE a été ajoutée avec succès !<br> Vous allez être redirigé vers la page d'accueil</p>
+					<!-- <div class="d-flex justify-content-center gap-3">
+						<a href="index.html" class="btn btn-primary">Retour à l'accueil</a>
+						<a href="action-suivante.html" class="btn btn-success">Poursuivre</a>
+					</div> -->
+				</div>
+			</div>
+		</div>
 		<script>
-		/*  document.getElementById('add-ressource').addEventListener('click', function() {
-				const container = document.getElementById('ressource-container');
-				const inputFile = document.createElement('div');
-				inputFile.classList.add('mb-3');
-				inputFile.innerHTML = `
-					<div class="d-flex align-items-center">
-						<input type="file" name="ressources[]" class="form-control me-2" accept=".pdf,.docx,.png,.jpeg">
-						<input type="checkbox" name="highlight[]" class="form-check-input me-2">
-						<label class="form-check-label">Mettre en avant</label>
-					</div>`;
-				container.appendChild(inputFile);
-			});
-		*/
-			document.addEventListener("DOMContentLoaded", function () {
-				const select = document.querySelector('.selectpicker');
-				if (select) {
-					$('.selectpicker').selectpicker();
-				}
-			});
-
-			document.addEventListener("DOMContentLoaded", function () {
-			const container = document.getElementById("ressource-container");
-			const addButton = document.getElementById("add-ressource");
-			const removeButton = document.getElementById("remove-ressource");
-
-			// Ajouter un nouveau champ de ressource
-			addButton.addEventListener("click", function () {
-				const newField = document.createElement("div");
-				newField.classList.add("ressource-item", "mb-2");
-				newField.innerHTML = `
-					<input type="file" name="ressources[]" class="form-control" accept=".pdf,.docx,.png,.jpeg">
-				`;
-				container.appendChild(newField);
-			});
-
-			// Supprimer le dernier champ de ressource
-			removeButton.addEventListener("click", function () {
-				const items = container.getElementsByClassName("ressource-item");
-				if (items.length > 1) {
-					container.removeChild(items[items.length - 1]);
-				} else {
-					alert("Vous devez conserver au moins un champ de ressource.");
-				}
-			});
-		});
+			setTimeout(() => {
+				window.location.href = "index.php?menu=enseignant&module=dashboard"; // Remplace "index.html" par l'URL de la page d'accueil
+			}, 3000);
 		</script>
+<?php
+	}
+
+	private function vue_annee() {
+?>		<!-- Annee -->
+		<div class="mb-3">
+			<label for="annee" class="form-label">Annee</label>
+			<input type="number" min="0" id="annee" name="annee" class="form-control" placeholder="Annee" required>
+			<?php if (isset($erreurs['annee'])): ?>
+				<small class="error-message"><?= $erreurs['annee'] ?></small>
+			<?php endif; ?>
+		</div>
+		<script>
+			const annee_courante = new Date().getFullYear();
+			document.getElementById('annee').setAttribute('min', annee_courante);
+		</script>
+<?php
+	}
+
+	private function vue_date_depot() {
+?>		<!-- Date de dépôt -->
+		<div>
+			<label for="date_depot" class="form-label">Date de Dépôt</label>
+			<input type="date" id="date_depot" name="date_depot" class="form-input" placeholder="Date de Dépôt" required>
+			<?php if (isset($erreurs['date_depot'])): ?>
+				<small class="error-message"><?= $erreurs['date_depot'] ?></small>
+			<?php endif; ?>
+		</div>
+		<script>
+			const date_courante = new Date().toISOString().split('T')[0];
+			document.getElementById('date_depot').setAttribute('min', date_courante);
+		</script>
+<?php
+	}
+
+	private function vue_intervenants($liste) {
+?>  	<div class="mb-3">
+			<label for="intervenants" class="form-label">Intervenants</label>
+
+			<?php if (!empty($liste)) : ?>
+				<div class="custom-select-container">
+					<div class="form-control multiselect dropdown-toggle" id="multiSelectDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+						<span class="text-muted" id="placeholder_intervenants">Sélectionner</span>
+					</div>
+					<ul class="dropdown-menu w-100" id="dropdownOptions">
+						<?php foreach ($liste as $intervenant): ?>
+							<li>
+								<label class="dropdown-item"><input type="checkbox" value="<?=htmlspecialchars($intervenant['email'])?>">
+								<?=htmlspecialchars($intervenant['email'])?>	
+								</label>
+							</li>
+						<?php endforeach; ?>
+					</ul>
+				</div>
+				<?php else : ?>
+						<p>Aucun enseignant</p>
+				<?php endif?>
+		</div>
+		<script src="../assets/script/scriptSelect.js"></script>
+<?php
+	} 
+
+	private function vue_depot_ressources() {
+?>		<!-- Ressources -->	
+		<div class="mb-3">
+			<label for="ressources" class="form-label">Ressources</label>
+
+			<div class="container mt-5">
+			<div id="drop-area" class="drop-area border border-secondary rounded p-4 text-center">
+                <p>Glissez vos fichiers ici ou <button type="button" id="file-input-button" class="btn btn-link">Déposer une Ressource</button></p>
+                <input type="file" id="file-input" multiple style="display: none;">
+            </div>
+				<table id="file-table" class="table table-bordered mt-4" style="display: none;">
+                <thead class="thead-light">
+						<tr>
+							<th>Nom du Fichier</th>
+							<th>Type</th>
+							<th>Mettre en avant</th>
+                        	<th>Action</th>
+						</tr>
+					</thead>
+					<tbody id="file-table-body"></tbody>
+				</table>
+			</div>
+		</div>
+		<script src="../assets/script/scriptDepot.js"></script>
 <?php
 	}
 }
