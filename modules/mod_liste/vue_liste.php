@@ -16,9 +16,27 @@ class VueListe extends VueGenerique {
     
         // Affichage du tableau HTML des étudiants
         ?>
+        <script>
+           document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('searchInput').addEventListener('keyup', function() {
+                const searchValue = this.value.toLowerCase();
+                const rows = document.querySelectorAll('#etudiantTable tbody tr');
+                rows.forEach(row => {
+                    const nom = row.cells[0].textContent.toLowerCase();
+                    const prenom = row.cells[1].textContent.toLowerCase();
+                    if (nom.includes(searchValue) || prenom.includes(searchValue)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+        });
+        </script>
         <div class="container mt-5">
             <h2 class="mb-4">Liste des étudiants</h2>
-            <table class="table table-bordered">
+            <input class="form-control mb-4" id="searchInput" type="text" placeholder="Rechercher par nom ou prénom...">
+            <table class="table table-bordered" id="etudiantTable">
                 <thead>
                     <tr>
                         <th>Nom</th>
