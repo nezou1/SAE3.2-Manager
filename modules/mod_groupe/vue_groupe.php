@@ -19,7 +19,7 @@ class VueGroupe extends VueGenerique {
                         Modifiable par les étudiants
                     </label>
                 </div>
-                <button type="submit" class="btn btn-primary">Créer le groupe</button>
+                <button type="submit" class="btn btn-dark">Créer le groupe</button>
             </form>
 
             <!-- Liste des groupes -->
