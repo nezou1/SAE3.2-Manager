@@ -58,4 +58,5 @@ class ModeleDashboard extends Connexion {
             $vue->afficherEnseignant();
         }
     }
+
 }

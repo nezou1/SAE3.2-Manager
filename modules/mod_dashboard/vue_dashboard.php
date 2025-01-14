@@ -3,10 +3,9 @@
 class VueDashboard extends VueGenerique {
 
     public function __construct() {
-        parent::__construct();  // Appelle le constructeur de VueGenerique (si nécessaire)
+        parent::__construct();  
     }
 
-    // Méthode principale pour afficher le tableau de bord en fonction du rôle
     public function get_dashboard() {
         
         //$this->afficherEtudiant();
@@ -18,13 +17,13 @@ class VueDashboard extends VueGenerique {
         ?>
         <style>
             .carousel-item img {
-                height: 350px; /* Ajustez selon vos besoins */
-                object-fit: cover; /* Les images s'adaptent sans se déformer */
+                height: 350px; 
+                object-fit: cover; 
                 width: 100%;
             }
             #calendar {
         max-width: 100%;
-        height: 500px; /* Ajustez la hauteur si nécessaire */
+        height: 500px; 
         margin: 0 auto;
         padding: 10px;
     }
@@ -128,26 +127,26 @@ class VueDashboard extends VueGenerique {
         <?php
     }
 
+    // Vue pour le dashboard enseignant
+
     public function afficherEnseignant() {
         ?>
         <link rel="stylesheet" href="../assets/css/styleDashboardEnseignant.css">
         <div class="container-fluid mt-4">
-            <div class="row">
-                <!-- Section Cours gérés par l'enseignant -->
-                <div class="col-lg-12">
-                    <?php $this->afficherCours(); ?>
-                </div>
-            </div>
             <div class="row mt-5">
                 <!-- Colonne gauche : Projets et ressources -->
                 <div class="col-lg-8">
                     <?php
                     $this->afficherProjets();  // Section Projets SAE
-                    $this->afficherRessources();  // Section Ressources
+                    $this->afficherRessources();// Section Ressources
+                    $this->raccourcisEnseignant();  // Nouvelle section Raccourcis
+                    
                     ?>
                 </div>
                 <!-- Colonne droite : Rendus et alertes -->
                 <div class="col-lg-4">
+                <h4>Calendrier</h4>
+                <?php $this->calendrier(); ?>
                     <?php
                     $this->afficherRendus();  // Section Rendus en attente
                     $this->afficherAlertes();  // Section Alertes
@@ -192,7 +191,7 @@ class VueDashboard extends VueGenerique {
         ?>
         <h4 class="mt-5">Projets SAE Créés</h4>
         <div class="row">
-            <div class="col-md-6 mb-3">
+            <div class="col-md-4 mb-3">
                 <div class="card text-center">
                     <div class="card-body">
                         <h5>SAE Manager</h5>
@@ -201,7 +200,7 @@ class VueDashboard extends VueGenerique {
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 mb-3">
+            <div class="col-md-4 mb-3">
                 <div class="card text-center">
                     <div class="card-body">
                         <h5>Refactoring & Design Pattern</h5>
@@ -210,6 +209,17 @@ class VueDashboard extends VueGenerique {
                     </div>
                 </div>
             </div>
+            <div class="col-md-4 mb-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5>Ajouter un projet</h5>
+                        <a href="creation_sae.php" class="btn btn-outline-dark">
+                            <i class="fas fa-plus"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
         </div>
         <?php
     }
@@ -260,4 +270,90 @@ class VueDashboard extends VueGenerique {
         </div>
         <?php
     }
+
+    private function raccourcisEnseignant() {
+        ?>
+        <h4 class="mt-5">Raccourcis</h4>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <div class="card text-center shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Vue d'ensemble sur les groupes</h5>
+                        <p class="text-muted">Consultez les informations sur les groupes et les projets associés.</p>
+                        <a href="groupes_ensemble.php" class="btn btn-outline-primary">Voir les groupes</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card text-center shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Liste des étudiants</h5>
+                        <p class="text-muted">Accédez à la liste des étudiants inscrits.</p>
+                        <a href="./index.php?module=liste&action=listeEtudiants" class="btn btn-outline-primary">Voir les étudiants</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card text-center shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Liste des enseignants intervenants</h5>
+                        <p class="text-muted">Découvrez la liste des enseignants impliqués dans les projets.</p>
+                        <a href="./index.php?module=liste&action=listeEnseignants" class="btn btn-outline-primary">Voir les enseignants</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php
+    }
+
+    public function afficherListeEtudiants() {
+        try {
+            // Connexion à la base de données via getConnexion()
+            $bdd = $this->getConnexion();
+    
+            // Requête SQL pour récupérer les étudiants
+            $sql = "SELECT idEtud, nom, prenom, email FROM Etudiant";
+            $result = $bdd->query($sql);
+    
+            // Affichage du tableau HTML des étudiants
+            ?>
+            <div class="container mt-5">
+                <h2 class="mb-4">Liste des étudiants</h2>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nom</th>
+                            <th>Prénom</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if ($result && $result->num_rows > 0):
+                            while ($etudiant = $result->fetch_assoc()): ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($etudiant['idEtud']); ?></td>
+                                    <td><?php echo htmlspecialchars($etudiant['nom']); ?></td>
+                                    <td><?php echo htmlspecialchars($etudiant['prenom']); ?></td>
+                                    <td><?php echo htmlspecialchars($etudiant['email']); ?></td>
+                                </tr>
+                            <?php endwhile;
+                        else: ?>
+                            <tr>
+                                <td colspan="4" class="text-center">Aucun étudiant trouvé.</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+            <?php
+    
+            // Fermer la connexion
+            $bdd->close();
+        } catch (Exception $e) {
+            echo "<p class='alert alert-danger'>Erreur lors de la récupération des étudiants : " . $e->getMessage() . "</p>";
+        }
+    }
+    
 }

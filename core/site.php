@@ -36,7 +36,8 @@ class Site {
 			case "dashboard" :	
 			case "sae":
 			case "soutenance" :
-			case "depot":                
+			case "depot":
+			case "liste":                
 				require_once PROJECT_ROOT . "/modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
 				break;
 			default :
