@@ -213,8 +213,8 @@ class VueDashboard extends VueGenerique {
                 <div class="card text-center">
                     <div class="card-body">
                         <h5>Ajouter un projet</h5>
-                        <a href="creation_sae.php" class="btn btn-outline-dark">
-                            <i class="fas fa-plus"></i>
+                        <a href="./index.php?menu=enseignant&module=sae&action=form_creer_sae" class="btn btn-outline-dark">
+                            <i class="fas fa-plus"> + </i>
                         </a>
                     </div>
                 </div>
@@ -230,8 +230,8 @@ class VueDashboard extends VueGenerique {
         <h4>Ressources</h4>
         <div class="card text-center">
             <div class="card-body">
-                <h5>Documentation pour le module</h5>
-                <a href="ressources.php" class="btn btn-outline-primary">Consulter</a>
+                <h5>Accedez au gestionnaire de ressource</h5>
+                <a href="./index.php?module=gestionnaireRessource&action=exec&menu=enseignant" class="btn btn-outline-primary">Consulter</a>
             </div>
         </div>
         <?php
@@ -289,7 +289,7 @@ class VueDashboard extends VueGenerique {
                     <div class="card-body">
                         <h5 class="card-title">Liste des étudiants</h5>
                         <p class="text-muted">Accédez à la liste des étudiants inscrits.</p>
-                        <a href="./index.php?module=liste&action=listeEtudiants" class="btn btn-outline-primary">Voir les étudiants</a>
+                        <a href="./index.php?module=liste&action=listeEtudiants&menu=enseignant" class="btn btn-outline-primary">Voir les étudiants</a>
                     </div>
                 </div>
             </div>
@@ -298,7 +298,7 @@ class VueDashboard extends VueGenerique {
                     <div class="card-body">
                         <h5 class="card-title">Liste des enseignants intervenants</h5>
                         <p class="text-muted">Découvrez la liste des enseignants impliqués dans les projets.</p>
-                        <a href="./index.php?module=liste&action=listeEnseignants" class="btn btn-outline-primary">Voir les enseignants</a>
+                        <a href="./index.php?module=liste&action=listeEnseignants&menu=enseignant" class="btn btn-outline-primary">Voir les enseignants</a>
                     </div>
                 </div>
             </div>

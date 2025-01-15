@@ -11,23 +11,17 @@ class ControleurgestionnaireRessource {
 
     public function __construct() {
         $this->modele = new ModelegestionnaireRessource();
-        $this->vue = new VuegestionnaireRessource();
+        $this->vue = new VueGestionnaireRessource();
         $this->action = $_GET['action'] ?? 'exec';
         $this->menu = $_GET['menu'] ?? 'enseignant';
     }
 
     public function exec() {
 
-        switch($this->menu){
-            case "enseignant":
-                require_once PROJECT_ROOT . "/composants/menu/enseignants/composant_menu_enseignant.php";
-                break;
-            default:
-                require_once "../composants/menu/connexion/composant_menu_connexion.php";
-        }
         switch ($this->action) {
             case 'exec':
-                $this->modele->affichergestionnaireRessource();
+                $result = $this->modele->listeRessource();
+                $this->vue->afficherRessources($result);
                 break;
             case 'logout':
                 $this->logout();
