@@ -61,4 +61,52 @@ class VueGroupe extends VueGenerique {
         </div>
         <?php
     }
+
+    public function affichageGroupeEtudiant($groupes) {
+        ?>
+        <div class="container mt-5">
+            <h1 class="text-center">Gestionnaire de Groupe</h1>
+            <div class="search-bar mb-4">
+                <input class="form-control" type="text" id="searchGroup" placeholder="Rechercher un groupe...">
+            </div>
+            <div class="row" id="groupContainer">
+                <?php foreach ($groupes as $groupe): ?>
+                    <div class="col-md-12 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title"><?= htmlspecialchars($groupe['nom']) ?></h5>
+                                <p class="card-text">
+                                    <strong>Collègues :</strong>
+                                    <ul>
+                                        <?php foreach ($groupe['collegues'] as $collegue): ?>
+                                            <li><?= htmlspecialchars($collegue) ?></li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                    <strong>Projet :</strong> <?= htmlspecialchars($groupe['projet']) ?>
+                                </p>
+                                <a href="index.php?module=groupe&action=voir&id=<?= htmlspecialchars($groupe['id']) ?>" class="btn btn-primary">Voir plus</a>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <script>
+            document.getElementById('searchGroup').addEventListener('keyup', function() {
+                const searchValue = this.value.toLowerCase();
+                const groups = document.querySelectorAll('#groupContainer .card');
+                groups.forEach(group => {
+                    const groupName = group.querySelector('.card-title').textContent.toLowerCase();
+                    if (groupName.includes(searchValue)) {
+                        group.parentElement.style.display = '';
+                    } else {
+                        group.parentElement.style.display = 'none';
+                    }
+                });
+            });
+        </script>
+        <?php
+    }
+
+
 }

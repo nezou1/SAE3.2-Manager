@@ -22,6 +22,9 @@ class ControleurGroupe {
             case 'add':
                 $this->ajouterGroupe();
                 break;
+            case'affichage':
+                $this->vue->affichageGroupeEtudiant();
+                break;
             default:
                 $this->vue->afficherErreur("Action inconnue : " . $this->action);
                 break;
