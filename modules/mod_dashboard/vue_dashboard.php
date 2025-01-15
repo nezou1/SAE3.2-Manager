@@ -333,7 +333,7 @@ class VueDashboard extends VueGenerique {
                     <div class="card-body">
                         <h5 class="card-title">Vue d'ensemble sur les groupes</h5>
                         <p class="text-muted">Consultez les informations sur les groupes et les projets associés.</p>
-                        <a href="groupes_ensemble.php" class="btn btn-outline-primary">Voir les groupes</a>
+                        <a href="./index.php?module=groupe&menu=enseignant" class="btn btn-outline-primary">Voir les groupes</a>
                     </div>
                 </div>
             </div>
