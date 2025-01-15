@@ -82,6 +82,13 @@ class VueDashboard extends VueGenerique {
                             </div>
                         </div>
                     </div>
+                    <div class="row mt-5">
+                        <?php
+                        $modele = new ModeleDashboard();
+                        $groupes = $modele->getGroupesEtudiant($_SESSION['login']);
+                        $this->afficherGroupesEtudiant($groupes);
+                        ?>
+                    </div>
                 </div>
     
                 <!-- Colonne droite : Calendrier et Alertes -->
@@ -96,6 +103,7 @@ class VueDashboard extends VueGenerique {
                     ?>                    
                 </div>
             </div>
+
         </div>
 
         <?php
@@ -123,6 +131,61 @@ class VueDashboard extends VueGenerique {
                 <div><strong> <?= $date ?> </strong> - <?= $message?> </div>
                 <a href="depot.php" class="btn btn-outline-primary btn-sm">Déposer</a>
             </div>
+        </div>
+        <?php
+    }
+
+    public function afficherGroupesEtudiant() {
+        $modele = new ModeleDashboard();
+        $groupes = $modele->getGroupesEtudiant();
+        
+        ?>
+        <div class="container mt-5">
+            <h4 class="mb-4">Mes Groupes</h4>
+            <?php if (!empty($groupes)): ?>
+                <div id="groupesCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <?php foreach (array_chunk($groupes, 4) as $index => $groupeChunk): ?>
+                            <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
+                                <div class="row">
+                                    <?php foreach ($groupeChunk as $idGroupe): ?>
+                                        <div class="col-md-3 mb-3">
+                                            <div class="card text-center shadow-sm">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Groupe <?= htmlspecialchars($idGroupe) ?></h5>
+                                                    <p class="text-muted">Collègues :</p>
+                                                    <ul class="list-unstyled">
+                                                        <?php 
+                                                        $membres = $modele->getMembreGroupe($idGroupe);
+                                                        if (is_array($membres)) {
+                                                            foreach ($membres as $membre): ?>
+                                                                <li><?= htmlspecialchars($membre['prenom'] . ' ' . $membre['nom']) ?></li>
+                                                            <?php endforeach;
+                                                        } else {
+                                                            echo "<li>Aucun membre trouvé.</li>";
+                                                        }
+                                                        ?>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#groupesCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#groupesCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            <?php else: ?>
+                <p class="text-center">Vous n'appartenez à aucun groupe pour le moment.</p>
+            <?php endif; ?>
         </div>
         <?php
     }
