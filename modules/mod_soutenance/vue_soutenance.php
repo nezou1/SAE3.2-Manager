@@ -7,82 +7,79 @@ class VueSoutenance extends VueGenerique{
 	}
 
     public function get_soutenances($soutenances) {
-    ?>
-        <h1>Soutenances</h1>
-                <?= $this->get_table_soutenance($soutenances)?>
-                <a href="index.php?module=soutenance&action=form_ajout">
-                    <button class="btn btn-primary w-100">Ajouter une Soutenance</button>
-                </a>
-            </div>
-        </section> 
-        
-<?php
-    }
-    public function get_liste_soutenances($soutenances) {
-    ?>      
+        ?>
         <div class="container">
+            <h1>Soutenances</h1>
+            <?= $this->get_table_soutenance($soutenances) ?>
+            <a href="index.php?module=soutenance&action=form_ajout">
+                <button class="btn btn-primary w-100">Ajouter une Soutenance</button>
+            </a>
+        </div>
+        <?php
+    }
+
+    public function get_liste_soutenances($soutenances) {
+        ?>
+        <div class="container">
+            <h1>Liste des Soutenances</h1>
             <div class="row">
-                        <?= $this->get_table_soutenance($soutenances)?>
-                    </div>
-                </section>
+                <?= $this->get_table_soutenance($soutenances) ?>
             </div>
-        </div>       
-    <?php
-        }
+        </div>
+        <?php
+    }
 
     public function get_table_soutenance($soutenances) {
-?>      
-        <!-- Liste des soutenances -->
-        <section class="col-md-6">
-            <div class="table-container">
-                <!-- <h3>Liste des soutenances</h3> -->
-                <table class="table table-striped">
-                    <thead>
+        ?>
+        <div class="table-container">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Groupe</th>
+                        <th>Description</th>
+                        <th>SAE</th>
+                        <th>Date</th>
+                        <th>De</th>
+                        <th>À</th>
+                        <th>Lieu</th>
+                        <th>Jurys</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($soutenances as $soutenance): ?>
                         <tr>
-                            <th>Groupe</th>
-                            <th>Description</th>
-                            <th>SAE</th>
-                            <th>Date</th>
-                            <th>De</th>
-                            <th>À</th>
-                            <th>Lieu</th>
-                            <th>Jurys</th>
+                            <td><?= htmlspecialchars($soutenance['nom_groupe']) ?></td>
+                            <td><?= htmlspecialchars($soutenance['description']) ?></td>
+                            <td><?= htmlspecialchars($soutenance['sae']) ?></td>
+                            <td><?= htmlspecialchars($soutenance['dateSout']) ?></td>
+                            <td><?= htmlspecialchars($soutenance['heureDebut']) ?></td>
+                            <td><?= htmlspecialchars($soutenance['heureFin']) ?></td>
+                            <td><?= htmlspecialchars($soutenance['lieu']) ?></td>
+                            <td>
+                                <div class="jury-container">
+                                    <button class="toggle-jurys">
+                                        <?= htmlspecialchars($soutenance['jurys'][0]) ?>
+                                    </button>
+                                    <ul class="jury-list hidden">
+                                        <?php foreach ($soutenance['jurys'] as $jury): ?>
+                                            <li><?= htmlspecialchars($jury) ?></li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                </div>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($soutenances as $soutenance): ?>
-                            <tr>
-                                <td><?= htmlspecialchars($soutenance['nom_groupe']) ?></td>
-                                <td><?= htmlspecialchars($soutenance['description']) ?></td>
-                                <td><?= htmlspecialchars($soutenance['sae']) ?></td>
-                                <td><?= htmlspecialchars($soutenance['dateSout']) ?></td>
-                                <td><?= htmlspecialchars($soutenance['heureDebut']) ?></td>
-                                <td><?= htmlspecialchars($soutenance['heureFin']) ?></td>
-                                <td><?= htmlspecialchars($soutenance['lieu']) ?></td>
-                                <td>
-                                    <div class="jury-container">
-                                        <button class="toggle-jurys">
-                                            <?=htmlspecialchars($soutenance['jurys'][0])?>
-                                        </button>
-                                        <ul class="jury-list hidden">
-                                            <?php foreach ($soutenance['jurys'] as $jury): ?>
-                                                <li><?= htmlspecialchars($jury) ?></li>
-                                            <?php endforeach; ?>
-                                        </ul>
-                                    </div>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-           
-<?php   }
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+        <?php
+    }
     
 
-    public function form_ajout($errors) {
+ public function form_ajout($errors) {
         ?>
-        <h1>Ajouter une Soutenance</h1>
         <div class="container">
+        <h1>Ajouter une Soutenance</h1>
             <div class="row">
                 <!-- Formulaire d'ajout de soutenance -->
                 <section class="col-md-6">
