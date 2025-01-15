@@ -138,57 +138,47 @@ class VueDashboard extends VueGenerique {
     public function afficherGroupesEtudiant() {
         $modele = new ModeleDashboard();
         $groupes = $modele->getGroupesEtudiant();
-        
         ?>
-        <div class="container mt-5">
-            <h4 class="mb-4">Mes Groupes</h4>
+        <h4 class="mb-4">Mes Groupes</h4>
+        <div class="d-flex flex-wrap">
             <?php if (!empty($groupes)): ?>
-                <div id="groupesCarousel" class="carousel slide" data-bs-ride="carousel">
-                    <div class="carousel-inner">
-                        <?php foreach (array_chunk($groupes, 4) as $index => $groupeChunk): ?>
-                            <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
-                                <div class="row">
-                                    <?php foreach ($groupeChunk as $idGroupe): ?>
-                                        <div class="col-md-3 mb-3">
-                                            <div class="card text-center shadow-sm">
-                                                <div class="card-body">
-                                                    <h5 class="card-title">Groupe <?= htmlspecialchars($idGroupe) ?></h5>
-                                                    <p class="text-muted">Collègues :</p>
-                                                    <ul class="list-unstyled">
-                                                        <?php 
-                                                        $membres = $modele->getMembreGroupe($idGroupe);
-                                                        if (is_array($membres)) {
-                                                            foreach ($membres as $membre): ?>
-                                                                <li><?= htmlspecialchars($membre['prenom'] . ' ' . $membre['nom']) ?></li>
-                                                            <?php endforeach;
-                                                        } else {
-                                                            echo "<li>Aucun membre trouvé.</li>";
-                                                        }
-                                                        ?>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    <?php endforeach; ?>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
+                <?php foreach (array_slice($groupes, 0, 4) as $idGroupe): ?>
+                    <div class="card text-center shadow-sm m-2" style="flex: 1 1 calc(25% - 16px); min-width: 200px;">
+                        <div class="card-body">
+                            <h5 class="card-title">Groupe <?= htmlspecialchars($idGroupe) ?></h5>
+                            <p class="text-muted">Collègues :</p>
+                            <ul class="list-unstyled">
+                                <?php 
+                                $membres = $modele->getMembreGroupe($idGroupe);
+                                if (is_array($membres)) {
+                                    foreach ($membres as $membre): ?>
+                                        <li><?= htmlspecialchars($membre['prenom'] . ' ' . $membre['nom']) ?></li>
+                                    <?php endforeach;
+                                } else {
+                                    echo "<li>Aucun membre trouvé.</li>";
+                                }
+                                ?>
+                            </ul>
+                        </div>
                     </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#groupesCarousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#groupesCarousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-                </div>
+                <?php endforeach; ?>
+                <?php if (count($groupes) > 4): ?>
+                    <!-- Card "Voir plus" pour rester alignée avec les autres -->
+                    <div class="card text-center shadow-sm m-2" style="flex: 1 1 calc(25% - 16px); min-width: 200px;">
+                        <div class="card-body d-flex align-items-center justify-content-center">
+                            <a href="voir_plus.php" class="btn btn-primary">Voir plus</a>
+                        </div>
+                    </div>
+                <?php endif; ?>
             <?php else: ?>
                 <p class="text-center">Vous n'appartenez à aucun groupe pour le moment.</p>
             <?php endif; ?>
         </div>
         <?php
     }
+    
+    
+    
 
     // Vue pour le dashboard enseignant
 
