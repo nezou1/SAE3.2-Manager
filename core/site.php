@@ -38,7 +38,8 @@ class Site {
 			case "soutenance" :
 			case "depot":
 			case "liste":         
-			case "gestionnaireRessource":       
+			case "gestionnaireRessource":
+			case "groupe":       
 				require_once PROJECT_ROOT . "/modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
 				break;
 			default :
