@@ -1,21 +1,21 @@
 
-const dropdown = document.getElementById('multiSelectDropdown');
+// const dropdown = document.getElementById('multiSelectDropdown');
 const options = document.getElementById('dropdownOptions');
 const placeholder = document.getElementById('placeholder_intervenants');
 
-// Fonction pour envoyer les données au fichier PHP
-function sendIntervenantsData(intervenants) {
-    const formData = new FormData();
+// // Fonction pour envoyer les données au fichier PHP
+// function sendIntervenantsData(intervenants) {
+//     const formData = new FormData();
 
-    intervenants.forEach((intervenant) => {
-        formData.append('intervenants[]', intervenant); // On envoie les intervenants sous forme de tableau
-    });
+//     intervenants.forEach((intervenant) => {
+//         formData.append('intervenants[]', intervenant); // On envoie les intervenants sous forme de tableau
+//     });
 
-    fetch('http://localhost//SAE3.2-Manager/modules/mod_sae/controleur_sae.php', {
-        method: 'POST',
-        body: formData
-    });
-}
+//     fetch('controleur_sae.php', {
+//         method: 'POST',
+//         body: formData
+//     });
+// }
 
 // Gestion des choix sélectionnés
 options.addEventListener('change', (e) => {
@@ -61,3 +61,18 @@ function updatePlaceholder() {
         placeholder.style.display = 'none';
     }
 }
+
+const dropdown = document.getElementById('choices');
+const label = document.getElementById('dropdownLabel');
+
+function updateDropdownLabel() {
+    const selectedOptions = Array.from(dropdown.selectedOptions).map(option => option.text);
+    if (selectedOptions.length > 0) {
+        label.textContent = selectedOptions.join(', ');
+    } else {
+        label.textContent = 'Sélectionner';
+    }
+}
+
+// Initialise l'état du label au chargement
+updateDropdownLabel();

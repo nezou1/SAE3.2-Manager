@@ -1,7 +1,7 @@
 <?php
 
-require_once PROJECT_ROOT . "/modules/mod_sae/modele_sae.php";
-require_once PROJECT_ROOT . "/modules/mod_sae/vue_sae.php";
+require_once  "../modules/mod_sae/modele_sae.php";
+require_once  "../modules/mod_sae/vue_sae.php";
 
 class ControleurSae {
 
@@ -22,8 +22,7 @@ class ControleurSae {
 				$this->mes_saes();
 				break;
 			case "form_creer_sae" :
-				$enseignants = $this->modele->liste_enseignants($_SESSION['login']);
-				$this->form_creer_sae($enseignants);
+				$this->form_creer_sae();
 				break;
 			case "creer_sae" :
 				// if(isset($_POST["tokenCSRF"]) && $_POST["tokenCSRF"] == $_SESSION['token']){
@@ -42,49 +41,25 @@ class ControleurSae {
 	}
 
 	public function mes_saes() {
-		$liste = $this->modele->get_saes();
+		$id = ($_GET['menu'] == 'enseignant') ? $this->modele->get_id_enseignant($_SESSION['login']) :  $this->modele->get_id_etudiant($_SESSION['login']);
+		$liste = $this->modele->get_saes($id);
 		$this->vue->mes_saes($liste);
 	}
 
-	public function form_creer_sae($enseignants) {
+	public function form_creer_sae() {
 		$erreurs = [];
-		$this->vue->form_creer_sae($enseignants,$erreurs);
+		$this->vue->form_creer_sae($erreurs);
 	}
 
 	public function creer_sae() {
-		$titre = $_POST["titre"];
-		$description = $_POST["description"];
-		$annee = $_POST["annee"];
-		$semestre = $_POST["semestre"];
-		$date_depot = $_POST["date_depot"];
-		$intervenants = isset($_POST["intervenants"]) ? $_POST["intervenants"] : null;
-
-		var_dump($_POST["intervenants"]);
-		$ressources = isset($_FILES["ressources"]) ? $_FILES["ressources"] : null;
-		$highlights = isset($_POST["highlight"]) ? $_POST["highlight"] : null;
-
-		// if (!$titre || !$description || !$annee || !$semestre || !$intervenants || !$ressources) {
-		// 	$this->vue->erreurParametresManquants();
-		// 	return;
-		// }
-
-		$erreurs = $this->modele->creer_sae(
-			$titre, 
-			$description, 
-			$annee, 
-			$semestre, 
-			$date_depot, 
-			$intervenants, 
-			$ressources, 
-			$highlights
-		);
+		$erreurs = $this->modele->creer_sae();
 
 		if (is_array($erreurs) && !empty($erreurs)) {
-			$enseignants = $this->modele->liste_enseignants($_SESSION['login']);
-			$this->vue->form_creer_sae($enseignants,$erreurs); // Réaffiche le formulaire avec les erreurs et les données déjà saisies
-		} else {
-			// $this->vue->confirmeAjout();
+			$this->vue->form_creer_sae($erreurs); // Réaffiche le formulaire avec les erreurs et les données déjà saisies
 		}
+		else
+			$this->vue->confirmeAjout();
+
 	}
 
 	public function acceder_sae($sae) {

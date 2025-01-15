@@ -109,39 +109,18 @@ function removeFileFromTable(row, file) {
     }
 }
 
-// Gérer la soumission du formulaire
-uploadForm.addEventListener('submit', async (event) => {
-    event.preventDefault(); // Empêche le rechargement de la page
-    const formData = new FormData(uploadForm);
+function updateHiddenInputs() {
+    const fileNames = [];
+    const fileStates = [];
+    const checkboxes = document.querySelectorAll('#file-table-body input[type="checkbox"]');
 
-    
-    for (let i = 0; i < ressources.length; i++) {
-        formData.append('ressources[]', ressources[i]);
-    }
-
-    // Ajouter les cases à cocher au FormData
-    const highlightCheckboxes = document.querySelectorAll('.highlight-checkbox');
-    highlightCheckboxes.forEach((checkbox) => {
-        const fileName = checkbox.dataset.fileName;
-        const isChecked = checkbox.checked;
-        formData.append(`highlight[${fileName}]`, isChecked); // Ajouter le nom du fichier et son état
+    checkboxes.forEach(checkbox => {
+        fileNames.push(checkbox.value); // Ajouter le nom du fichier
+        // Ajouter l'état de la case (1 pour cochée, 0 pour non cochée)
+        fileStates.push(checkbox.checked ? 1 : 0); 
     });
 
-    // Envoyer les données au serveur
-    const response = await fetch('http://localhost//SAE3.2-Manager/modules/mod_sae/controleur_sae.php', {
-        method: 'POST',
-        body: formData
-    });
-
-    if (response.ok) {
-        console.log('Données envoyées avec succès');
-        // Réinitialiser le formulaire et le tableau
-        uploadForm.reset();
-        fileTableBody.innerHTML = '';
-        fileTable.style.display = 'none';
-        dropArea.style.display = 'block';
-        ressources = []; // Réinitialiser le tableau de fichiers
-    } else {
-        console.error('Erreur lors de l\'envoi des données');
-    }
-});
+    // Mettre à jour les champs cachés
+    miseEnAvantInput.value = fileNames.join(','); // Liste des noms de fichiers
+    etatInput.value = fileStates.join(','); // Liste des états (1/0)
+}

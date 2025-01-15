@@ -26,18 +26,14 @@ class VueSae extends VueGenerique{
 		if ($saes){
 			foreach($saes as $sae){
 	?>			<div class="col-md-4">
-					<a href="index.php?menu=enseignant&module=sae&action=acceder_sae&projet=<?=htmlspecialchars($sae)?>">
+					<a href="index.php?menu=enseignant&module=sae&action=acceder_sae&projet=<?=htmlspecialchars($sae['idProjet'])?>">
 						<div class="card">
-							<!-- <img src="https://via.placeholder.com/350x200" class="card-img-top" alt="Bangkok"> -->
 							<div class="card-body">
 								<h5 class="card-title"><?= htmlspecialchars($sae['titre'])?></h5>
 								<p class="card-text">
 									Annee : <?= htmlspecialchars($sae['annee'])?><br>
 									S<?= htmlspecialchars($sae['semestre'])?>
 								</p>
-	<!-- <?php						if ($_GET["menu"] == "enseignant") { ?>
-									<a href="index.php?module=sae&action=modifier_sae&projet=<?=htmlspecialchars($sae)?>" class="btn btn-primary">Modifier</a>
-	<?php						} ?> -->
 							</div>
 						</div>
 					</a>
@@ -55,22 +51,18 @@ class VueSae extends VueGenerique{
 ?>		
 	<!-- Section principale -->
 	<div class="hero">
-			<h1>NOM DE LA SAE</h1>
-			<div class="description-container">
-				<p class="description">courte description</p>
+		<h1><?=htmlspecialchars($sae["titre"])?></h1>
+		<section>
+			<div class="mb-3">
+				<label for="description" class="form-label">Description</label>
+				<input type="text" id="description" name="description" class="form-control" placeholder="Description" required>
 			</div>
-		</div>
-
-		<!-- Section des cercles -->
-		<div class="circles">
-			<div class="circle">Cours</div>
-			<div class="circle">Ressource</div>
-			<div class="circle">Dépôt</div>
-		</div>
+		</section>
+	</div>
 <?php
 	}
 
-	public function form_creer_sae($liste_enseignant, $erreurs) {
+	public function form_creer_sae($erreurs) {
 ?>
         <h1>Créer une SAE</h1>
         <div class="container">
@@ -78,11 +70,11 @@ class VueSae extends VueGenerique{
                 <!-- Formulaire d'ajout de SAE -->
                 <section class="col-md-6">
                     <div class="form-container">
-						<form action="index.php?menu=enseignant&module=sae&action=creer_sae" method="POST" enctype="multipart/form-data"> <!--nonvalide -->
+						<form action="index.php?menu=enseignant&module=sae&action=creer_sae" method="POST" enctype="multipart/form-data" nonvalide>
 							<!-- Titre -->
 							<div class="mb-3">
 								<label for="titre" class="form-label">Titre</label>
-								<input type="text" id="titre" name="titre" class="form-control" placeholder="Titre" required>
+								<input type="text" id="titre" name="titre" class="form-control" placeholder="Titre" >
 								<?php if (isset($erreurs['titre'])): ?>
 									<small class="error-message"><?= $erreurs['titre'] ?></small>
 								<?php endif; ?>
@@ -90,15 +82,27 @@ class VueSae extends VueGenerique{
 							<!-- Description -->
 							<div class="mb-3">
 								<label for="description" class="form-label">Description</label>
-								<input type="text" id="description" name="description" class="form-control" placeholder="Description" required>
+								<input type="text" id="description" name="description" class="form-control" placeholder="Description" >
 								<?php if (isset($erreurs['description'])): ?>
 									<small class="error-message"><?= $erreurs['description'] ?></small>
 								<?php endif; ?>
 							</div>
+							<!-- Annee -->
+							<div class="mb-3">
+								<label for="annee" class="form-label">Annee</label>
+								<input type="number" min="0" id="annee" name="annee" class="form-control" placeholder="Annee" >
+								<?php if (isset($erreurs['annee'])): ?>
+									<small class="error-message"><?= $erreurs['annee'] ?></small>
+								<?php endif; ?>
+							</div>
+							<script>
+								const annee_courante = new Date().getFullYear();
+								document.getElementById('annee').setAttribute('min', annee_courante);
+							</script>
 							<!-- Semestre -->
 							<div class="mb-3">
 								<label for="semestre" class="form-label">Semestre</label>
-								<select name="semestre[]" id="semestre" class="form-select selectpicker" data-live-search="true" data-selected-text-format="count" required>
+								<select name="semestre[]" id="semestre" class="form-select selectpicker" data-live-search="true" data-selected-text-format="count" >
 									<option value="" disabled selected>Sélectionner</option>
 										<?php for ($semestre = 1 ; $semestre <= 6 ; $semestre++): ?>
 											<option value="<?= $semestre?>">
@@ -109,12 +113,7 @@ class VueSae extends VueGenerique{
 								<?php if (isset($erreurs['semestre'])): ?>
 									<small class="error-message"><?= $erreurs['semestre'] ?></small>
 								<?php endif; ?>
-							</div>	
-<?php 						$this->vue_annee();
-							$this->vue_date_depot();
-							$this->vue_intervenants($liste_enseignant);
-							$this->vue_depot_ressources();
-?>							
+							</div>
 							<div class="d-flex justify-content-between">
 								<input type="submit" class="btn btn-primary" value="Créer">
 							</div>
@@ -131,33 +130,13 @@ class VueSae extends VueGenerique{
 				<div class="card-body">
 					<h1 class="text-success">Confirmation réussie</h1>
 					<p class="mt-3 mb-4">Votre SAE a été ajoutée avec succès !<br> Vous allez être redirigé vers la page d'accueil</p>
-					<!-- <div class="d-flex justify-content-center gap-3">
-						<a href="index.html" class="btn btn-primary">Retour à l'accueil</a>
-						<a href="action-suivante.html" class="btn btn-success">Poursuivre</a>
-					</div> -->
 				</div>
 			</div>
 		</div>
 		<script>
 			setTimeout(() => {
-				window.location.href = "index.php?menu=enseignant&module=dashboard"; // Remplace "index.html" par l'URL de la page d'accueil
+				window.location.href = "index.php?menu=enseignant&module=sae&action=mes_saes"; // Remplace "index.html" par l'URL de la page d'accueil
 			}, 3000);
-		</script>
-<?php
-	}
-
-	private function vue_annee() {
-?>		<!-- Annee -->
-		<div class="mb-3">
-			<label for="annee" class="form-label">Annee</label>
-			<input type="number" min="0" id="annee" name="annee" class="form-control" placeholder="Annee" required>
-			<?php if (isset($erreurs['annee'])): ?>
-				<small class="error-message"><?= $erreurs['annee'] ?></small>
-			<?php endif; ?>
-		</div>
-		<script>
-			const annee_courante = new Date().getFullYear();
-			document.getElementById('annee').setAttribute('min', annee_courante);
 		</script>
 <?php
 	}
@@ -184,26 +163,55 @@ class VueSae extends VueGenerique{
 
 			<?php if (!empty($liste)) : ?>
 				<div class="custom-select-container">
+					<!-- Dropdown -->
 					<div class="form-control multiselect dropdown-toggle" id="multiSelectDropdown" data-bs-toggle="dropdown" aria-expanded="false">
 						<span class="text-muted" id="placeholder_intervenants">Sélectionner</span>
+						<input type="hidden" name="intervenants[]" id="intervenants" class="form-input">
 					</div>
+					<!-- Dropdown menu -->
 					<ul class="dropdown-menu w-100" id="dropdownOptions">
 						<?php foreach ($liste as $intervenant): ?>
 							<li>
-								<label class="dropdown-item"><input type="checkbox" value="<?=htmlspecialchars($intervenant['email'])?>">
-								<?=htmlspecialchars($intervenant['email'])?>	
+								<label class="dropdown-item">
+									<input type="checkbox" class="intervenant-checkbox" value="<?=htmlspecialchars($intervenant['email']) ?>">
+									<?=htmlspecialchars($intervenant['email']) ?>
 								</label>
 							</li>
 						<?php endforeach; ?>
 					</ul>
 				</div>
-				<?php else : ?>
-						<p>Aucun enseignant</p>
-				<?php endif?>
+
+				<!-- Script to handle selections -->
+				<script>
+					document.addEventListener('DOMContentLoaded', function () {
+						const checkboxes = document.querySelectorAll('.intervenant-checkbox');
+						const inputField = document.getElementById('intervenants');
+						const placeholder = document.getElementById('placeholder_intervenants');
+
+						function updateSelections() {
+							// Récupère toutes les valeurs sélectionnées
+							const selected = Array.from(checkboxes)
+								.filter(cb => cb.checked) // Filtrer uniquement les cases cochées
+								.map(cb => cb.value);    // Obtenir leurs valeurs
+							
+							// Met à jour l'input caché
+							inputField.value = selected.join(','); // Join pour soumission via formulaire
+							
+							// Met à jour le placeholder
+							placeholder.textContent = selected.length > 0 ? selected.join(', ') : 'Sélectionner';
+						}
+						// Ajouter un événement change à chaque case
+						checkboxes.forEach(checkbox => {
+							checkbox.addEventListener('change', updateSelections);
+						});
+					});
+				</script>
+			<?php else : ?>
+				<p>Aucun enseignant</p>
+			<?php endif ?>
 		</div>
-		<script src="../assets/script/scriptSelect.js"></script>
 <?php
-	} 
+	}
 
 	private function vue_depot_ressources() {
 ?>		<!-- Ressources -->	
@@ -213,7 +221,7 @@ class VueSae extends VueGenerique{
 			<div class="container mt-5">
 			<div id="drop-area" class="drop-area border border-secondary rounded p-4 text-center">
                 <p>Glissez vos fichiers ici ou <button type="button" id="file-input-button" class="btn btn-link">Déposer une Ressource</button></p>
-                <input type="file" id="file-input" multiple style="display: none;">
+                <input type="file" name="ressources[]" id="file-input" multiple style="display: none;">
             </div>
 				<table id="file-table" class="table table-bordered mt-4" style="display: none;">
                 <thead class="thead-light">
@@ -226,6 +234,8 @@ class VueSae extends VueGenerique{
 					</thead>
 					<tbody id="file-table-body"></tbody>
 				</table>
+				<input type="hidden" name="fichiers_mise_en_avant[]" id="fichiers_mise_en_avant">
+        		<input type="hidden" name="fichiers_etat[]" id="fichiers_etat">
 			</div>
 		</div>
 		<script src="../assets/script/scriptDepot.js"></script>
