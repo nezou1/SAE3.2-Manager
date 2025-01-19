@@ -33,8 +33,26 @@ class ControleurSae {
 				break;
 			case "acceder_sae":
 				if(isset($_GET['projet'])){
-					$this->acceder_sae($_GET['projet']);
+					$this->acceder_sae();
 				}
+				else {
+					die ("SAE introuvable");
+				}
+				break;
+			case "ajouter_soutenance":
+				// if(isset($_POST["tokenCSRF"]) && $_POST["tokenCSRF"] == $_SESSION['token']){
+				$this->ajouter_soutenance();
+				/* } else {
+					die("token incorrecte");
+				}*/
+				break;
+			case "ajouter_groupe":
+				// if(isset($_POST["tokenCSRF"]) && $_POST["tokenCSRF"] == $_SESSION['token']){
+				$this->ajouter_groupe();
+				/* } else {
+					die("token incorrecte");
+				}*/
+				break;
 			default : 
 				die ("Action inexistante");
 		}
@@ -62,8 +80,48 @@ class ControleurSae {
 
 	}
 
-	public function acceder_sae($sae) {
-		$this->vue->acceder_sae($sae);
+	public function acceder_sae() {
+		$id_ens = $this->modele->get_id_enseignant($_SESSION['login']);
+		$sae = $this->modele->get_projet($_GET['projet']);
+
+		$enseignants = $this->modele->get_enseignants_sae($_GET['projet']);
+		$ressources = $this->modele->get_ressources_sae($_GET['projet']);
+		$groupes = $this->modele->get_groupes_sae($_GET['projet']);
+		$etudiants = $this->modele->get_etudiants_sans_grp();
+		// $rendus = $this->modele->get_rendus_sae($_GET['projet']);
+		$soutenances = $this->modele->get_soutenances_sae($_GET['projet']);
+
+		$this->vue->acceder_sae(
+			$sae, 
+			$enseignants, 
+			$ressources, 
+			$groupes,
+			$etudiants,
+			// $rendus,
+			$soutenances
+		);
+	}
+
+	public function ajouter_groupe() {
+		// $erreurs = 
+		$this->modele->ajouter_groupe();
+
+		// if (is_array($erreurs) && !empty($erreurs)) {
+		// 	$this->vue->form_ajouter_groupe($erreurs); // Réaffiche le formulaire avec les erreurs et les données déjà saisies
+		// }
+
+		header('Location: ./index.php?menu=enseignant&module=sae&action=acceder_sae&projet=' . $_GET['projet']);
+
+	}
+
+	public function ajouter_soutenance() {
+		$erreurs = $this->modele->ajouter_soutenance();
+
+		// if (is_array($erreurs) && !empty($erreurs)) {
+		// 	$this->vue->form_creer_sae($erreurs); // Réaffiche le formulaire avec les erreurs et les données déjà saisies
+		// }
+		// else
+		// 	$this->vue->confirmeAjout();
 	}
 }
 ?>
