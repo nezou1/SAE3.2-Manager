@@ -56,19 +56,6 @@ class RenduController
         }
     }
 
-    public function creerRendu() {
-        $titre = $_POST['titre'];
-        $description = $_POST['description'];
-        $date = $_POST['date'];
-        $fileUpload = isset($_POST['fileUpload']) ? 1 : 0;
-
-        // Save the project submission form details to the database
-        $this->modele->creerRendu($titre, $description, $date, $fileUpload);
-
-        // Redirect to the instructor's page
-        header('Location: index.php?module=rendu');
-    }
-
 
    
 }

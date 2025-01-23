@@ -20,7 +20,7 @@ class VueCompMenuEtudiant extends VueCompGenerique {
                             <a class="nav-link text-white" href="index.php?menu=etudiant&module=sae">Mes SAE</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="#">Trello</a>
+                            <a class="nav-link text-white" href="index.php?menu=etudiant&module=evaluation&action=afficherNotesEtudiantSoutenance">Mes notes de soutenance</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white" href="#">Github</a>

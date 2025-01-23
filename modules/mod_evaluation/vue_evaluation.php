@@ -65,5 +65,39 @@ class VueEvaluation extends VueGenerique
         <button type="button" class="btn btn-primary" href='index.php?module=rendu'>Retour</button>
         <?php
     }
+
+    public function afficherNotesEtudiantSoutenance($notes) {
+        ?>
+        <div class="container mt-5">
+            <h1>Notes des Soutenances</h1>
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Soutenance</th>
+                        <th>Note</th>
+                        <th>Commentaire</th>
+                        <th>Coefficient</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (empty($notes)): ?>
+                        <tr>
+                            <td colspan="4">Aucune note trouvée.</td>
+                        </tr>
+                    <?php else: ?>
+                        <?php foreach ($notes as $note): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($note['description']) ?></td>
+                                <td><?= htmlspecialchars($note['note']) ?></td>
+                                <td><?= htmlspecialchars($note['commentaire']) ?></td>
+                                <td><?= htmlspecialchars($note['coef']) ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+        <?php
+    }
 }
 ?>

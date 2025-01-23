@@ -64,20 +64,6 @@ class ModeleRendu extends Connexion
         $stmt->execute(['idSoutenance' => $idSoutenance]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-    
-    public function creerRendu($titre, $description, $date, $fileUpload) {
-        $bdd = Connexion::getConnexion();
-        $sql = "INSERT INTO Rendu (titre, description, date, fileUpload) VALUES (:titre, :description, :date, :fileUpload)";
-        $stmt = $bdd->prepare($sql);
-        $stmt->execute([
-            'titre' => $titre,
-            'description' => $description,
-            'date' => $date,
-            'fileUpload' => $fileUpload
-        ]);
-    }
-
-
 
 }
 ?>

@@ -48,5 +48,17 @@ class ModeleEvaluation extends Connexion
             'id' => $id
         ]);
     }
+
+    public function getNotesEtudiantSoutenance($idEtudiant) {
+        $bdd = Connexion::getConnexion();
+        $sql = "SELECT s.description, e.note, e.commentaire, e.coef
+                FROM Evaluation e
+                JOIN Soutenance s ON e.idSoutenance = s.idSoutenance
+                JOIN estDansLeGroupe edg ON s.idGroupe = edg.idGroupe
+                WHERE edg.idEtud = :idEtudiant";
+        $stmt = $bdd->prepare($sql);
+        $stmt->execute(['idEtudiant' => $idEtudiant]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 ?>
