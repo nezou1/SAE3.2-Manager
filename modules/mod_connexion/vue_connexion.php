@@ -40,7 +40,7 @@ class VueConnexion extends VueGenerique {
                 <?php endif; ?>
             </div>
             <div class="d-grid">
-                <button type="submit" class="btn btn-dark text-black"> Connexion
+                <button type="submit" class="btn btn-primary text-black"> Connexion
                     <!--<a href="./index.php?module=dashboard&action=exec" method="POST" class="text-decoration-none text-black">Connexion</a><br>-->
                 </button>
             </div>

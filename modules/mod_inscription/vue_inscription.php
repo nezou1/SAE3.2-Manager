@@ -66,7 +66,7 @@ class VueInscription extends VueGenerique {
                 </div>
             </div>
             <div class="d-grid">
-                <button type="submit" class="btn btn-secondary text-black">S'inscrire</button>
+                <button type="submit" class="btn btn-primary text-black">S'inscrire</button>
             </div>
             <div class="text-center mt-3">
                 <a href="./index.php?module=connexion&action=login" class="text-black">Vous avez déjà un compte ? Connectez-vous !</a>
