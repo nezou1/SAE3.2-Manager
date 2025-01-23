@@ -19,7 +19,7 @@ class Site {
 				require_once  "../composants/menu/".$this->menuNom."s/composant_menu_".$this->menuNom.".php";
 				break;
 			case "connexion":
-				require_once  "../composants/menu/".$this->menuNom."../composant_menu_".$this->menuNom.".php";
+				require_once  "../composants/menu/".$this->menuNom."/composant_menu_".$this->menuNom.".php";
 				break;
 			default :
 				die ("Menu inexistant");
@@ -43,7 +43,7 @@ class Site {
 			case "groupe":  
 			case "rendu":  
 			case "evaluation":   
-				require_once PROJECT_ROOT . "/modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
+				require_once "../modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
 				break;
 			default :
 				die ("Module inexistant");
