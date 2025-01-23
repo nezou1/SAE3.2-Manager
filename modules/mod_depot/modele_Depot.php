@@ -3,30 +3,47 @@
 class ModeleDepot extends Connexion {
 
     public function getDepotsByProjet($idProjet, $idGroupe) {
-        $sql = "SELECT * FROM depot WHERE idProjet = :idProjet AND idGroupe = :idGroupe ORDER BY dateEnvoyee DESC";
-        $stmt = $this->pdo->prepare($sql);
+        $sql = "SELECT * FROM Rendu WHERE idProjet = :idProjet AND idGroupe = :idGroupe ORDER BY dateEnvoyee DESC";
+        $stmt = $this->getConnexion()->prepare($sql);
         $stmt->execute([
-            'idProjet' => $idProjet,
-            'idGroupe' => $idGroupe
+            'idProjet' => intval($idProjet),
+            'idGroupe' => intval($idGroupe)
         ]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function addDepot($idProjet, $idGroupe, $descriptif, $dateEnvoyee) {
-        $sql = "INSERT INTO depot (idProjet, idGroupe, descriptif, dateEnvoyee) VALUES (:idProjet, :idGroupe, :descriptif, :dateEnvoyee)";
-        $stmt = $this->pdo->prepare($sql);
+    public function addDepot($idProjet, $idGroupe, $descriptif, $dateEnvoyee, $fichier, $nomFichier) {
+        $sql = "INSERT INTO Rendu (descriptif, dateEnvoyee, idProjet, idGroupe, fichier, nomFichier) 
+                VALUES (:descriptif, :dateEnvoyee, :idProjet, :idGroupe, :fichier, :nomFichier)";
+        $stmt = $this->getConnexion()->prepare($sql);
         $stmt->execute([
-            'idProjet' => $idProjet,
-            'idGroupe' => $idGroupe,
             'descriptif' => $descriptif,
-            'dateEnvoyee' => $dateEnvoyee
+            'dateEnvoyee' => $dateEnvoyee,
+            'idProjet' => intval($idProjet),
+            'idGroupe' => intval($idGroupe),
+            'fichier' => $fichier,
+            'nomFichier' => $nomFichier
         ]);
     }
 
-    public function getProjetDetails($idProjet) {
-        $sql = "SELECT * FROM projet WHERE idProjet = :idProjet";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute(['idProjet' => $idProjet]);
+    public function getFichierById($idRendu) {
+        $sql = "SELECT fichier, nomFichier FROM Rendu WHERE idRendu = :idRendu";
+        $stmt = $this->getConnexion()->prepare($sql);
+        $stmt->execute(['idRendu' => intval($idRendu)]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    public function getProjetDetails($idProjet) {
+        $sql = "SELECT * FROM Projet WHERE idProjet = :idProjet";
+        $stmt = $this->getConnexion()->prepare($sql);
+        $stmt->execute(['idProjet' => intval($idProjet)]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    public function getAllProjets() {
+        $sql = "SELECT * FROM Projet";
+        $stmt = $this->getConnexion()->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
+?>
