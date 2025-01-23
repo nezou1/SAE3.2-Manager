@@ -7,7 +7,7 @@ class ModeleSoutenance extends Connexion {
                     FROM Enseignant natural join estJury join Soutenance using (idSoutenance) join Groupe using (idGroupe) join Projet ON Soutenance.idProjet = Projet.idProjet
                     ORDER BY dateSout, heureDebut";
         $pdo_req = self::$bdd->query($req);
-		$soutenances = $pdo_req->fetchAll(PDO::FETCH_ASSOC);
+        $soutenances = $pdo_req->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($soutenances as &$soutenance) {
             $soutenance['jurys'] = $this->getJurysBySoutenanceId($soutenance['idSoutenance']);
@@ -20,7 +20,7 @@ class ModeleSoutenance extends Connexion {
             FROM Enseignant
             NATURAL JOIN estJury
             WHERE idSoutenance = ?";
-        $pdo_req = $pdo->prepare($request);
+        $pdo_req = self::$bdd->prepare($request);
         $pdo_req->execute([$id]);
         return $pdo_req->fetchAll(PDO::FETCH_COLUMN); // Récupère uniquement les noms des jurys
     }
@@ -165,6 +165,18 @@ class ModeleSoutenance extends Connexion {
         $pdo_req->execute([$emailJury]);
         return $pdo_req->rowCount() > 0;
     }
-    
+
+    public function mesSoutenanceEtudiant($idEtudiant) {
+        $bdd = Connexion::getConnexion();
+        $sql = "SELECT s.idSoutenance, s.description, s.dateSout, s.heureDebut, s.heureFin, s.lieu, g.nom as nom_groupe
+                FROM Soutenance s
+                JOIN Groupe g ON s.idGroupe = g.idGroupe
+                JOIN estDansLeGroupe edg ON g.idGroupe = edg.idGroupe
+                WHERE edg.idEtud = :idEtudiant
+                ORDER BY s.dateSout, s.heureDebut";
+        $stmt = $bdd->prepare($sql);
+        $stmt->execute(['idEtudiant' => $idEtudiant]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 ?>

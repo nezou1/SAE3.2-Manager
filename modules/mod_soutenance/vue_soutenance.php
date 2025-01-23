@@ -178,5 +178,44 @@ class VueSoutenance extends VueGenerique{
         </div>
         <?php
     }
+
+    public function mesSoutenanceEtudiant($soutenances) {
+        ?>
+        <div class="container mt-5">
+            <h1>Mes Soutenances</h1>
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Date</th>
+                        <th>Heure Début</th>
+                        <th>Heure Fin</th>
+                        <th>Lieu</th>
+                        <th>Groupe</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (empty($soutenances)): ?>
+                        <tr>
+                            <td colspan="6">Aucune soutenance trouvée.</td>
+                        </tr>
+                    <?php else: ?>
+                        <?php foreach ($soutenances as $soutenance): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($soutenance['description']) ?></td>
+                                <td><?= htmlspecialchars($soutenance['dateSout']) ?></td>
+                                <td><?= htmlspecialchars($soutenance['heureDebut']) ?></td>
+                                <td><?= htmlspecialchars($soutenance['heureFin']) ?></td>
+                                <td><?= htmlspecialchars($soutenance['lieu']) ?></td>
+                                <td><?= htmlspecialchars($soutenance['nom_groupe']) ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+        <?php
+    }
+     
 }
 ?>

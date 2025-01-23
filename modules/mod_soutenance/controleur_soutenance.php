@@ -31,6 +31,9 @@ class ControleurSoutenance {
 					die("token incorrecte");
 				}
 				break;
+			case "mesSoutenances":
+				$this->mesSoutenanceEtudiant();
+				break;
 			default : 
 				die ("Action inexistante");
 			
@@ -77,5 +80,19 @@ class ControleurSoutenance {
 			  $this->vue->confirmeAjout();
 		  }
 	}
+
+	public function recupererIdEtudiant($email) {
+        $bdd = Connexion::getConnexion();
+        $sql = "SELECT idEtud FROM Etudiant WHERE email = :email";
+        $stmt = $bdd->prepare($sql);
+        $stmt->execute(['email' => $email]);
+        return $stmt->fetch(PDO::FETCH_COLUMN);
+    }
+
+	private function mesSoutenanceEtudiant() {
+        $idEtudiant = $this->recupererIdEtudiant($_SESSION['login']); // Assurez-vous que l'ID de l'étudiant est stocké dans la session
+        $soutenances = $this->modele->mesSoutenanceEtudiant($idEtudiant);
+        $this->vue->mesSoutenanceEtudiant($soutenances);
+    }
 }
 ?>
