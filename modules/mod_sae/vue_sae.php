@@ -8,27 +8,29 @@ class VueSae extends VueGenerique{
 
 	public function mes_saes($saes) {
 	?>
-		<h1>Mes SAE</h1>
 		<div class="container">
-			<div class="row">
-				<?= $this->get_saes($saes)?>
-<?php				if ($_GET["menu"] == "enseignant") {?>
-					<a href="index.php?menu=enseignant&module=sae&action=form_creer_sae">
-						<button class="btn btn-primary w-100">Creer une SAE</button>
-					</a>
-<?php				}?>
+			<h1 class="text-center mb-4">Mes SAE</h1>
+			<div class="container">
+				<div class="row">
+					<?= $this->get_saes($saes)?>
+	<?php				if ($_GET["menu"] == "enseignant") {?>
+						<a href="index.php?menu=enseignant&module=sae&action=form_creer_sae">
+							<button class="btn btn-primary w-100">Creer une SAE</button>
+						</a>
+	<?php				}?>
+				<div>
 			<div>
-		<div>
+		</div>
 	<?php
 	}
 
 	private function get_saes($saes) {
 		if ($saes){
 			foreach($saes as $sae){
-	?>			<div class="col-md-4">
+	?>			<div class="col-md-4 w-100 mb-4">
 					<a href="index.php?menu=enseignant&module=sae&action=acceder_sae&projet=<?=htmlspecialchars($sae['idProjet'])?>">
-						<div class="card">
-							<div class="card-body">
+						<div class="card text-center">
+							<div class="card-body ">
 								<h5 class="card-title"><?= htmlspecialchars($sae['titre'])?></h5>
 								<p class="card-text">
 									Annee : <?= htmlspecialchars($sae['annee'])?><br>
@@ -47,7 +49,7 @@ class VueSae extends VueGenerique{
 <?php	}
 	}
 
-	public function acceder_sae($sae, $enseignants, $ressources, $groupes, $etudiants, $soutenances) {
+	public function acceder_sae($sae, $enseignants, $ressources, $groupes, $etudiants, $depots, $soutenances) {
 ?>		
 	<div class="container">
 		<!-- Titre du projet -->
@@ -61,73 +63,144 @@ class VueSae extends VueGenerique{
 
 		<!-- Description -->
 		<div class="mb-4">
-			<h4>Description</h4>
+			<h3 class="text-center mt-4 mb-4" >Description</h3>
 			<textarea class="form-control" rows="5" placeholder="Entrez la description du projet..."
 			<?php if($_GET['menu'] == 'etudiant'):?> readonly <?php endif;?>><?= htmlspecialchars($sae['description'])?></textarea>
 		</div>
 
 		<!-- Ressources associées -->
-		<div class="mb-4">
-			<h4>Ressources Associées</h4>
-			<ul class="list-unstyled" id="ressourceList">
-				<li><i class="bi bi-file-earmark"></i> <a href="#">Ressource 1</a></li>
-				<li><i class="bi bi-file-earmark"></i> <a href="#">Ressource 2</a></li>
-			</ul>
-			<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addRessourceModal">Ajouter Ressource</button>
-		</div>
+		<div class="container mt-4">
+			<div class="mb-4">
+				<h3 class="text-center mb-4">Ressources</h3>
+				<div class="table-responsive border rounded p-3" style="max-height: 400px; background-color: #f8f9fa; overflow-y: auto;">
+				<?php if (!empty($ressources)) {?>
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th scope="col"></th>
+								<th scope="col">Nom de la Ressource</th>
+								<th scope="col">Action</th>
+							</tr>
+						</thead>
+						<tbody id="ressourceList">
+							<?php foreach ($ressources as $index => $ressource): ?>
+								<tr>
+									<th scope="row"><?php echo $index + 1; ?></th>
+									<td>
+										<a href="<?= htmlspecialchars($ressource['url']);?>" target="_blank" class="btn btn-link">
+											<?= htmlspecialchars($ressource['titre']); ?>
+										</a>
+									</td>
+									<td>
+										<form action="index.php?menu=enseignant&module=sae&action=supprimer_ressource&projet=<?=$_GET['projet']?>" method="POST" style="display:inline;">
+											<input type="hidden" name="idRessource" value="<?php echo $ressource['idRessource']; ?>">
+											<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce groupe ?');">Supprimer</button>
+										</form>
+									</td>
+								</tr>
+							<?php endforeach; ?>
+						</tbody>
+					</table>
+<?php			}else {?>
+					<div class="col-md-4">									
+						<p>Vous n'avez ajouté aucune ressource pour le moment</p>
+					</div>
+<?php			}?>
+					<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addRessourceModal">Ajouter Ressource</button>
+				</div>
+			</div>
+		</div>	
+		
 
 		<!-- Groupes associés -->
 		<div class="container mt-4">
 			<h3 class="text-center mb-4">Groupes</h3>
 			<div class="table-responsive border rounded p-3" style="max-height: 400px; background-color: #f8f9fa; overflow-y: auto;">
 				<?php if (!empty($groupes)) {?>
-					<div style="max-height: 400px; overflow-y: auto; border: 1px solid #ccc; border-radius: 5px; background-color: #fff;">
-						<table class="table table-bordered">
-							<thead>
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th>Nom du Groupe</th>
+								<th>Modifiable par Étudiant</th>
+								<th>Actions</th> <!-- Colonne pour les actions -->
+							</tr>
+						</thead>
+						<tbody>
+							<?php foreach ($groupes as $groupe): ?>
 								<tr>
-									<th>Nom du Groupe</th>
-									<th>Modifiable par Étudiant</th>
-									<th>Actions</th> <!-- Colonne pour les actions -->
+									<td><?php echo htmlspecialchars($groupe['nom']); ?></td>
+									<td><?php echo $groupe['modifiable_par_etudiant'] ? "Oui" : "Non"; ?></td>
+									<td>
+										<form action="index.php?menu=enseignant&module=sae&action=supprimer_groupe&projet=<?=$_GET['projet']?>" method="POST" style="display:inline;">
+											<input type="hidden" name="idGroupe" value="<?php echo $groupe['idGroupe']; ?>">
+											<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce groupe ?');">Supprimer</button>
+										</form>
+									</td>
 								</tr>
-							</thead>
-							<tbody>
-								<?php foreach ($groupes as $groupe): ?>
-									<tr>
-										<td><?php echo htmlspecialchars($groupe['nom']); ?></td>
-										<td><?php echo $groupe['modifiable_par_etudiant'] ? "Oui" : "Non"; ?></td>
-										<td>
-											<form action="index.php?menu=enseignant&module=sae&action=supprimer_groupe&projet=<?=$_GET['projet']?>" method="POST" style="display:inline;">
-												<input type="hidden" name="idGroupe" value="<?php echo $groupe['idGroupe']; ?>">
-												<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce groupe ?');">Supprimer</button>
-											</form>
-										</td>
-									</tr>
-								<?php endforeach; ?>
-							</tbody>
-						</table>
-					</div>
+							<?php endforeach; ?>
+						</tbody>
+					</table>
 <?php			}else {?>
-					<div class="col-md-4">									
+					<div class="col-md-4">
 						<p>Vous n'avez crée aucun groupe pour le moment</p>
 					</div>
-<?php			}?>
+<?php			}?>	<div class="col-md-4">									
+					
 				<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addGroupModal">Ajouter Groupe</button>
 			</div>
 		</div>
 
 		<!-- Dépôts à rendre -->
-		<div class="mb-4">
-			<h4>Dépôts à Rendre</h4>
-			<ul class="list-unstyled" id="depotList">
-				<li><i class="bi bi-box-arrow-in-down"></i> Dépôt 1</li>
-				<li><i class="bi bi-box-arrow-in-down"></i> Dépôt 2</li>
-			</ul>
+		<div class="container mt-4">
+			<h3 class="text-center mb-4">Dépots</h3>
+			<div class="table-responsive border rounded p-3" style="max-height: 400px; background-color: #f8f9fa; overflow-y: auto;">
+				<?php if (!empty($groupes)) {?>
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th scope="col"></th>
+								<th scope="col">Nom de la Ressource</th>
+								<th scope="col">Date de rendu</th>
+								<th scope="col">Action</th>
+							</tr>
+						</thead>
+						<tbody id="ressourceList">
+							<?php $i = 0; foreach ($depots as $depot): ?>
+								<tr>
+									<th scope="row"><?php echo $i + 1; ?></th>
+									<td>
+										<?= htmlspecialchars($depot['descriptif']); ?>
+									</td>
+									<td>
+										<?= htmlspecialchars($depot['dateAttendu']); ?>
+									</td>
+									<td>
+										<form action="index.php?menu=enseignant&module=sae&action=acceder_rendu&projet=<?=$_GET['projet']?>?>" method="POST" style="display:inline;">
+											
+											<button type="submit" class="btn btn-danger btn-sm">Rendu(s)</button>
+										</form>
+										<form action="index.php?menu=enseignant&module=sae&action=supprimer_depot&projet=<?=$_GET['projet']?>" method="POST" style="display:inline;">
+											<input type="hidden" name="idDepot" value="<?php echo $depot['idDepot']; ?>">
+											<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce dépot ?');">Supprimer</button>
+										</form>
+									</td>
+								</tr>
+							<?php endforeach; ?>
+						</tbody>
+					</table>
+<?php			}else {?>
+					<div class="col-md-4">									
+						<p>Vous n'avez crée aucun dépot pour le moment</p>
+					</div>
+<?php			}?>	<div class="col-md-4">	
+			</div>
+
 			<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addDepotModal">Ajouter Dépôt</button>
 		</div>
 
-		<?php if(!empty($groupes))
-				$this->mes_soutenances($soutenances)?>
-
+		<?php if($groupes) {
+				$this->mes_soutenances($soutenances);
+		}?>
 		<!-- Note finale -->
 		<div class="mb-4">
 			<h4>Note Finale</h4>
@@ -138,19 +211,34 @@ class VueSae extends VueGenerique{
 
 	<!-- Modal Ajouter Ressource -->
 	<div class="modal fade" id="addRessourceModal" tabindex="-1" aria-labelledby="addRessourceModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
+		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="addRessourceModalLabel">Ajouter Ressource</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
-					<input type="text" id="ressourceName" class="form-control" placeholder="Nom de la ressource">
-					<input type="url" id="ressourceLink" class="form-control mt-2" placeholder="Lien de la ressource">
+					<form id="ressourceForm" action="index.php?menu=enseignant&module=sae&action=ajouter_ressource&projet=<?php echo $_GET['projet'] ?>" method="POST" enctype="multipart/form-data">
+						<div class="mb-3">
+							<label for="ressourceName" class="form-label">Nom de la ressource</label>
+							<input type="text" name="ressourceName" id="ressourceName" class="form-control" placeholder="Nom de la ressource">
+							<div id="ressourceNameError" class="text-danger d-none"></div>
+						</div>
+						<!-- Modifiable par les étudiants -->
+						<div class="form-check mb-3">
+							<input class="form-check-input" type="checkbox" id="mise_en_avant" name="mise_en_avant">
+							<label class="form-check-label" for="mise_en_avant">Mettre en avant</label>
+						</div>
+						<div class="mb-3">
+							<label for="ressourceFile" class="form-label">Fichier à télécharger</label>
+							<input type="file" name="ressourceFile" id="ressourceFile" class="form-control" accept=".png,.jpeg,.jpg,.pdf,.docx,.xlsx,.txt">
+							<div id="ressourceFileError" class="text-danger d-none"></div>
+						</div>
+					</form>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-					<button type="button" class="btn btn-primary" onclick="addRessource()">Ajouter</button>
+					<input type="submit" class="btn btn-primary" onclick="addRessource(event)"value="Ajouter">
 				</div>
 			</div>
 		</div>
@@ -165,7 +253,7 @@ class VueSae extends VueGenerique{
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
-					<form id="addGroupForm" method="POST" action="index.php?menu=enseignant&module=sae&action=ajouter_groupe&projet=<?php echo $_GET['projet'] ?>">
+					<form id="addGroupForm" method="POST" action="index.php?menu=enseignant&module=sae&action=ajouter_groupe&projet=<?=$_GET['projet']?>">
 						<!-- Nom du groupe -->
 						<div class="mb-3">
 							<label for="nom_grp" class="form-label">Nom du groupe</label>
@@ -211,15 +299,14 @@ class VueSae extends VueGenerique{
 							<small id="etudiants_error" class="text-danger d-none"></small>
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="closeModalGroupe()">Fermer</button>
-							<input type="submit" class="btn btn-primary" onclick="validateForm(event)"value="Ajouter">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+							<input type="submit" class="btn btn-primary" onclick="addGroupe(event)"value="Ajouter">
 						</div>
 					</form>
 				</div>
 			</div>
 		</div>
 	</div>
-	<script src="../assets/script/scriptModalWindows.js"></script>
 
 
 
@@ -232,12 +319,22 @@ class VueSae extends VueGenerique{
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
-					<input type="text" id="depotName" class="form-control" placeholder="Nom du dépôt">
-					<input type="date" id="depotDate" class="form-control mt-2" placeholder="Date limite">
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-					<button type="button" class="btn btn-primary" onclick="addDepot()">Ajouter</button>
+					<form method="POST" action="index.php?menu=enseignant&module=sae&action=ajouter_depot&projet=<?= $_GET['projet']?>" id="depotForm">
+						<div class="mb-3">
+							<label for="description_depot" class="form-label">Description</label>
+							<textarea class="form-control" id="description_depot" name="description_depot" required></textarea>
+							<small id="description_depot_error" class="text-danger d-none"></small>
+						</div>
+						<div class="mb-3">
+							<label for="date_depot" class="form-label">Date de rendu</label>
+							<input type="date" class="form-control" id="date_depot" name="date_depot" required>
+							<small id="date_depot_error" class="text-danger d-none"></small>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+							<button type="button" class="btn btn-primary" onclick="addDepot(event)">Ajouter</button>
+						</div>
+					</form>
 				</div>
 			</div>
 		</div>
@@ -333,6 +430,9 @@ class VueSae extends VueGenerique{
         </div>
     </div>
 </div>
+
+<script src="../assets/script/scriptModalWindows.js"></script>
+
 <?php
 	}
 
@@ -403,61 +503,59 @@ class VueSae extends VueGenerique{
 
 	public function form_creer_sae($erreurs) {
 ?>
-        <h1>Créer une SAE</h1>
         <div class="container">
+			<h1 class="text-center mb-4">Mes SAE</h1>
             <div class="row">
-                <!-- Formulaire d'ajout de SAE -->
-                <section class="col-md-6">
-                    <div class="form-container">
-						<form action="index.php?menu=enseignant&module=sae&action=creer_sae" method="POST" enctype="multipart/form-data" nonvalide>
-							<!-- Titre -->
-							<div class="mb-3">
-								<label for="titre" class="form-label">Titre</label>
-								<input type="text" id="titre" name="titre" class="form-control" placeholder="Titre" >
-								<?php if (isset($erreurs['titre'])): ?>
-									<small class="error-message"><?= $erreurs['titre'] ?></small>
-								<?php endif; ?>
-							</div>
-							<!-- Description -->
-							<div class="mb-3">
-								<label for="description" class="form-label">Description</label>
-								<input type="text" id="description" name="description" class="form-control" placeholder="Description" >
-								<?php if (isset($erreurs['description'])): ?>
-									<small class="error-message"><?= $erreurs['description'] ?></small>
-								<?php endif; ?>
-							</div>
-							<!-- Annee -->
-							<div class="mb-3">
-								<label for="annee" class="form-label">Annee</label>
-								<input type="number" min="0" id="annee" name="annee" class="form-control" placeholder="Annee" >
-								<?php if (isset($erreurs['annee'])): ?>
-									<small class="error-message"><?= $erreurs['annee'] ?></small>
-								<?php endif; ?>
-							</div>
-							<script>
-								const annee_courante = new Date().getFullYear();
-								document.getElementById('annee').setAttribute('min', annee_courante);
-							</script>
-							<!-- Semestre -->
-							<div class="mb-3">
-								<label for="semestre" class="form-label">Semestre</label>
-								<select name="semestre[]" id="semestre" class="form-select selectpicker" data-live-search="true" data-selected-text-format="count" >
-									<option value="" disabled selected>Sélectionner</option>
-										<?php for ($semestre = 1 ; $semestre <= 6 ; $semestre++): ?>
-											<option value="<?= $semestre?>">
-												<?= $semestre ?>
-											</option>
-										<?php endfor; ?>
-									</select>
-								<?php if (isset($erreurs['semestre'])): ?>
-									<small class="error-message"><?= $erreurs['semestre'] ?></small>
-								<?php endif; ?>
-							</div>
-							<div class="d-flex justify-content-between">
-								<input type="submit" class="btn btn-primary" value="Créer">
-							</div>
-						</form>
-                </section>
+				<div class="form-container">
+					<!-- Formulaire d'ajout de SAE -->
+					<form action="index.php?menu=enseignant&module=sae&action=creer_sae" method="POST" enctype="multipart/form-data" nonvalide>
+						<!-- Titre -->
+						<div class="mb-3">
+							<label for="titre" class="form-label">Titre</label>
+							<input type="text" id="titre" name="titre" class="form-control" placeholder="Titre" >
+							<?php if (isset($erreurs['titre'])): ?>
+								<small class="error-message"><?= $erreurs['titre'] ?></small>
+							<?php endif; ?>
+						</div>
+						<!-- Description -->
+						<div class="mb-3">
+							<label for="description" class="form-label">Description</label>
+							<input type="text" id="description" name="description" class="form-control" placeholder="Description" >
+							<?php if (isset($erreurs['description'])): ?>
+								<small class="error-message"><?= $erreurs['description'] ?></small>
+							<?php endif; ?>
+						</div>
+						<!-- Annee -->
+						<div class="mb-3">
+							<label for="annee" class="form-label">Annee</label>
+							<input type="number" min="0" id="annee" name="annee" class="form-control" placeholder="Annee" >
+							<?php if (isset($erreurs['annee'])): ?>
+								<small class="error-message"><?= $erreurs['annee'] ?></small>
+							<?php endif; ?>
+						</div>
+						<script>
+							const annee_courante = new Date().getFullYear();
+							document.getElementById('annee').setAttribute('min', annee_courante);
+						</script>
+						<!-- Semestre -->
+						<div class="mb-3">
+							<label for="semestre" class="form-label">Semestre</label>
+							<select name="semestre[]" id="semestre" class="form-select selectpicker" data-live-search="true" data-selected-text-format="count" >
+								<option value="" disabled selected>Sélectionner</option>
+									<?php for ($semestre = 1 ; $semestre <= 6 ; $semestre++): ?>
+										<option value="<?= $semestre?>">
+											<?= $semestre ?>
+										</option>
+									<?php endfor; ?>
+								</select>
+							<?php if (isset($erreurs['semestre'])): ?>
+								<small class="error-message"><?= $erreurs['semestre'] ?></small>
+							<?php endif; ?>
+						</div>
+						<div class="d-flex justify-content-between">
+							<input type="submit" class="btn btn-primary" value="Créer">
+						</div>
+					</form>
             </div>
         </div>
 <?php

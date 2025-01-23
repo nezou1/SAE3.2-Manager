@@ -14,7 +14,7 @@ class ModeleSae extends Connexion {
 
     public function get_saes($id) {
         $req = ($_GET['menu'] == 'enseignant') ?  $this->requetes['get_saes_ens'] : $this->requetes['get_saes_etud'];
-        $pdo_req = self::$bdd->prepare($req);
+        $pdo_req = $this->getConnexion()->prepare($req);
         $id = (int)$id;
         $pdo_req->execute([$id]);
         $result = $pdo_req->fetchAll();
@@ -26,14 +26,14 @@ class ModeleSae extends Connexion {
 
     public function get_projet($id_projet) {
         $req =  $this->requetes['get_projet'];
-        $pdo_req = self::$bdd->prepare($req);
+        $pdo_req = $this->getConnexion()->prepare($req);
         $id_projet = (int)$id_projet;
         $pdo_req->execute([$id_projet]);
         return $pdo_req->fetch(PDO::FETCH_ASSOC);
     }
 
     private function get_elements($requete, $id) {
-        $pdo_req = self::$bdd->prepare($requete);
+        $pdo_req = $this->getConnexion()->prepare($requete);
         $id = (int)$id;
         $pdo_req->execute([$id]);
         return $pdo_req->fetchAll();
@@ -77,7 +77,7 @@ class ModeleSae extends Connexion {
 
     public function get_rendus_sae($id_projet, $id_grp) {
         $requete = $this->requetes['get_rendus_sae'];
-        $pdo_req = self::$bdd->prepare($requete);
+        $pdo_req = $this->getConnexion()->prepare($requete);
         $id_projet = (int)$id_projet;
         $pdo_req->execute([$id_projet, $id_grp]);
         return $pdo_req->fetchAll();
@@ -85,7 +85,7 @@ class ModeleSae extends Connexion {
 
     public function get_soutenances_sae($id_projet) {
         $requete = $this->requetes['get_soutenances_sae'];
-        $pdo_req = self::$bdd->prepare($requete);
+        $pdo_req = $this->getConnexion()->prepare($requete);
         $id_projet = (int)$id_projet;
         $pdo_req->execute([$id_projet]);
 
@@ -99,33 +99,33 @@ class ModeleSae extends Connexion {
 
     private function getJuryByIdSoutenance($id) {
         $requete = $this->requetes['get_jury'];
-        $pdo_req = self::$bdd->prepare($requete);
+        $pdo_req = $this->getConnexion()->prepare($requete);
         $pdo_req->execute([$id]);
-        return $pdo_req->fetchAll(PDO::FETCH_COLUMN); // Récupère uniquement les noms des jurys
+        return $pdo_req->fetch(PDO::FETCH_COLUMN); // Récupère uniquement les noms des jurys
     }
 
     // AJOUTER UN GROUPE
 
     private function addGroupe($nom, $modifiableParEtudiant) {
         $requete = $this->requetes['inserer_groupe'];
-        $pdo_req = self::$bdd->prepare($requete);
+        $pdo_req = $this->getConnexion()->prepare($requete);
         $pdo_req->execute([
             'nom' => $nom,
             'modifiable_par_etudiant' => $modifiableParEtudiant
         ]);
-        return self::$bdd->lastInsertId(); 
+        return $this->getConnexion()->lastInsertId(); 
     }
 
     private function lierGroupe_SAE($id_groupe) {
         $requete = $this->requetes['lier_groupe_a_projet'];
-        $pdo_req = self::$bdd->prepare($requete);
+        $pdo_req = $this->getConnexion()->prepare($requete);
         $pdo_req->execute([(int)$_GET['projet'], $id_groupe]);
         return $pdo_req->fetchAll();
     }
 
     private function lierEtudiantsAuGroupe($idGroupe, $etudiants) {
         $requete = $this->requetes['lier_etud_au_groupe'];
-        $pdo_req = self::$bdd->prepare($requete);
+        $pdo_req = $this->getConnexion()->prepare($requete);
         foreach ($etudiants as $idEtudiant) {
             $pdo_req->execute([
                 'idGroupe' => $idGroupe,
@@ -135,28 +135,11 @@ class ModeleSae extends Connexion {
     }
 
     public function ajouter_groupe() {
-        // Vérification que les données sont présentes
-        if (!isset($_POST['nom_grp']) || !isset($_POST['etudiants'])) {
-            echo "Les données du formulaire sont manquantes.";
-            return;
-        }
     
         // Récupération et validation des données
         $nomGroupe = trim($_POST['nom_grp']);
         $modifiableParEtudiant = isset($_POST['modifiable_par_etudiant']) ? 1 : 0; // Si coché, 1 sinon 0
         $etudiants = $_POST['etudiants'] ?? []; // Liste des étudiants sélectionnés
-    
-        // Vérification que le nom du groupe n'est pas vide
-        if (empty($nomGroupe)) {
-            echo "Le nom du groupe est requis.";
-            return;
-        }
-    
-        // Vérification que des étudiants ont été sélectionnés
-        if (empty($etudiants)) {
-            echo "Veuillez sélectionner au moins un étudiant.";
-            return;
-        }
     
         try {
             // Ajout du groupe dans la base de données
@@ -168,8 +151,6 @@ class ModeleSae extends Connexion {
                 $this->lierEtudiantsAuGroupe($idGroupe, $etudiants);
             }
     
-            // Message de succès
-            echo "Groupe ajouté avec succès !";
         } catch (PDOException $e) {
             // Gestion des erreurs SQL
             error_log("Erreur lors de l'ajout du groupe : " . $e->getMessage());
@@ -179,6 +160,54 @@ class ModeleSae extends Connexion {
     
 
     // AJOUTER UNE RESSOURCE
+
+    private function inserer_ressource($nom_ressource, $type_fichier, $chemin_complet, $mise_en_avant, $id_projet) {
+        $requete = $this->requetes['inserer_ressource'];
+        $pdo_req = $this->getConnexion()->prepare($requete);
+        $id_projet = (int)$id_projet;
+        $pdo_req->execute([$nom_ressource, $type_fichier, $chemin_complet, $mise_en_avant, $id_projet]);
+        $pdo_req->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function ajouter_ressource() {
+        $nom_ressource = $_POST['ressourceName'];
+        $mise_en_avant = (isset($_POST['mise_en_avant'])) ? 1 : 0;
+        $file = $_FILES['ressourceFile'];
+        $chemin_temporaire = $file['tmp_name'];
+        $type_fichier = $file['type'];
+
+        $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+        $nouveau_nom_fichier = $nom_ressource . '_'. Date('d-m-Y') .'.' . $extension;
+
+        $dossier_destination = '/chemin/vers/votre/dossier/ressources/';
+
+        // Définir le dossier de destination
+        $dossier_destination = '../uploads/';
+        $chemin_complet = $dossier_destination . $nouveau_nom_fichier;
+
+        // Vérifier et créer le dossier si nécessaire
+        if (!file_exists($dossier_destination)) {
+            mkdir($dossier_destination, 0777, true);
+        }
+
+        // Déplacer le fichier
+        if (move_uploaded_file($chemin_temporaire, $chemin_complet)) {
+            $this->inserer_ressource($nom_ressource, $type_fichier, $chemin_complet, $mise_en_avant, $_GET['projet']);          
+        }
+    }
+
+    // AJOUTER UN DEPOT
+
+    public function ajouter_depot() {
+        $descriptif = $_POST['description_depot'];
+        $dateAttendu = $_POST['date_depot'];
+        $id_projet = $_GET['projet'];
+        $requete = $this->requetes['inserer_depot'];
+        $pdo_req = $this->getConnexion()->prepare($requete);
+        $id_projet = (int)$id_projet;
+        $pdo_req->execute([$descriptif, $dateAttendu, $id_projet]);
+        return $pdo_req->fetch(PDO::FETCH_ASSOC);
+    }
 
     // AJOUTER UNE SOUTENANCE
 
@@ -259,11 +288,39 @@ class ModeleSae extends Connexion {
             $id_groupe
         );   
     }
+
+    //SUPPRIMER RESSOURCE
+
+    public function supprimer_ressource($id_ressource) {
+        return $this->get_elements(
+            $this->requetes['supprimer_ressource'],
+            $id_ressource
+        );   
+    }
+
+    //SUPPRIMER DEPOT
+
+    public function supprimer_depot($id_depot) {
+        return $this->get_elements(
+            $this->requetes['supprimer_depot'],
+            $id_depot
+        );   
+    }
+
+    // ACCEDER AU RENDU
+
+    public function get_depots_sae($id_projet) {
+        $requete = $this->requetes['get_depots_sae'];
+        $pdo_req = $this->getConnexion()->prepare($requete);
+        $pdo_req->execute([$id_projet]);
+        return $pdo_req->fetchAll();
+    }
+
     // CREER UNE SAE
 
     public function liste_enseignants() {
         $req = $this->requetes['liste_enseignant'];
-        $pdo_req = self::$bdd->prepare($req);
+        $pdo_req = $this->getConnexion()->prepare($req);
         $pdo_req->bindParam("email_resp", $_SESSION['login']);
         $pdo_req->execute();
         return $pdo_req->fetchAll();
@@ -271,7 +328,7 @@ class ModeleSae extends Connexion {
 
     public function get_id_enseignant($email) {
         $req = $this->requetes['id_enseignant'];
-        $pdo_req = self::$bdd->prepare($req);
+        $pdo_req = $this->getConnexion()->prepare($req);
         $pdo_req->execute(["email" => $email]);
         $result = $pdo_req->fetch(PDO::FETCH_ASSOC);
 
@@ -280,7 +337,7 @@ class ModeleSae extends Connexion {
 
     public function get_id_etudiant($email) {
         $req = $this->requetes['id_etudiant'];
-        $pdo_req = self::$bdd->prepare($req);
+        $pdo_req = $this->getConnexion()->prepare($req);
         $pdo_req->execute(["email" => $email]);
         $result = $pdo_req->fetch(PDO::FETCH_ASSOC);
 
@@ -289,7 +346,7 @@ class ModeleSae extends Connexion {
 
     private function titre_existe($titre) {
         $req = $this->requetes['get_titre_sae'];
-        $pdo_req = self::$bdd->prepare($req);
+        $pdo_req = $this->getConnexion()->prepare($req);
         $pdo_req->execute([$titre]);
         return $pdo_req->fetch();
     }
@@ -297,15 +354,15 @@ class ModeleSae extends Connexion {
 
     private function addProjet($titre, $description, $annee, $semestre) {
         $req = $this->requetes['inserer_projet'];
-        $pdo_req = self::$bdd->prepare($req);
+        $pdo_req = $this->getConnexion()->prepare($req);
         $pdo_req->execute([$titre, $description, $annee, $semestre]);
-        return self::$bdd->lastInsertId();
+        return $this->getConnexion()->lastInsertId();
     }
 
 
     private function assigner_ens_comme($email, $id_projet, $role) {
         $req = $this->requetes['inserer_enseignant'];
-        $pdo_req = self::$bdd->prepare($req);
+        $pdo_req = $this->getConnexion()->prepare($req);
 
         $id_ens = $this->get_id_enseignant($email, $id_projet);
         if ($id_ens !== null)
@@ -318,41 +375,6 @@ class ModeleSae extends Connexion {
         for ($i = 0; $i < count($intervenants); $i++) {
             $email_intervenant = $intervenants[$i];
             assigner_ens_comme($email_intervenant, $id_projet, 'intervenant');
-        }
-    }
-    
-    private function addRessources($mise_en_avant, $idProjet) {
-        if (isset($_FILES['ressources'])) {
-            $files = $_FILES['ressources'];
-
-            foreach ($files['name'] as $key => $file) {
-                $file_basename = pathinfo($file, PATHINFO_FILENAME);
-                $file_extension = pathinfo($file, PATHINFO_EXTENSION);
-                $name_ressource = $file_basename . '_' . date("Ymd_His") . '.' . $file_extension;
-
-                $uploadDir = './uploads/';
-                if(!file_exists($uploadDir)){
-                    if (!mkdir($uploadDir, 0777, false)) {
-                        echo "Impossible de créer le fichier";
-            
-                    }
-                }
-                $destination = $uploadDir . $name_ressource;
-
-                if (move_uploaded_file($files['tmp_name'][$key], $destination)) {
-                    $url_ressource = 'http://' . $_SERVER['HTTP_HOST'] . '../' . $destination;
-
-                    $mise_en_avant_values = explode(',', $mise_en_avant);
-                    $est_mise_en_avant = isset($mise_en_avant_values[$key]) ? (int)$mise_en_avant_values[$key] : 0;
-
-                    $req = $this->requetes['inserer_ressource'];
-                    $pdo_req = self::$bdd->prepare($req);
-                    $pdo_req->execute([$name_ressource, $file_extension, $url_ressource, $est_mise_en_avant, $idProjet]);
-
-                } else {
-                    echo "Erreur lors du déplacement du fichier $fileName.<br>";
-                }
-            }            
         }
     }
 

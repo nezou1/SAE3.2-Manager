@@ -1,49 +1,80 @@
-function addRessource() {
-    const name = document.getElementById('ressourceName').value;
-    const link = document.getElementById('ressourceLink').value;
-    if (name && link) {
-        const list = document.getElementById('ressourceList');
-        const listItem = document.createElement('li');
-        listItem.innerHTML = `<i class='bi bi-file-earmark'></i> <a href='${link}' target='_blank'>${name}</a>`;
-        list.appendChild(listItem);
-        document.getElementById('ressourceName').value = '';
-        document.getElementById('ressourceLink').value = '';
-        const modal = bootstrap.Modal.getInstance(document.getElementById('addRessourceModal'));
-        modal.hide();
+function addRessource(event) {
+
+    event.preventDefault();
+    resetErrors();
+    let isValid = true;
+  
+    // Vérification du nom de la ressource
+    const ressourceName = document.getElementById('ressourceName');    
+    if (ressourceName.value.trim() === '') {
+        showError('ressourceNameError', 'Veuillez entrer un nom pour la ressource');
+        isValid = false;
+    }
+  
+    // Vérification du fichier
+    const ressourceFile = document.getElementById('ressourceFile');
+    if (ressourceFile.files.length === 0) {
+      isValid = false;
+      showError('ressourceFileError', 'Veuillez sélectionner un fichier.');
+      isValid = false;
+    }
+  
+    if (isValid) {
+        document.getElementById('ressourceForm').submit();
     }
 }
 
-
-
-
-    // Fonction pour gérer les erreurs du formulaire
-function validateForm(event) {
-    event.preventDefault(); // Empêche l'envoi du formulaire
-
-    // Réinitialiser les erreurs
+function addDepot(event) {
+    event.preventDefault();
     resetErrors();
 
     let isValid = true;
 
-    // Vérifier le champ "Nom du groupe"
+    // Validation de la description
+    const description_depot = document.getElementById('description_depot').value;
+    if (description_depot.trim() === '') {
+        showError('description_depot_error', 'La description du dépôt est requise.');
+        isValid = false;
+    }
+
+    // Validation de la date
+    const date_depot = document.getElementById('date_depot').value;
+    if (date_depot.trim() === '') {
+        showError('date_depot_error', 'La date du dépôt est requise.');
+        isValid = false;
+    }
+
+    if (isValid) {
+        document.getElementById('depotForm').submit();
+    }
+}
+
+
+    // Fonction pour gérer les erreurs du formulaire
+function addGroupe(event) {
+    event.preventDefault(); // Empêche l'envoi du formulaire
+
+    resetErrors();
+
+    let isValid = true;
+
     const nomGrp = document.getElementById('nom_grp').value;
     if (nomGrp.trim() === '') {
         showError('nom_grp_error', 'Le nom du groupe est requis.');
         isValid = false;
     }
 
-    // Vérifier la sélection d'étudiants
     const selectedEtudiants = document.querySelectorAll('input[name="etudiants[]"]:checked');
     if (selectedEtudiants.length < 2) {
         showError('etudiants_error', 'Veuillez ajouter au moins deux étudiants au groupe.');
         isValid = false;
     }
 
-    // Si tout est valide, soumettre le formulaire
     if (isValid) {
         document.getElementById('addGroupForm').submit();
     }
 }
+
 
 // Fonction pour afficher les messages d'erreur
 function showError(elementId, message) {
@@ -61,31 +92,6 @@ function resetErrors() {
     });
 }
 
-// Ajouter l'événement de soumission du formulaire
-document.getElementById('addGroupForm').addEventListener('submit', validateForm);
-
-
-
-
-
-
-
-
-
-function addDepot() {
-    const name = document.getElementById('depotName').value;
-    const date = document.getElementById('depotDate').value;
-    if (name && date) {
-        const list = document.getElementById('depotList');
-        const listItem = document.createElement('li');
-        listItem.innerHTML = `<i class='bi bi-box-arrow-in-down'></i> ${name} - Date limite: ${date}`;
-        list.appendChild(listItem);
-        document.getElementById('depotName').value = '';
-        document.getElementById('depotDate').value = '';
-        const modal = bootstrap.Modal.getInstance(document.getElementById('addDepotModal'));
-        modal.hide();
-    }
-}
 
 function addSoutenance() {
     // Récupération de toutes les valeurs des champs
