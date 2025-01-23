@@ -41,7 +41,7 @@ class Site {
 			case "groupeEtudiant":    
 			case "gestionnaireRessource":
 			case "groupe":       
-				require_once PROJECT_ROOT . "/modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
+				require_once "../modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
 				break;
 			default :
 				die ("Module inexistant");

@@ -23,7 +23,7 @@ class ControleurGroupe {
                 $this->ajouterGroupe();
                 break;
             case 'mes_groupes':
-                $this->afficherGroupesEtudiant($_SESSION['idEtudiant'] ?? null);
+                $this->afficherGroupesEtudiant($_SESSION['login'] ?? null);
                 break;
             case 'voir_membres':
                 $this->afficherMembresGroupe($_GET['idGroupe'] ?? null);
@@ -37,14 +37,15 @@ class ControleurGroupe {
     private function afficherGroupes() {
         $groupes = $this->modele->getGroupes();
         $etudiants = $this->modele->getEtudiants();
-        $this->vue->afficherGroupes($groupes, $etudiants);
+        $role = $_GET['menu'] ?? 'etudiant';
+        $this->vue->afficherGroupes($groupes, $etudiants, $role);
     }
 
     private function ajouterGroupe() {
         if (!isset($_POST['nom']) || trim($_POST['nom']) === '') {
             $groupes = $this->modele->getGroupes();
             $etudiants = $this->modele->getEtudiants();
-            $this->vue->afficherGroupes($groupes, $etudiants);
+            $this->vue->afficherGroupes($groupes, $etudiants, $_GET['menu']);
             $this->vue->afficherErreur("Le nom du groupe est requis.");
             return;
         }
@@ -57,20 +58,15 @@ class ControleurGroupe {
         $this->modele->lierEtudiantsAuGroupe($idGroupe, $etudiants);
     
         $this->vue->afficherMessage("Groupe ajouté avec succès.");
-        $this->afficherGroupes();
     }
     
-       
-    private function afficherGroupesEtudiant($idEtudiant = null) {
-        if (!$idEtudiant) {
-            if (isset($_SESSION['idEtud'])) {
-                $idEtudiant = $_SESSION['idEtud'];
-            } else {
-                $this->vue->afficherErreur("Vous devez être connecté pour voir vos groupes.");
-                return;
-            }
+    private function afficherGroupesEtudiant($email) {
+        if (!$email) {
+            $this->vue->afficherErreur("Vous devez être connecté pour voir vos groupes.");
+            return;
         }
-    
+
+        $idEtudiant = $this->modele->getIdEtudiant($email);
         $groupes = $this->modele->getGroupesParEtudiant($idEtudiant);
         $this->vue->afficherGroupesEtudiant($groupes);
     }

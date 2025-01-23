@@ -162,7 +162,7 @@ class VueDashboard extends VueGenerique {
                         </div>
                     </div>
                 <?php endforeach; ?>
-                <?php if (count($groupes) > 4): ?>
+                <?php if (count($groupes) > 3): ?>
                     <!-- Card "Voir plus" pour rester alignée avec les autres -->
                     <div class="card text-center shadow-sm m-2" style="flex: 1 1 calc(25% - 16px); min-width: 200px;">
                         <div class="card-body d-flex align-items-center justify-content-center">
