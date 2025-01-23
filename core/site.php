@@ -37,7 +37,8 @@ class Site {
 			case "sae":
 			case "soutenance" :
 			case "depot":
-			case "liste":         
+			case "liste":     
+			case "groupeEtudiant":    
 			case "gestionnaireRessource":
 			case "groupe":       
 				require_once PROJECT_ROOT . "/modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";

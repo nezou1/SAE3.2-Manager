@@ -166,7 +166,7 @@ class VueDashboard extends VueGenerique {
                     <!-- Card "Voir plus" pour rester alignée avec les autres -->
                     <div class="card text-center shadow-sm m-2" style="flex: 1 1 calc(25% - 16px); min-width: 200px;">
                         <div class="card-body d-flex align-items-center justify-content-center">
-                            <a href="./index.php?menu=etudiant&module=groupe&action=affichage" class="btn btn-primary">Voir plus</a>
+                            <a href="./index.php?menu=etudiant&module=groupe&action=mes_groupes" class="btn btn-primary">Voir plus</a>
                         </div>
                     </div>
                 <?php endif; ?>
