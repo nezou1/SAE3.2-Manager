@@ -2,7 +2,7 @@
 
 require_once 'modele_connexion.php';
 require_once 'vue_connexion.php';
-require_once '/Users/nezhaelfayez/Desktop/IUT/S3/PHP/local_html/SAE3.2-Manager/modules/mod_dashboard/vue_dashboard.php';
+require_once PROJECT_ROOT . '/modules/mod_dashboard/vue_dashboard.php';
 
 class ControleurConnexion {
     private $modele;

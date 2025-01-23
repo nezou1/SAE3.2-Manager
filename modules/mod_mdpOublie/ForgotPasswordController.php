@@ -2,7 +2,7 @@
 
 require "modele_mdpOublie.php";
 require "vue_mdpOublie.php";
-require "/Users/nezhaelfayez/Desktop/IUT/S3/PHP/local_html/SAE3.2-Manager/modules/mod_inscription/modele_inscription.php";
+require PROJECT_ROOT . "/modules/mod_inscription/modele_inscription.php";
 
 class ControleurMdpOublie {
     private $modele;

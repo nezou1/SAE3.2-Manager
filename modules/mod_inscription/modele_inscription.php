@@ -1,6 +1,6 @@
 <?php
 
-require_once('/Users/nezhaelfayez/Desktop/IUT/S3/PHP/local_html/SAE3.2-Manager/core/connexion.php');
+require_once(PROJECT_ROOT . '/core/connexion.php');
 
 class ModeleInscription extends Connexion {
 
