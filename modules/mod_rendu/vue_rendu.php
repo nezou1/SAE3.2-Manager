@@ -4,7 +4,7 @@ class VueRendu extends VueGenerique
 {
     public function afficherPageEnseignant($soutenances, $rendus) {
         ?>
-        <div class="container mt-5">
+        <div class="mt-5">
             <h1>Evaluation</h1>
             <div class="section">
                 <h2>Soutenances</h2>
@@ -71,9 +71,38 @@ class VueRendu extends VueGenerique
                 </table>
             </div>
             <div class="d-flex justify-content-between mt-4">
-                <a href="index.php?module=soutenance&action=form_ajout" class="btn btn-primary">Ajouter une Soutenance</a>
-                <a href="index.php?module=rendu&action=creer" class="btn btn-primary">Ajouter un Rendu</a>
+                <a href="index.php?module=soutenance" class="btn btn-primary">Ajouter une Soutenance</a>
+                <a href="index.php?module=rendu&action=creerRendu" class="btn btn-primary">Ajouter un Rendu</a>
             </div>
+        </div>
+        <?php
+    }
+    public function creerRendu() {
+        ?>
+        <div class="container mt-5">
+            <h1>Créer un Rendu</h1>
+            <form method="POST" action="index.php?module=rendu&action=creer">
+                <div class="mb-3">
+                    <label for="titre" class="form-label">Titre</label>
+                    <input type="text" class="form-control" id="titre" name="titre" required>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" name="description" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="date" class="form-label">Date de rendu</label>
+                    <input type="date" class="form-control" id="date" name="date" required>
+                </div>
+                <div class="mb-3">
+                    <label for="options" class="form-label">Options</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="fileUpload" name="fileUpload">
+                        <label class="form-check-label" for="fileUpload">Souhaitez-vous une zone de téléchargement ?</label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Créer</button>
+            </form>
         </div>
         <?php
     }

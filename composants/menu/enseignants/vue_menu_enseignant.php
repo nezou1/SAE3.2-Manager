@@ -21,7 +21,7 @@ class VueCompMenuEnseignant extends VueCompGenerique {
                             <a class="nav-link" href="index.php?menu=enseignant&module=sae&action=form_creer_sae">Créer une SAE</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="index.php?menu=enseignant&module=soutenance">Mes Soutenances</a>
+                            <a class="nav-link" href="index.php?menu=enseignant&module=rendu">Evaluation</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="index.php?menu=enseignant&module=connexion&action=deconnexion&menu=connexion">Déconnexion</a>

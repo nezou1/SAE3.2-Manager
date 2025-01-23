@@ -62,7 +62,7 @@ class VueEvaluation extends VueGenerique
             <h1>Évaluation soumise</h1>
             <p>Votre évaluation a bien été soumise.</p>
         </div>
-        <button type="button" class="btn btn-primary" href='index.php?module=rendu">Retour</button>
+        <button type="button" class="btn btn-primary" href='index.php?module=rendu'>Retour</button>
         <?php
     }
 }

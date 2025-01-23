@@ -21,6 +21,13 @@ class RenduController
             case 'accueilEval':
                 $this->afficher();
                 break;
+            case 'creerRendu':
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    $this->creerRendu();
+                } else {
+                    $this->vue->creerRendu();
+                }
+                break;
             default:
                 $this->afficher(); // Par défaut, afficher la page d'évaluation
         }
@@ -47,6 +54,19 @@ class RenduController
             error_log('Erreur lors de la récupération des données : ' . $e->getMessage());
             echo '<p>Une erreur est survenue lors du chargement des données.</p>';
         }
+    }
+
+    public function creerRendu() {
+        $titre = $_POST['titre'];
+        $description = $_POST['description'];
+        $date = $_POST['date'];
+        $fileUpload = isset($_POST['fileUpload']) ? 1 : 0;
+
+        // Save the project submission form details to the database
+        $this->modele->creerRendu($titre, $description, $date, $fileUpload);
+
+        // Redirect to the instructor's page
+        header('Location: index.php?module=rendu');
     }
 
 
