@@ -2,7 +2,7 @@
 
 require_once 'modele_connexion.php';
 require_once 'vue_connexion.php';
-require_once PROJECT_ROOT . '/modules/mod_dashboard/vue_dashboard.php';
+require_once  '../modules/mod_dashboard/vue_dashboard.php';
 
 class ControleurConnexion {
     private $modele;
@@ -39,7 +39,7 @@ class ControleurConnexion {
 
     public function logout() {
         session_destroy();
-        header('Location: ./index.php/?module=connexion&action=logout');
+        header('Location: ./index.php?menu=connexion&module=connexion&action=login');
         exit();
     }
 

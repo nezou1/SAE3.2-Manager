@@ -1,7 +1,7 @@
 <?php
 
 
-require_once(PROJECT_ROOT .'/core/connexion.php');
+require_once('../core/connexion.php');
 class ModeleDashboard extends Connexion {
 
     public function getUserInfo($email) {

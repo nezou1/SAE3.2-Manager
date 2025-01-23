@@ -1,6 +1,6 @@
 <?php
 
-require_once PROJECT_ROOT . "/composants/menu/etudiants/vue_menu_etudiant.php";
+require_once  "../composants/menu/etudiants/vue_menu_etudiant.php";
 
 
 class ControleurCompMenuEtudiant {

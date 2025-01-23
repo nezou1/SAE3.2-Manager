@@ -2,7 +2,7 @@
 
 require "modele_mdpOublie.php";
 require "vue_mdpOublie.php";
-require PROJECT_ROOT . "/modules/mod_inscription/modele_inscription.php";
+require  "../modules/mod_inscription/modele_inscription.php";
 
 class ControleurMdpOublie {
     private $modele;

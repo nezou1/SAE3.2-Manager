@@ -13,7 +13,7 @@ class VueSae extends VueGenerique{
 			<div class="row">
 				<?= $this->get_saes($saes)?>
 <?php				if ($_GET["menu"] == "enseignant") {?>
-					<a href="index.php?module=sae&action=form_creer_sae">
+					<a href="index.php?menu=enseignant&module=sae&action=form_creer_sae">
 						<button class="btn btn-primary w-100">Creer une SAE</button>
 					</a>
 <?php				}?>
@@ -26,18 +26,14 @@ class VueSae extends VueGenerique{
 		if ($saes){
 			foreach($saes as $sae){
 	?>			<div class="col-md-4">
-					<a href="index.php?module=sae&action=acceder_sae&projet=<?=htmlspecialchars($sae)?>">
+					<a href="index.php?menu=enseignant&module=sae&action=acceder_sae&projet=<?=htmlspecialchars($sae['idProjet'])?>">
 						<div class="card">
-							<!-- <img src="https://via.placeholder.com/350x200" class="card-img-top" alt="Bangkok"> -->
 							<div class="card-body">
 								<h5 class="card-title"><?= htmlspecialchars($sae['titre'])?></h5>
 								<p class="card-text">
 									Annee : <?= htmlspecialchars($sae['annee'])?><br>
 									S<?= htmlspecialchars($sae['semestre'])?>
 								</p>
-	<!-- <?php						if ($_GET["menu"] == "enseignant") { ?>
-									<a href="index.php?module=sae&action=modifier_sae&projet=<?=htmlspecialchars($sae)?>" class="btn btn-primary">Modifier</a>
-	<?php						} ?> -->
 							</div>
 						</div>
 					</a>
@@ -51,26 +47,361 @@ class VueSae extends VueGenerique{
 <?php	}
 	}
 
-	public function acceder_sae($sae) {
+	public function acceder_sae($sae, $enseignants, $ressources, $groupes, $etudiants, $soutenances) {
 ?>		
-	<!-- Section principale -->
-	<div class="hero">
-			<h1>NOM DE LA SAE</h1>
-			<div class="description-container">
-				<p class="description">courte description</p>
+	<div class="container">
+		<!-- Titre du projet -->
+		<h1 class="text-center mb-4"><?= htmlspecialchars($sae['titre'])?></h1>
+
+		<!-- Année et semestre -->
+		<div class="top-0 start-0 p-3 text-white rounded" style="background-color: #91A89B; color: white; border-radius: 0.375rem;">
+			<strong>Année : </strong><?= htmlspecialchars($sae['annee'])?><br>
+			<strong>S<?= htmlspecialchars($sae['semestre'])?></strong>
+		</div>
+
+		<!-- Description -->
+		<div class="mb-4">
+			<h4>Description</h4>
+			<textarea class="form-control" rows="5" placeholder="Entrez la description du projet..."
+			<?php if($_GET['menu'] == 'etudiant'):?> readonly <?php endif;?>><?= htmlspecialchars($sae['description'])?></textarea>
+		</div>
+
+		<!-- Ressources associées -->
+		<div class="mb-4">
+			<h4>Ressources Associées</h4>
+			<ul class="list-unstyled" id="ressourceList">
+				<li><i class="bi bi-file-earmark"></i> <a href="#">Ressource 1</a></li>
+				<li><i class="bi bi-file-earmark"></i> <a href="#">Ressource 2</a></li>
+			</ul>
+			<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addRessourceModal">Ajouter Ressource</button>
+		</div>
+
+		<!-- Groupes associés -->
+		<div class="container mt-4">
+			<h3 class="text-center mb-4">Groupes</h3>
+			<div class="table-responsive border rounded p-3" style="max-height: 400px; background-color: #f8f9fa; overflow-y: auto;">
+				<?php if (!empty($groupes)) {?>
+					<div style="max-height: 400px; overflow-y: auto; border: 1px solid #ccc; border-radius: 5px; background-color: #fff;">
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<th>Nom du Groupe</th>
+									<th>Modifiable par Étudiant</th>
+									<th>Actions</th> <!-- Colonne pour les actions -->
+								</tr>
+							</thead>
+							<tbody>
+								<?php foreach ($groupes as $groupe): ?>
+									<tr>
+										<td><?php echo htmlspecialchars($groupe['nom']); ?></td>
+										<td><?php echo $groupe['modifiable_par_etudiant'] ? "Oui" : "Non"; ?></td>
+										<td>
+											<form action="index.php?menu=enseignant&module=sae&action=supprimer_groupe&projet=<?=$_GET['projet']?>" method="POST" style="display:inline;">
+												<input type="hidden" name="idGroupe" value="<?php echo $groupe['idGroupe']; ?>">
+												<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce groupe ?');">Supprimer</button>
+											</form>
+										</td>
+									</tr>
+								<?php endforeach; ?>
+							</tbody>
+						</table>
+					</div>
+<?php			}else {?>
+					<div class="col-md-4">									
+						<p>Vous n'avez crée aucun groupe pour le moment</p>
+					</div>
+<?php			}?>
+				<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addGroupModal">Ajouter Groupe</button>
 			</div>
 		</div>
 
-		<!-- Section des cercles -->
-		<div class="circles">
-			<div class="circle">Cours</div>
-			<div class="circle">Ressource</div>
-			<div class="circle">Dépôt</div>
+		<!-- Dépôts à rendre -->
+		<div class="mb-4">
+			<h4>Dépôts à Rendre</h4>
+			<ul class="list-unstyled" id="depotList">
+				<li><i class="bi bi-box-arrow-in-down"></i> Dépôt 1</li>
+				<li><i class="bi bi-box-arrow-in-down"></i> Dépôt 2</li>
+			</ul>
+			<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addDepotModal">Ajouter Dépôt</button>
 		</div>
+
+		<?php if(!empty($groupes))
+				$this->mes_soutenances($soutenances)?>
+
+		<!-- Note finale -->
+		<div class="mb-4">
+			<h4>Note Finale</h4>
+			<input type="text" class="form-control" placeholder="Entrez la note finale...">
+		</div>
+		
+	</div>
+
+	<!-- Modal Ajouter Ressource -->
+	<div class="modal fade" id="addRessourceModal" tabindex="-1" aria-labelledby="addRessourceModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="addRessourceModalLabel">Ajouter Ressource</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<input type="text" id="ressourceName" class="form-control" placeholder="Nom de la ressource">
+					<input type="url" id="ressourceLink" class="form-control mt-2" placeholder="Lien de la ressource">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+					<button type="button" class="btn btn-primary" onclick="addRessource()">Ajouter</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal Ajouter Groupe -->
+	<div class="modal fade" id="addGroupModal" tabindex="-1" aria-labelledby="addGroupModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="addGroupModalLabel">Ajouter un Groupe</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<form id="addGroupForm" method="POST" action="index.php?menu=enseignant&module=sae&action=ajouter_groupe&projet=<?php echo $_GET['projet'] ?>">
+						<!-- Nom du groupe -->
+						<div class="mb-3">
+							<label for="nom_grp" class="form-label">Nom du groupe</label>
+							<input type="text" id="nom_grp" name="nom_grp" class="form-control" required>
+							<small id="nom_grp_error" class="text-danger d-none"></small>
+						</div>
+
+						<!-- Modifiable par les étudiants -->
+						<div class="form-check mb-3">
+							<input class="form-check-input" type="checkbox" id="modifiable_par_etudiant" name="modifiable_par_etudiant">
+							<label class="form-check-label" for="modifiable_par_etudiant">Modifiable par les étudiants</label>
+						</div>
+
+						<!-- Liste des étudiants -->
+						<div class="mb-3">
+							<label for="etudiants" class="form-label">Ajouter des étudiants</label>
+							<div class="border p-2 rounded overflow-auto" style="height: 220px; background-color: #f8f9fa;">
+								<table class="table table-bordered">
+									<thead>
+										<tr>
+											<th></th> <!-- Colonne pour les cases à cocher -->
+											<th>Nom</th>
+											<th>Prénom</th>
+										</tr>
+									</thead>
+									<tbody>
+										<?php foreach ($etudiants as $etudiant): ?>
+											<tr>
+												<td>
+													<input class="form-check-input" type="checkbox" id="etudiant-<?php echo $etudiant['idEtud']; ?>" name="etudiants[]" value="<?php echo $etudiant['idEtud']; ?>">
+												</td>
+												<td>
+													<?php echo htmlspecialchars($etudiant['nom']); ?>
+												</td>
+												<td>
+													<?php echo htmlspecialchars($etudiant['prenom']); ?>
+												</td>
+											</tr>
+										<?php endforeach; ?>
+									</tbody>
+								</table>
+							</div>
+							<small id="etudiants_error" class="text-danger d-none"></small>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="closeModalGroupe()">Fermer</button>
+							<input type="submit" class="btn btn-primary" onclick="validateForm(event)"value="Ajouter">
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="../assets/script/scriptModalWindows.js"></script>
+
+
+
+	<!-- Modal Ajouter Dépôt -->
+	<div class="modal fade" id="addDepotModal" tabindex="-1" aria-labelledby="addDepotModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="addDepotModalLabel">Ajouter Dépôt</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<input type="text" id="depotName" class="form-control" placeholder="Nom du dépôt">
+					<input type="date" id="depotDate" class="form-control mt-2" placeholder="Date limite">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+					<button type="button" class="btn btn-primary" onclick="addDepot()">Ajouter</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal Ajouter Soutenance -->
+	<div class="modal fade" id="addSoutenanceModal" tabindex="-1" aria-labelledby="addSoutenanceModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addSoutenanceModalLabel">Ajouter Soutenance</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Formulaire de la soutenance -->
+                <form id=soutenanceForm>
+                    <!-- Nom du Groupe -->
+                    <div class="mb-3">
+                        <label for="soutenance_nom_grp" class="form-label">Nom du Groupe</label>
+						<select id="soutenance_nom_grp" class="form-select" required>
+							<option value="">Choisir un groupe</option>
+							<?php foreach ($groupes as $groupe): ?>
+								<option value="<?=htmlspecialchars($groupe['nom']) ?>">
+									<?=htmlspecialchars($groupe['nom']) ?>
+								</option>
+							<?php endforeach; ?>
+						</select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="soutenance_titre_sae" class="form-label">Titre de la SAE</label>
+                        <select id="soutenance_titre_sae" class="form-select" required>
+                            <option value="">Choisir un titre</option>
+                            <!-- Options des SAE (les options doivent être générées dynamiquement) -->
+                            <!-- <?php /*foreach ($saes as $sae): ?>
+								<option value="<?=htmlspecialchars($sae['titre']) ?>">
+									<?=htmlspecialchars($sae['titre']) ?>
+								</option>
+							<?php endforeach; */?> -->
+							<option value="sae1">SAE 1</option>
+                            <option value="sae2">SAE 2</option>
+                            <option value="sae3">SAE 3</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Description -->
+                    <div class="mb-3">
+                        <label for="soutenance_description" class="form-label">Description</label>
+                        <textarea id="soutenance_description" class="form-control" placeholder="Description de la soutenance" required></textarea>
+                    </div>
+                    
+                    <!-- Date de la soutenance -->
+                    <div class="mb-3">
+                        <label for="soutenance_dateSout" class="form-label">Date de Soutenance</label>
+                        <input type="date" id="soutenance_dateSout" class="form-control" required>
+                    </div>
+                    
+                    <!-- Lieu de la soutenance -->
+                    <div class="mb-3">
+                        <label for="soutenance_lieu" class="form-label">Lieu de la Soutenance</label>
+                        <input type="text" id="soutenance_lieu" class="form-control" placeholder="Lieu de la soutenance" required>
+                    </div>
+                    
+                    <!-- Heure de début -->
+                    <div class="mb-3">
+                        <label for="soutenance_heure_debut" class="form-label">Heure de Début</label>
+                        <input type="time" id="soutenance_heure_debut" class="form-control" required>
+                    </div>
+                    
+                    <!-- Heure de fin -->
+                    <div class="mb-3">
+                        <label for="soutenance_heure_fin" class="form-label">Heure de Fin</label>
+                        <input type="time" id="soutenance_heure_fin" class="form-control" required>
+                    </div>
+                    
+                    <!-- Jurys -->
+                    <div class="mb-3">
+                        <label for="soutenance_jurys" class="form-label">Sélectionner les Jurys</label>
+                        <select id="soutenance_jurys" class="form-select" multiple required>
+                            <!-- Options des jurys (les options doivent être générées dynamiquement) -->
+                            <option value="jury1@example.com">Jury 1</option>
+                            <option value="jury2@example.com">Jury 2</option>
+                            <option value="jury3@example.com">Jury 3</option>
+                            <!-- Ajoute d'autres jurys ici -->
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-primary" onclick="addSoutenance()">Ajouter</button>
+            </div>
+        </div>
+    </div>
+</div>
 <?php
 	}
 
-	public function form_creer_sae() {
+
+
+// VUE SOUTENANCE
+
+		private function mes_soutenances($soutenances){
+?>			<div class="mb-4">
+<?php			if (!empty($soutenances)){
+					$this->tableau_soutenances(htmlspecialchars($soutenances));
+				}else {
+?>					<div class="col-md-4">									
+						<p>Vous n'avez aucune soutenances pour le moment</p>
+					</div>
+<?php	 		}?>
+				<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSoutenanceModal">Ajouter une Soutenance</button>
+			</div>
+<?php	}
+
+		private function tableau_soutenances($soutenances) {
+?>			<!-- Tableau des soutenances -->
+			<div>
+				<h4>Soutenances</h4>
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>Groupe</th>
+							<th>Description</th>
+							<th>SAE</th>
+							<th>Date</th>
+							<th>De</th>
+							<th>À</th>
+							<th>Lieu</th>
+							<th>Jurys</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach ($soutenances as $soutenance): ?>
+							<tr>
+								<td><?= htmlspecialchars($soutenance['nom_groupe']) ?></td>
+								<td><?= htmlspecialchars($soutenance['description']) ?></td>
+								<td><?= htmlspecialchars($soutenance['titre_sae']) ?></td>
+								<td><?= htmlspecialchars($soutenance['dateSout']) ?></td>
+								<td><?= htmlspecialchars($soutenance['heureDebut']) ?></td>
+								<td><?= htmlspecialchars($soutenance['heureFin']) ?></td>
+								<td><?= htmlspecialchars($soutenance['lieu']) ?></td>
+								<td>
+									<div class="jury-container">
+										<button class="toggle-jurys">
+											<?=htmlspecialchars($soutenance['jurys'][0])?>
+										</button>
+										<ul class="jury-list hidden">
+											<?php foreach ($soutenance['jurys'] as $jury): ?>
+												<li><?= htmlspecialchars($jury) ?></li>
+											<?php endforeach; ?>
+										</ul>
+									</div>
+								</td>
+							</tr>
+						<?php endforeach; ?>
+					</tbody>
+				</table>
+			</div>
+<?php	}
+
+// FORMULAIRE CREER SAE
+
+	public function form_creer_sae($erreurs) {
 ?>
         <h1>Créer une SAE</h1>
         <div class="container">
@@ -78,143 +409,175 @@ class VueSae extends VueGenerique{
                 <!-- Formulaire d'ajout de SAE -->
                 <section class="col-md-6">
                     <div class="form-container">
-						<form action="index.php?module=sae&action=creer_sae" method="POST" enctype="multipart/form-data" novalidate>
+						<form action="index.php?menu=enseignant&module=sae&action=creer_sae" method="POST" enctype="multipart/form-data" nonvalide>
 							<!-- Titre -->
 							<div class="mb-3">
 								<label for="titre" class="form-label">Titre</label>
-								<input type="text" id="titre" name="titre" class="form-control" placeholder="Titre" required>
-								<?php if (isset($errors['titre'])): ?>
-									<small class="error-message"><?= $errors['titre'] ?></small>
+								<input type="text" id="titre" name="titre" class="form-control" placeholder="Titre" >
+								<?php if (isset($erreurs['titre'])): ?>
+									<small class="error-message"><?= $erreurs['titre'] ?></small>
 								<?php endif; ?>
 							</div>
 							<!-- Description -->
 							<div class="mb-3">
 								<label for="description" class="form-label">Description</label>
-								<input type="text" id="description" name="description" class="form-control" placeholder="Description" required>
-								<?php if (isset($errors['description'])): ?>
-									<small class="error-message"><?= $errors['description'] ?></small>
+								<input type="text" id="description" name="description" class="form-control" placeholder="Description" >
+								<?php if (isset($erreurs['description'])): ?>
+									<small class="error-message"><?= $erreurs['description'] ?></small>
 								<?php endif; ?>
 							</div>
 							<!-- Annee -->
 							<div class="mb-3">
 								<label for="annee" class="form-label">Annee</label>
-								<input type="number" id="annee" name="annee" class="form-control" placeholder="Annee" required>
-								<?php if (isset($errors['annee'])): ?>
-									<small class="error-message"><?= $errors['annee'] ?></small>
+								<input type="number" min="0" id="annee" name="annee" class="form-control" placeholder="Annee" >
+								<?php if (isset($erreurs['annee'])): ?>
+									<small class="error-message"><?= $erreurs['annee'] ?></small>
 								<?php endif; ?>
 							</div>
+							<script>
+								const annee_courante = new Date().getFullYear();
+								document.getElementById('annee').setAttribute('min', annee_courante);
+							</script>
 							<!-- Semestre -->
 							<div class="mb-3">
 								<label for="semestre" class="form-label">Semestre</label>
-								<input type="number" id="semestre" name="semestre" class="form-control" placeholder="Semestre" required>
-								<?php if (isset($errors['semestre'])): ?>
-									<small class="error-message"><?= $errors['semestre'] ?></small>
-								<?php endif; ?>
-							</div>
-							<!-- Date de dépôt -->
-							<div>
-								<label for="date_depot" class="form-label">Date de Dépôt</label>
-								<input type="date" id="date_depot" name="date_depot" class="form-input" placeholder="Date de Dépôt" required>
-								<?php if (isset($errors['date_depot'])): ?>
-									<small class="error-message"><?= $errors['date_depot'] ?></small>
-								<?php endif; ?>
-							</div>
-							<!-- Heure de dépôt -->
-							<div>
-							<label for="heure_depot" class="form-label">Heure de Dépôt</label>
-							<input type="time" id="heure_depot" name="heure_depot" class="form-input" placeholder="Heure de Dépôt" required>
-								<?php if (isset($errors['heure_depot'])): ?>
-									<small class="error-message"><?= $errors['heure_depot'] ?></small>
-								<?php endif; ?>
-							</div>
-							<!-- Intervenants -->
-							<div class="mb-3">
-								<label for="intervenants" class="form-label">Intervenants</label>
-								<?php if (!empty($intervenants)) : ?>
-									<select name="intervenants[]" id="intervenants" class="form-select selectpicker" multiple data-live-search="true" data-selected-text-format="count">
-										<?php foreach ($intervenants as $intervenant): ?>
-											<option value="<?= htmlspecialchars($intervenant['idEns']) ?>">
-												<?= htmlspecialchars($intervenant['email']) ?>
+								<select name="semestre[]" id="semestre" class="form-select selectpicker" data-live-search="true" data-selected-text-format="count" >
+									<option value="" disabled selected>Sélectionner</option>
+										<?php for ($semestre = 1 ; $semestre <= 6 ; $semestre++): ?>
+											<option value="<?= $semestre?>">
+												<?= $semestre ?>
 											</option>
-										<?php endforeach; ?>
+										<?php endfor; ?>
 									</select>
-									<?php if (isset($errors['intervenants'])): ?>
-										<div class="text-danger mt-1"><small><?= $errors['intervenants'] ?></small></div>
-									<?php endif; ?>
-								<?php else : ?>
-									<p>Aucun enseignant</p>
-							<?php endif?>
+								<?php if (isset($erreurs['semestre'])): ?>
+									<small class="error-message"><?= $erreurs['semestre'] ?></small>
+								<?php endif; ?>
 							</div>
-							<!-- Ressources -->	
-							<div class="mb-3">
-								<label for="ressources" class="form-label">Ressources</label>
-								<div id="ressource-container">
-									<!-- Champ de saisie initial -->
-									<div class="ressource-item mb-2">
-										<input type="file" name="ressources[]" class="form-control" accept=".pdf,.docx,.png,.jpeg">
-									</div>
-								</div>
-								<!-- Boutons pour ajouter ou supprimer des champs -->
-								<button type="button" id="add-ressource" class="btn btn-primary btn-sm mt-2">Ajouter une ressource</button>
-								<button type="button" id="remove-ressource" class="btn btn-danger btn-sm mt-2">Supprimer une ressource</button>
-							</div>
-
-							<!-- Boutons -->
 							<div class="d-flex justify-content-between">
 								<input type="submit" class="btn btn-primary" value="Créer">
 							</div>
-
-                    	</form>
+						</form>
                 </section>
             </div>
         </div>
+<?php
+	}
+
+	public function confirmeAjout() {
+?>		<div class="container d-flex justify-content-center align-items-center vh-100">
+			<div class="card shadow-lg p-4 text-center">
+				<div class="card-body">
+					<h1 class="text-success">Confirmation réussie</h1>
+					<p class="mt-3 mb-4">Votre SAE a été ajoutée avec succès !<br> Vous allez être redirigé vers la page d'accueil</p>
+				</div>
+			</div>
+		</div>
 		<script>
-		/*  document.getElementById('add-ressource').addEventListener('click', function() {
-				const container = document.getElementById('ressource-container');
-				const inputFile = document.createElement('div');
-				inputFile.classList.add('mb-3');
-				inputFile.innerHTML = `
-					<div class="d-flex align-items-center">
-						<input type="file" name="ressources[]" class="form-control me-2" accept=".pdf,.docx,.png,.jpeg">
-						<input type="checkbox" name="highlight[]" class="form-check-input me-2">
-						<label class="form-check-label">Mettre en avant</label>
-					</div>`;
-				container.appendChild(inputFile);
-			});
-		*/
-			document.addEventListener("DOMContentLoaded", function () {
-				const select = document.querySelector('.selectpicker');
-				if (select) {
-					$('.selectpicker').selectpicker();
-				}
-			});
-
-			document.addEventListener("DOMContentLoaded", function () {
-			const container = document.getElementById("ressource-container");
-			const addButton = document.getElementById("add-ressource");
-			const removeButton = document.getElementById("remove-ressource");
-
-			// Ajouter un nouveau champ de ressource
-			addButton.addEventListener("click", function () {
-				const newField = document.createElement("div");
-				newField.classList.add("ressource-item", "mb-2");
-				newField.innerHTML = `
-					<input type="file" name="ressources[]" class="form-control" accept=".pdf,.docx,.png,.jpeg">
-				`;
-				container.appendChild(newField);
-			});
-
-			// Supprimer le dernier champ de ressource
-			removeButton.addEventListener("click", function () {
-				const items = container.getElementsByClassName("ressource-item");
-				if (items.length > 1) {
-					container.removeChild(items[items.length - 1]);
-				} else {
-					alert("Vous devez conserver au moins un champ de ressource.");
-				}
-			});
-		});
+			setTimeout(() => {
+				window.location.href = "index.php?menu=enseignant&module=sae&action=mes_saes"; // Remplace "index.html" par l'URL de la page d'accueil
+			}, 3000);
 		</script>
+<?php
+	}
+
+	private function vue_date_depot() {
+?>		<!-- Date de dépôt -->
+		<div>
+			<label for="date_depot" class="form-label">Date de Dépôt</label>
+			<input type="date" id="date_depot" name="date_depot" class="form-input" placeholder="Date de Dépôt" required>
+			<?php if (isset($erreurs['date_depot'])): ?>
+				<small class="error-message"><?= $erreurs['date_depot'] ?></small>
+			<?php endif; ?>
+		</div>
+		<script>
+			const date_courante = new Date().toISOString().split('T')[0];
+			document.getElementById('date_depot').setAttribute('min', date_courante);
+		</script>
+<?php
+	}
+
+	private function vue_intervenants($liste) {
+?>  	<div class="mb-3">
+			<label for="intervenants" class="form-label">Intervenants</label>
+
+			<?php if (!empty($liste)) : ?>
+				<div class="custom-select-container">
+					<!-- Dropdown -->
+					<div class="form-control multiselect dropdown-toggle" id="multiSelectDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+						<span class="text-muted" id="placeholder_intervenants">Sélectionner</span>
+						<input type="hidden" name="intervenants[]" id="intervenants" class="form-input">
+					</div>
+					<!-- Dropdown menu -->
+					<ul class="dropdown-menu w-100" id="dropdownOptions">
+						<?php foreach ($liste as $intervenant): ?>
+							<li>
+								<label class="dropdown-item">
+									<input type="checkbox" class="intervenant-checkbox" value="<?=htmlspecialchars($intervenant['email']) ?>">
+									<?=htmlspecialchars($intervenant['email']) ?>
+								</label>
+							</li>
+						<?php endforeach; ?>
+					</ul>
+				</div>
+
+				<!-- Script to handle selections -->
+				<script>
+					document.addEventListener('DOMContentLoaded', function () {
+						const checkboxes = document.querySelectorAll('.intervenant-checkbox');
+						const inputField = document.getElementById('intervenants');
+						const placeholder = document.getElementById('placeholder_intervenants');
+
+						function updateSelections() {
+							// Récupère toutes les valeurs sélectionnées
+							const selected = Array.from(checkboxes)
+								.filter(cb => cb.checked) // Filtrer uniquement les cases cochées
+								.map(cb => cb.value);    // Obtenir leurs valeurs
+							
+							// Met à jour l'input caché
+							inputField.value = selected.join(','); // Join pour soumission via formulaire
+							
+							// Met à jour le placeholder
+							placeholder.textContent = selected.length > 0 ? selected.join(', ') : 'Sélectionner';
+						}
+						// Ajouter un événement change à chaque case
+						checkboxes.forEach(checkbox => {
+							checkbox.addEventListener('change', updateSelections);
+						});
+					});
+				</script>
+			<?php else : ?>
+				<p>Aucun enseignant</p>
+			<?php endif ?>
+		</div>
+<?php
+	}
+
+	private function vue_depot_ressources() {
+?>		<!-- Ressources -->	
+		<div class="mb-3">
+			<label for="ressources" class="form-label">Ressources</label>
+
+			<div class="container mt-5">
+			<div id="drop-area" class="drop-area border border-secondary rounded p-4 text-center">
+                <p>Glissez vos fichiers ici ou <button type="button" id="file-input-button" class="btn btn-link">Déposer une Ressource</button></p>
+                <input type="file" name="ressources[]" id="file-input" multiple style="display: none;">
+            </div>
+				<table id="file-table" class="table table-bordered mt-4" style="display: none;">
+                <thead class="thead-light">
+						<tr>
+							<th>Nom du Fichier</th>
+							<th>Type</th>
+							<th>Mettre en avant</th>
+                        	<th>Action</th>
+						</tr>
+					</thead>
+					<tbody id="file-table-body"></tbody>
+				</table>
+				<input type="hidden" name="fichiers_mise_en_avant[]" id="fichiers_mise_en_avant">
+        		<input type="hidden" name="fichiers_etat[]" id="fichiers_etat">
+			</div>
+		</div>
+		<script src="../assets/script/scriptDepot.js"></script>
 <?php
 	}
 }
