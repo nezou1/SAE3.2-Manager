@@ -1,0 +1,43 @@
+/* Barre de navigation */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #9fb6a6; /* Vert pour la barre de navigation */
+    padding: 10px 20px;
+}
+
+.navbar-left .profile-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.navbar-center nav a {
+    text-decoration: none;
+    color: white;
+    margin: 0 15px;
+    font-weight: bold;
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Espace entre les éléments */
+}
+
+.navbar-right .search-input {
+    padding: 5px;
+    border: none;
+    border-radius: 4px;
+    outline: none;
+}
+
+.navbar-right .icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
+

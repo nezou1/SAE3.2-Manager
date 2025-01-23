@@ -18,5 +18,9 @@ class ModuleGenerique {
 	public function get_affichage() {
 		return $this->affichage;
 	}
+
+	public function get_title() {
+		return $this->title;
+	}
 }
 ?>

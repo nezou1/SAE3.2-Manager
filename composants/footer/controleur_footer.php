@@ -1,6 +1,6 @@
 <?php
 
-require_once "composants/footer/vue_footer.php";
+require_once  "../composants/footer/vue_footer.php";
 
 class ControleurCompFooter {
 
