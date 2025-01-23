@@ -1,7 +1,6 @@
 <?php
 class ModeleRendu extends Connexion
 {
-
     public function recupererIdEnseignant($email) {
         $bdd = Connexion::getConnexion();
         $sql = "SELECT idEns FROM Enseignant WHERE email = :email";
@@ -9,10 +8,11 @@ class ModeleRendu extends Connexion
         $stmt->execute(['email' => $email]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
     public function getSoutenancesByEnseignant($email) {
         $bdd = Connexion::getConnexion();
         $idEns = $this->recupererIdEnseignant($email)['idEns'];
-        $sql = "SELECT * FROM Soutenance s
+        $sql = "SELECT s.* FROM Soutenance s
                 INNER JOIN estJury ej ON s.idSoutenance = ej.idSoutenance
                 WHERE ej.idEns = :idEns";
         $stmt = $bdd->prepare($sql);
@@ -64,6 +64,5 @@ class ModeleRendu extends Connexion
         $stmt->execute(['idSoutenance' => $idSoutenance]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-
 }
 ?>
