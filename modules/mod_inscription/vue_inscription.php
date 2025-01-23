@@ -7,7 +7,6 @@ class VueInscription extends VueGenerique {
     }
 
     public function get_inscription(){
-        
         ?> 
         <div class="container">
             <div class="card shadow p-4">
@@ -21,9 +20,9 @@ class VueInscription extends VueGenerique {
         <?php
     }
 
-   public function formInscription() {
+    public function formInscription($errors = []) {
         ?>
-        <form action="./index.php?action=inscrire" method="POST">
+        <form action="./index.php?module=inscription&action=inscrire" method="POST">
             <div class="mb-3">
                 <label for="nom" class="form-label">Nom</label>
                 <input type="text" id="nom" name="nom" class="form-control" placeholder="Nom" required>
@@ -90,5 +89,3 @@ class VueInscription extends VueGenerique {
         <?php
     }
 }
-
-?>

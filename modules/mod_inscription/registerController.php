@@ -2,7 +2,6 @@
 
 require "modele_inscription.php";
 require "vue_inscription.php";
-//require "modele_connexion.php";
 
 class ControleurInscription {
     private $modele;
@@ -16,7 +15,6 @@ class ControleurInscription {
     }
 
     public function exec() {
-
         switch ($this->action) {
             case 'confirme':
                 $this->vue->confirmeInscription();
@@ -25,11 +23,7 @@ class ControleurInscription {
                 $this->vue->get_inscription();
                 break;
             case 'inscrire':
-                if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                    $this->inscrire();
-                } else {
-                    $this->vue->get_inscription();
-                }
+                $this->inscrire();
                 break;
             default:
                 header('Location: ./index.php?module=inscription&action=form');
@@ -62,20 +56,15 @@ class ControleurInscription {
 
             if ($this->modele->getUserByEmail($email)) {
                 $errors['email'] = "Cet email est déjà utilisé.";
-                $this->showInscriptionError("Cet email est déjà utilisé.");
+                $this->vue->formInscription($errors);
                 return;
             }
 
-            $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-            $this->modele->inscrire($nom, $prenom, $email, $hashedPassword, $profil, $activation_key);
+            $this->modele->inscrire($nom, $prenom, $email, $password, $profil, $activation_key);
             $this->vue->confirmeInscription();
         } catch (Exception $e) {
             error_log("Erreur lors de l'inscription : " . $e->getMessage());
             $this->vue->formInscription(['db_error' => "Une erreur est survenue. Veuillez réessayer plus tard."]);
         }
-    }
-
-    public function showInscriptionError($message) {
-        $this->vue->formInscription(['form' => $message]);
     }
 }
