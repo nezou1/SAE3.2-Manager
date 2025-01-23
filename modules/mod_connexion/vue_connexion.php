@@ -12,7 +12,7 @@ class VueConnexion extends VueGenerique {
         <div class="container">
             <div class="card shadow p-4">
                 <div class="text-center">
-                    <img src="../assets/logo.png" alt="SAE Manager Logo" class="logo">
+                    <img src="../assets/logo.png" alt="SAE Manager Logo" class="logo"  style="width: 150px;">
                     <h2 class="mb-4">Connexion</h2>
                     <?php $this->formConnexion(); ?> 
                 </div>
