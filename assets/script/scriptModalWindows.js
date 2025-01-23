@@ -16,105 +16,53 @@ function addRessource() {
 
 
 
-function addGroupe() {
-    // Récupérer les éléments du formulaire
-    const nomInput = document.getElementById('nom_grp');
-    const etudiantsInputs = document.querySelectorAll('input[name="etudiants[]"]');
-    const nomError = document.getElementById('nom_grp_error');
-    const etudiantsError = document.getElementById('etudiants_error');
-    const globalError = document.getElementById('global_error');
+    // Fonction pour gérer les erreurs du formulaire
+function validateForm(event) {
+    event.preventDefault(); // Empêche l'envoi du formulaire
 
-    // Réinitialiser les messages d'erreur
-    nomError.classList.add('d-none');
-    etudiantsError.classList.add('d-none');
-    globalError.classList.add('d-none');
+    // Réinitialiser les erreurs
+    resetErrors();
 
-    // Préparer les données du formulaire
-    const formData = new FormData();
-    formData.append('nom_grp', nomInput.value);
-    formData.append('modifiable_par_etudiant', document.getElementById('modifiable_par_etudiant').checked ? '1' : '0');
-    [...etudiantsInputs].forEach(input => {
-        if (input.checked) {
-            formData.append('etudiants[]', input.value);
-        }
-    });
+    let isValid = true;
 
-    // Validation côté client
-    let hasError = false;
-
-    // Vérification du champ "nom du groupe"
-    if (!nomInput.value.trim()) {
-        nomError.textContent = "Le nom du groupe est obligatoire.";
-        nomError.classList.remove('d-none');
-        hasError = true;
+    // Vérifier le champ "Nom du groupe"
+    const nomGrp = document.getElementById('nom_grp').value;
+    if (nomGrp.trim() === '') {
+        showError('nom_grp_error', 'Le nom du groupe est requis.');
+        isValid = false;
     }
 
-    // Vérification des étudiants sélectionnés (au moins 2)
-    const selectedStudentsCount = [...etudiantsInputs].filter(input => input.checked).length;
-    if (selectedStudentsCount < 2) {
-        etudiantsError.textContent = "Au moins deux étudiants doivent être sélectionnés.";
-        etudiantsError.classList.remove('d-none');
-        hasError = true;
+    // Vérifier la sélection d'étudiants
+    const selectedEtudiants = document.querySelectorAll('input[name="etudiants[]"]:checked');
+    if (selectedEtudiants.length < 2) {
+        showError('etudiants_error', 'Veuillez ajouter au moins deux étudiants au groupe.');
+        isValid = false;
     }
 
-    // Si une erreur est détectée, arrêter l'exécution
-    if (hasError) {
-        return;
+    // Si tout est valide, soumettre le formulaire
+    if (isValid) {
+        document.getElementById('addGroupForm').submit();
     }
+}
 
-    // Envoi des données via Fetch
-    fetch('../../modules/mod_sae/modele_sae.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.success) {
-            alert(data.message || "Groupe ajouté avec succès !");
-            bootstrap.Modal.getInstance(document.getElementById('addGroupModal')).hide();
-            
-            // Réinitialisation du formulaire et des erreurs
-            document.getElementById('addGroupForm').reset();
-            nomError.classList.add('d-none');
-            etudiantsError.classList.add('d-none');
-            globalError.classList.add('d-none');
-        } else {
-            if (data.errors) {
-                if (data.errors.nom_grp) {
-                    nomError.textContent = data.errors.nom_grp;
-                    nomError.classList.remove('d-none');
-                }
-                if (data.errors.etudiants) {
-                    etudiantsError.textContent = data.errors.etudiants;
-                    etudiantsError.classList.remove('d-none');
-                }
-            } else if (data.message) {
-                globalError.textContent = data.message || "Une erreur inattendue est survenue.";
-                globalError.classList.remove('d-none');
-            }
-        }
-    })
-    .catch(error => {
-        console.error("Erreur:", error);
-        globalError.textContent = "Une erreur est survenue lors de l'ajout du groupe.";
-        globalError.classList.remove('d-none');
+// Fonction pour afficher les messages d'erreur
+function showError(elementId, message) {
+    const errorElement = document.getElementById(elementId);
+    errorElement.textContent = message;
+    errorElement.classList.remove('d-none');
+}
+
+// Fonction pour réinitialiser les messages d'erreur
+function resetErrors() {
+    const errorElements = document.querySelectorAll('.text-danger');
+    errorElements.forEach(element => {
+        element.textContent = '';
+        element.classList.add('d-none');
     });
 }
 
-
-
-
-function closeModalGroupe() {
-    document.getElementById('nom_grp').value = '';
-    document.getElementById('modifiable_par_etudiant').checked = false;
-    document.querySelectorAll('input[name="etudiants[]"]').forEach(checkbox => (checkbox.checked = false));
-}
-
+// Ajouter l'événement de soumission du formulaire
+document.getElementById('addGroupForm').addEventListener('submit', validateForm);
 
 
 

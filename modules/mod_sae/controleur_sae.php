@@ -53,6 +53,13 @@ class ControleurSae {
 					die("token incorrecte");
 				}*/
 				break;
+			case "supprimer_groupe":
+					// if(isset($_POST["tokenCSRF"]) && $_POST["tokenCSRF"] == $_SESSION['token']){
+				$this->supprimer_groupe();
+				/* } else {
+					die("token incorrecte");
+				}*/
+				break;
 			default : 
 				die ("Action inexistante");
 		}
@@ -87,19 +94,21 @@ class ControleurSae {
 		$enseignants = $this->modele->get_enseignants_sae($_GET['projet']);
 		$ressources = $this->modele->get_ressources_sae($_GET['projet']);
 		$groupes = $this->modele->get_groupes_sae($_GET['projet']);
-		$etudiants = $this->modele->get_etudiants_sans_grp();
+		$etudiants = $this->modele->get_etudiants_sans_grp($_GET['projet']);
 		// $rendus = $this->modele->get_rendus_sae($_GET['projet']);
 		$soutenances = $this->modele->get_soutenances_sae($_GET['projet']);
 
-		$this->vue->acceder_sae(
-			$sae, 
-			$enseignants, 
-			$ressources, 
-			$groupes,
-			$etudiants,
-			// $rendus,
-			$soutenances
-		);
+		// if ($enseignants && $ressources && $groupes && $etudiants && $soutenances) {
+			$this->vue->acceder_sae(
+				$sae, 
+				$enseignants, 
+				$ressources, 
+				$groupes,
+				$etudiants,
+				// $rendus,
+				$soutenances
+			);
+		// }
 	}
 
 	public function ajouter_groupe() {
@@ -111,7 +120,14 @@ class ControleurSae {
 		// }
 
 		header('Location: ./index.php?menu=enseignant&module=sae&action=acceder_sae&projet=' . $_GET['projet']);
+	}
 
+	public function supprimer_groupe() {
+		$this->modele->dissocier_groupe_sae($_POST["idGroupe"]);
+		$this->modele->dissocier_groupe_etudiant($_POST["idGroupe"]);
+		$this->modele->supprimer_groupe($_POST["idGroupe"]);
+		
+		header('Location: ./index.php?menu=enseignant&module=sae&action=acceder_sae&projet=' . $_GET['projet']);
 	}
 
 	public function ajouter_soutenance() {

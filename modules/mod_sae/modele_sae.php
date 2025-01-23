@@ -58,13 +58,14 @@ class ModeleSae extends Connexion {
             $this->requetes['get_groupes_sae'],
             $id_projet
         );
+        
     }
 
-    public function get_etudiants_sans_grp() {
-        $requete = $this->requetes['get_etudiants_sans_grp'];
-        $pdo_req = self::$bdd->prepare($requete);
-        $pdo_req->execute();
-        return $pdo_req->fetchAll();
+    public function get_etudiants_sans_grp($id_projet) {
+        return $this->get_elements(
+            $this->requetes['get_etudiants_sans_grp'],
+            $id_projet
+        );
     }
 
     public function get_etudiants_grp($id_groupe) {
@@ -115,6 +116,13 @@ class ModeleSae extends Connexion {
         return self::$bdd->lastInsertId(); 
     }
 
+    private function lierGroupe_SAE($id_groupe) {
+        $requete = $this->requetes['lier_groupe_a_projet'];
+        $pdo_req = self::$bdd->prepare($requete);
+        $pdo_req->execute([(int)$_GET['projet'], $id_groupe]);
+        return $pdo_req->fetchAll();
+    }
+
     private function lierEtudiantsAuGroupe($idGroupe, $etudiants) {
         $requete = $this->requetes['lier_etud_au_groupe'];
         $pdo_req = self::$bdd->prepare($requete);
@@ -127,52 +135,48 @@ class ModeleSae extends Connexion {
     }
 
     public function ajouter_groupe() {
-        $errors = [];
-        $response = [];
-    
-        // Récupération des données
-        $nomGroupe = isset($_POST['nom_grp']) ? trim($_POST['nom_grp']) : null;
-        $modifiableParEtudiant = isset($_POST['modifiable_par_etudiant']) ? (int)$_POST['modifiable_par_etudiant'] : 0;
-        $etudiants = isset($_POST['etudiants']) ? $_POST['etudiants'] : [];
-    
-        // Validation des données
-        if (empty($nomGroupe)) {
-            $errors['nom_grp'] = "Le nom du groupe est obligatoire.";
-        }// else if ($this->nom_groupe_existe($nomGroupe)) {
-        //     $errors['nom_grp'] = "Le nom du groupe est déjà utilisé.";
-        // }
-    
-        if (empty($etudiants) || !is_array($etudiants)) {
-            $errors['etudiants'] = "Veuillez sélectionner au moins deux étudiants.";
-        } else if (count($etudiants) < 2) {
-            $errors['etudiants'] = "Au moins deux étudiants doivent être sélectionnés.";
+        // Vérification que les données sont présentes
+        if (!isset($_POST['nom_grp']) || !isset($_POST['etudiants'])) {
+            echo "Les données du formulaire sont manquantes.";
+            return;
         }
     
-        // Gestion des erreurs
-        if (!empty($errors)) {
-            $response['success'] = false;
-            $response['errors'] = $errors;
-            echo json_encode($response);
-            exit;
+        // Récupération et validation des données
+        $nomGroupe = trim($_POST['nom_grp']);
+        $modifiableParEtudiant = isset($_POST['modifiable_par_etudiant']) ? 1 : 0; // Si coché, 1 sinon 0
+        $etudiants = $_POST['etudiants'] ?? []; // Liste des étudiants sélectionnés
+    
+        // Vérification que le nom du groupe n'est pas vide
+        if (empty($nomGroupe)) {
+            echo "Le nom du groupe est requis.";
+            return;
+        }
+    
+        // Vérification que des étudiants ont été sélectionnés
+        if (empty($etudiants)) {
+            echo "Veuillez sélectionner au moins un étudiant.";
+            return;
         }
     
         try {
             // Ajout du groupe dans la base de données
             $idGroupe = $this->addGroupe($nomGroupe, $modifiableParEtudiant);
-            // Liaison des étudiants au groupe
-            $this->lierEtudiantsAuGroupe($idGroupe, $etudiants);
+            $this->lierGroupe_SAE($idGroupe);
     
-            // $response['success'] = true;
-            // $response['message'] = "Groupe ajouté avec succès !";
-            // echo json_encode($response);
+            // Si des étudiants sont associés, les lier au groupe
+            if (!empty($etudiants)) {
+                $this->lierEtudiantsAuGroupe($idGroupe, $etudiants);
+            }
+    
+            // Message de succès
+            echo "Groupe ajouté avec succès !";
         } catch (PDOException $e) {
             // Gestion des erreurs SQL
             error_log("Erreur lors de l'ajout du groupe : " . $e->getMessage());
-            $response['success'] = false;
-            $response['message'] = "Une erreur est survenue lors de l'ajout du groupe.";
-            echo json_encode($response);
+            echo "Une erreur est survenue lors de l'ajout du groupe.";
         }
     }
+    
 
     // AJOUTER UNE RESSOURCE
 
@@ -233,6 +237,28 @@ class ModeleSae extends Connexion {
         return true;
     }
 
+    // SUPPRIMER GROUPE
+
+    public function dissocier_groupe_sae($id_groupe) {
+        return $this->get_elements(
+            $this->requetes['dissocier_groupe_sae'],
+            $id_groupe
+        );   
+    }
+
+    public function dissocier_groupe_etudiant($id_groupe) {
+        return $this->get_elements(
+            $this->requetes['dissocier_groupe_etudiant'],
+            $id_groupe
+        );   
+    }
+
+    public function supprimer_groupe($id_groupe) {
+        return $this->get_elements(
+            $this->requetes['supprimer_groupe'],
+            $id_groupe
+        );   
+    }
     // CREER UNE SAE
 
     public function liste_enseignants() {

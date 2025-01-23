@@ -80,27 +80,32 @@ class VueSae extends VueGenerique{
 		<div class="container mt-4">
 			<h3 class="text-center mb-4">Groupes</h3>
 			<div class="table-responsive border rounded p-3" style="max-height: 400px; background-color: #f8f9fa; overflow-y: auto;">
-				<?php if ($groupes) {?>
-					<table class="table table-bordered table-hover">
-						<thead class="table-light">
-							<tr>
-								<th>Nom du Groupe</th>
-								<th>Statut</th>
-							</tr>
-						</thead>
-						<tbody>
-							<?php foreach ($groupes as $groupe): ?>
+				<?php if (!empty($groupes)) {?>
+					<div style="max-height: 400px; overflow-y: auto; border: 1px solid #ccc; border-radius: 5px; background-color: #fff;">
+						<table class="table table-bordered">
+							<thead>
 								<tr>
-									<td><?php echo htmlspecialchars($groupe['nom']); ?></td>
-									<td>
-										<span class="badge bg-<?php echo $groupe['modifiable_par_etudiant'] ? 'success' : 'secondary'; ?>">
-											<?php echo $groupe['modifiable_par_etudiant'] ? 'Modifiable' : 'Non modifiable'; ?>
-										</span>
-									</td>
+									<th>Nom du Groupe</th>
+									<th>Modifiable par Étudiant</th>
+									<th>Actions</th> <!-- Colonne pour les actions -->
 								</tr>
-							<?php endforeach; ?>
-						</tbody>
-					</table>
+							</thead>
+							<tbody>
+								<?php foreach ($groupes as $groupe): ?>
+									<tr>
+										<td><?php echo htmlspecialchars($groupe['nom']); ?></td>
+										<td><?php echo $groupe['modifiable_par_etudiant'] ? "Oui" : "Non"; ?></td>
+										<td>
+											<form action="index.php?menu=enseignant&module=sae&action=supprimer_groupe&projet=<?=$_GET['projet']?>" method="POST" style="display:inline;">
+												<input type="hidden" name="idGroupe" value="<?php echo $groupe['idGroupe']; ?>">
+												<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce groupe ?');">Supprimer</button>
+											</form>
+										</td>
+									</tr>
+								<?php endforeach; ?>
+							</tbody>
+						</table>
+					</div>
 <?php			}else {?>
 					<div class="col-md-4">									
 						<p>Vous n'avez crée aucun groupe pour le moment</p>
@@ -157,7 +162,7 @@ class VueSae extends VueGenerique{
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="addGroupModalLabel">Ajouter un Groupe</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeModalGroupe()"></button>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
 					<form id="addGroupForm" method="POST" action="index.php?menu=enseignant&module=sae&action=ajouter_groupe&projet=<?php echo $_GET['projet'] ?>">
@@ -178,29 +183,44 @@ class VueSae extends VueGenerique{
 						<div class="mb-3">
 							<label for="etudiants" class="form-label">Ajouter des étudiants</label>
 							<div class="border p-2 rounded overflow-auto" style="height: 220px; background-color: #f8f9fa;">
-								<?php foreach ($etudiants as $etudiant): ?>
-									<div class="form-check">
-										<input class="form-check-input" type="checkbox" id="etudiant-<?php echo $etudiant['idEtud']; ?>" name="etudiants[]" value="<?php echo $etudiant['idEtud']; ?>">
-										<label class="form-check-label" for="etudiant-<?php echo $etudiant['idEtud']; ?>">
-											<?php echo htmlspecialchars($etudiant['nom'] . " " . $etudiant['prenom']); ?>
-										</label>
-									</div>
-								<?php endforeach; ?>
+								<table class="table table-bordered">
+									<thead>
+										<tr>
+											<th></th> <!-- Colonne pour les cases à cocher -->
+											<th>Nom</th>
+											<th>Prénom</th>
+										</tr>
+									</thead>
+									<tbody>
+										<?php foreach ($etudiants as $etudiant): ?>
+											<tr>
+												<td>
+													<input class="form-check-input" type="checkbox" id="etudiant-<?php echo $etudiant['idEtud']; ?>" name="etudiants[]" value="<?php echo $etudiant['idEtud']; ?>">
+												</td>
+												<td>
+													<?php echo htmlspecialchars($etudiant['nom']); ?>
+												</td>
+												<td>
+													<?php echo htmlspecialchars($etudiant['prenom']); ?>
+												</td>
+											</tr>
+										<?php endforeach; ?>
+									</tbody>
+								</table>
 							</div>
 							<small id="etudiants_error" class="text-danger d-none"></small>
 						</div>
-
-						<div id="global_error" class="text-danger d-none mb-3"></div>
-
 						<div class="modal-footer">
 							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="closeModalGroupe()">Fermer</button>
-							<button type="button" class="btn btn-primary" onclick="addGroupe()">Ajouter</button>
+							<input type="submit" class="btn btn-primary" onclick="validateForm(event)"value="Ajouter">
 						</div>
 					</form>
 				</div>
 			</div>
 		</div>
 	</div>
+	<script src="../assets/script/scriptModalWindows.js"></script>
+
 
 
 	<!-- Modal Ajouter Dépôt -->
@@ -313,8 +333,6 @@ class VueSae extends VueGenerique{
         </div>
     </div>
 </div>
-
-	<script src="../assets/script/scriptModalWindows.js"></script>
 <?php
 	}
 

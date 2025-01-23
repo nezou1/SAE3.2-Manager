@@ -10,6 +10,13 @@ class RequetesSQL {
         "inserer_ressource" => "INSERT INTO Ressource (titre, type, url, mise_en_avant, idProjet) VALUES (?, ?, ?, '?', ?)",
         "inserer_groupe" => "INSERT INTO Groupe (nom, imageTitre, modifiable_par_etudiant) VALUES (:nom, NULL, :modifiable_par_etudiant)",
         "lier_etud_au_groupe" => "INSERT INTO estDansLeGroupe (idGroupe, idEtud) VALUES (:idGroupe, :idEtud)",
+        "lier_groupe_a_projet" => "INSERT INTO estDansCeProjet (idProjet, idGroupe) VALUES (? , ?)",
+
+
+        "dissocier_groupe_sae" => "DELETE FROM estDansCeProjet WHERE idGroupe = ?",
+        "dissocier_groupe_etudiant" => "DELETE FROM estDansLeGroupe WHERE idGroupe = ?",
+        "supprimer_groupe" => "DELETE FROM Groupe WHERE idGroupe = ?",
+
         
         "get_titre_sae" => "SELECT titre FROM Projet WHERE titre = ?",
         "get_saes_ens" => "SELECT Projet.idProjet, titre, description, annee, semestre
@@ -46,7 +53,12 @@ class RequetesSQL {
                               WHERE idProjet = ?",
         "get_etudiants_sans_grp" => "SELECT e.idEtud, e.nom, e.prenom
                                      FROM Etudiant e
-                                     WHERE idEtud NOT IN (SELECT idEtud FROM estDansLeGroupe)",
+                                     WHERE idEtud NOT IN (
+                                        SELECT idEtud 
+                                        FROM estDansLeGroupe 
+                                        JOIN estDansCeProjet USING (idGroupe)
+                                        WHERE idProjet = ?
+                                     )",
         "get_etudiants_grp" => "SELECT idEtud, nom, prenom
                                 FROM Etudiant
                                 JOIN estDansLeGroupe USING (idEtud)
