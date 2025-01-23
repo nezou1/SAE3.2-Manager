@@ -60,6 +60,22 @@ class ControleurSae {
 					die("token incorrecte");
 				}*/
 				break;
+			case "ajouter_ressource":
+				$this->ajouter_ressource();
+				break;
+
+			case "supprimer_ressource":
+				$this->supprimer_ressource();
+				break;
+			case "ajouter_depot":
+				$this->ajouter_depot();
+				break;
+			case "supprimer_depot":
+				$this->supprimer_depot();
+				break;
+			case "acceder_rendu":
+				$this->acceder_rendu();
+				break;
 			default : 
 				die ("Action inexistante");
 		}
@@ -95,7 +111,7 @@ class ControleurSae {
 		$ressources = $this->modele->get_ressources_sae($_GET['projet']);
 		$groupes = $this->modele->get_groupes_sae($_GET['projet']);
 		$etudiants = $this->modele->get_etudiants_sans_grp($_GET['projet']);
-		// $rendus = $this->modele->get_rendus_sae($_GET['projet']);
+		$depots = $this->modele->get_depots_sae($_GET['projet']);
 		$soutenances = $this->modele->get_soutenances_sae($_GET['projet']);
 
 		// if ($enseignants && $ressources && $groupes && $etudiants && $soutenances) {
@@ -105,7 +121,7 @@ class ControleurSae {
 				$ressources, 
 				$groupes,
 				$etudiants,
-				// $rendus,
+				$depots,
 				$soutenances
 			);
 		// }
@@ -130,14 +146,45 @@ class ControleurSae {
 		header('Location: ./index.php?menu=enseignant&module=sae&action=acceder_sae&projet=' . $_GET['projet']);
 	}
 
+	public function ajouter_ressource() {
+		$this->modele->ajouter_ressource();
+
+		header('Location: ./index.php?menu=enseignant&module=sae&action=acceder_sae&projet=' . $_GET['projet']);
+	}
+
+	public function supprimer_ressource() {
+		$this->modele->supprimer_ressource($_POST["idRessource"]);
+		
+		header('Location: ./index.php?menu=enseignant&module=sae&action=acceder_sae&projet=' . $_GET['projet']);
+	}
+
+	public function ajouter_depot() {
+		$this->modele->ajouter_depot();
+
+		header('Location: ./index.php?menu=etudiant&module=sae&action=acceder_sae&projet=' . $_GET['projet']);
+	}
+
+	public function supprimer_depot() {
+		$this->modele->supprimer_depot($_POST["idDepot"]);
+		
+		header('Location: ./index.php?menu=etudiant&module=sae&action=acceder_sae&projet=' . $_GET['projet']);
+	}
+
 	public function ajouter_soutenance() {
 		$erreurs = $this->modele->ajouter_soutenance();
+
+		header('Location: ./index.php?menu=enseignant&module=sae&action=acceder_sae&projet=' . $_GET['projet']);
 
 		// if (is_array($erreurs) && !empty($erreurs)) {
 		// 	$this->vue->form_creer_sae($erreurs); // Réaffiche le formulaire avec les erreurs et les données déjà saisies
 		// }
 		// else
 		// 	$this->vue->confirmeAjout();
+	}
+
+	public function acceder_rendu() {
+		$rendus = $this->modele->get_rendus_depot($_POST['idDepot']);
+		$this->vue->acceder_rendu($rendus);
 	}
 }
 ?>

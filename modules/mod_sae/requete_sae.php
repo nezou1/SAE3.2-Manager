@@ -7,8 +7,10 @@ class RequetesSQL {
         
         "inserer_projet" => "INSERT INTO Projet (titre, description, annee, semestre) VALUES (?, ?, ?, ?)",
         "inserer_enseignant" => "INSERT INTO estAssigneComme (idEns, idProjet, role) VALUES (?, ?, ?)",
-        "inserer_ressource" => "INSERT INTO Ressource (titre, type, url, mise_en_avant, idProjet) VALUES (?, ?, ?, '?', ?)",
+        "inserer_ressource" => "INSERT INTO Ressource (titre, type, url, mise_en_avant, idProjet) VALUES (?, ?, ?, ?, ?)",
         "inserer_groupe" => "INSERT INTO Groupe (nom, imageTitre, modifiable_par_etudiant) VALUES (:nom, NULL, :modifiable_par_etudiant)",
+        "inserer_depot" => "INSERT INTO Depot (descriptif, dateAttendu, idProjet) VALUES (?, ?, ?)",
+        "inserrer_rendu" => "INSERT INTO Rendu (idDepot, idGroupe, dateEnvoyee, titre_rendu, url_rendu) VALUES (?, ?, ?, ?, ?)",
         "lier_etud_au_groupe" => "INSERT INTO estDansLeGroupe (idGroupe, idEtud) VALUES (:idGroupe, :idEtud)",
         "lier_groupe_a_projet" => "INSERT INTO estDansCeProjet (idProjet, idGroupe) VALUES (? , ?)",
 
@@ -16,6 +18,9 @@ class RequetesSQL {
         "dissocier_groupe_sae" => "DELETE FROM estDansCeProjet WHERE idGroupe = ?",
         "dissocier_groupe_etudiant" => "DELETE FROM estDansLeGroupe WHERE idGroupe = ?",
         "supprimer_groupe" => "DELETE FROM Groupe WHERE idGroupe = ?",
+        "supprimer_ressource" => "DELETE FROM Ressource WHERE idRessource = ?",
+        "supprimer_rendu" => "DELETE FROM Rendu WHERE idRendu = ?",
+        "supprimer_depot" => "DELETE FROM Depot WHERE idDepot = ?",
 
         
         "get_titre_sae" => "SELECT titre FROM Projet WHERE titre = ?",
@@ -44,9 +49,10 @@ class RequetesSQL {
                                FROM estAssigneComme
                                JOIN Enseignant USING(idEns)
                                WHERE idProjet = ?",
-        "get_ressources_sae" => "SELECT titre, mise_en_avant
+        "get_ressources_sae" => "SELECT idRessource, titre, mise_en_avant, url
                                  FROM Ressource
-                                 WHERE idProjet = ?",
+                                 WHERE idProjet = ?
+                                 ORDER BY mise_en_avant DESC",
         "get_groupes_sae" => "SELECT idGroupe, nom, modifiable_par_etudiant
                               FROM Groupe
                               JOIN estDansCeProjet USING (idGroupe)
@@ -63,10 +69,14 @@ class RequetesSQL {
                                 FROM Etudiant
                                 JOIN estDansLeGroupe USING (idEtud)
                                 WHERE idEtud = ?",
-        "get_rendus_sae" => "SELECT idRendu, descriptif, dateAttendu, dateEnvoyee
+        "get_depots_sae" => "SELECT idDepot, descriptif, dateAttendu, idProjet
+                            FROM Depot
+                            WHERE idProjet = ?",
+        "get_rendus_depot" => "SELECT idDepot, idGroupe, dateEnvoyee, titre_rendu, url_rendu, note, commentaire
                              FROM Rendu
                              JOIN Evaluation USING (Rendu)
-                             WHERE idProjet = ? AND idGroupe = ?",
+                             WHERE idDepot = ?
+                             ORDER BY idGroupe",
         "get_soutenances_sae" => "SELECT s.idSoutenance, s.description, dateSout, lieu, heureDebut, heureFin, nom as nom_groupe, titre as titre_sae
                                   FROM Groupe
                                   JOIN Soutenance s USING (idGroupe)
