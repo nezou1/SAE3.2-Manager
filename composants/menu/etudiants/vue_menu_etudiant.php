@@ -36,8 +36,8 @@ class VueCompMenuEtudiant extends VueCompGenerique {
                     <!-- Recherche et icônes -->
                     <div class="d-flex align-items-center">
                         <input type="text" class="form-control me-2" placeholder="Search" style="max-width: 200px; border-radius: 5px;">
-                        <img src="/SAE3.2-Manager/assets/bell-icon.png" alt="Notifications" style="width: 24px; height: 24px; margin-right: 10px; cursor: pointer;">
-                        <img src="/SAE3.2-Manager/assets/message-icon.png" alt="Messages" style="width: 24px; height: 24px; cursor: pointer;">
+                        <img src="../SAE3.2-Manager/assets/bell-icon.png" alt="Notifications" style="width: 24px; height: 24px; margin-right: 10px; cursor: pointer;">
+                        <img src="../SAE3.2-Manager/assets/message-icon.png" alt="Messages" style="width: 24px; height: 24px; cursor: pointer;">
                     </div>
                 </div>
             </div>';

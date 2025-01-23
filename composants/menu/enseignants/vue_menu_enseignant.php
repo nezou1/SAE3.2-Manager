@@ -24,7 +24,7 @@ class VueCompMenuEnseignant extends VueCompGenerique {
                             <a class="nav-link" href="index.php?menu=enseignant&module=rendu">Evaluation</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="index.php?menu=enseignant&module=connexion&action=deconnexion&menu=connexion">Déconnexion</a>
+                            <a class="nav-link" href="index.php?menu=connexion&module=connexion&action=logout&menu=connexion">Déconnexion</a>
                         </li>
                     </ul>
                 </div>

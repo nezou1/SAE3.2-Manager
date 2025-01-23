@@ -1,6 +1,6 @@
 <?php
 
-require_once PROJECT_ROOT . "/modules/mod_sae/controleur_sae.php";
+require_once  "../modules/mod_sae/controleur_sae.php";
 
 class ModSae extends ModuleGenerique{
 

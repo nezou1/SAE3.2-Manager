@@ -1,7 +1,7 @@
 <?php
 
-require_once PROJECT_ROOT . "/modules/mod_soutenance/modele_soutenance.php";
-require_once PROJECT_ROOT . "/modules/mod_soutenance/vue_soutenance.php";
+require_once  "../modules/mod_soutenance/modele_soutenance.php";
+require_once  "../modules/mod_soutenance/vue_soutenance.php";
 
 class ControleurSoutenance {
 

@@ -1,96 +1,393 @@
 <?php
 
+require_once  "../modules/mod_sae/requete_sae.php";
+
 class ModeleSae extends Connexion {
+
+    private $requetes;
+
+    public function __construct() {
+        $this->requetes = RequetesSQL::$queries;
+    }
 
     // MES SAES
 
-    public function get_saes() {
-        $req = "SELECT * FROM Projet";
-        $pdo_req = self::$bdd->query($req);
+    public function get_saes($id) {
+        $req = ($_GET['menu'] == 'enseignant') ?  $this->requetes['get_saes_ens'] : $this->requetes['get_saes_etud'];
+        $pdo_req = self::$bdd->prepare($req);
+        $id = (int)$id;
+        $pdo_req->execute([$id]);
+        $result = $pdo_req->fetchAll();
+
+        return !empty($result) ? $result : null;
     }
 
-    // CREER UNE SAE
+    // ACCEDER A UNE SAE
+
+    public function get_projet($id_projet) {
+        $req =  $this->requetes['get_projet'];
+        $pdo_req = self::$bdd->prepare($req);
+        $id_projet = (int)$id_projet;
+        $pdo_req->execute([$id_projet]);
+        return $pdo_req->fetch(PDO::FETCH_ASSOC);
+    }
+
+    private function get_elements($requete, $id) {
+        $pdo_req = self::$bdd->prepare($requete);
+        $id = (int)$id;
+        $pdo_req->execute([$id]);
+        return $pdo_req->fetchAll();
+    }
+
+    public function get_enseignants_sae($id_projet) {
+        return $this->get_elements(
+            $this->requetes['get_enseignants_sae'],
+            $id_projet
+        );
+    }
+
+    public function get_ressources_sae($id_projet) {
+        return $this->get_elements(
+            $this->requetes['get_ressources_sae'],
+            $id_projet
+        );
+    }
+
+    public function get_groupes_sae($id_projet) {
+        return $this->get_elements(
+            $this->requetes['get_groupes_sae'],
+            $id_projet
+        );
+        
+    }
+
+    public function get_etudiants_sans_grp($id_projet) {
+        return $this->get_elements(
+            $this->requetes['get_etudiants_sans_grp'],
+            $id_projet
+        );
+    }
+
+    public function get_etudiants_grp($id_groupe) {
+        return $this->get_elements(
+            $this->requetes['get_etudiants_grp'],
+            $id_groupe
+        );
+    }
+
+    public function get_rendus_sae($id_projet, $id_grp) {
+        $requete = $this->requetes['get_rendus_sae'];
+        $pdo_req = self::$bdd->prepare($requete);
+        $id_projet = (int)$id_projet;
+        $pdo_req->execute([$id_projet, $id_grp]);
+        return $pdo_req->fetchAll();
+    }
+
+    public function get_soutenances_sae($id_projet) {
+        $requete = $this->requetes['get_soutenances_sae'];
+        $pdo_req = self::$bdd->prepare($requete);
+        $id_projet = (int)$id_projet;
+        $pdo_req->execute([$id_projet]);
+
+        $soutenances = $pdo_req->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($soutenances as &$soutenance) {
+            $soutenance['jurys'] = $this->getJuryByIdSoutenance($soutenance['idSoutenance']);
+        }
+        return $soutenances;
+    }
+
+    private function getJuryByIdSoutenance($id) {
+        $requete = $this->requetes['get_jury'];
+        $pdo_req = self::$bdd->prepare($requete);
+        $pdo_req->execute([$id]);
+        return $pdo_req->fetchAll(PDO::FETCH_COLUMN); // Récupère uniquement les noms des jurys
+    }
+
+    // AJOUTER UN GROUPE
+
+    private function addGroupe($nom, $modifiableParEtudiant) {
+        $requete = $this->requetes['inserer_groupe'];
+        $pdo_req = self::$bdd->prepare($requete);
+        $pdo_req->execute([
+            'nom' => $nom,
+            'modifiable_par_etudiant' => $modifiableParEtudiant
+        ]);
+        return self::$bdd->lastInsertId(); 
+    }
+
+    private function lierGroupe_SAE($id_groupe) {
+        $requete = $this->requetes['lier_groupe_a_projet'];
+        $pdo_req = self::$bdd->prepare($requete);
+        $pdo_req->execute([(int)$_GET['projet'], $id_groupe]);
+        return $pdo_req->fetchAll();
+    }
+
+    private function lierEtudiantsAuGroupe($idGroupe, $etudiants) {
+        $requete = $this->requetes['lier_etud_au_groupe'];
+        $pdo_req = self::$bdd->prepare($requete);
+        foreach ($etudiants as $idEtudiant) {
+            $pdo_req->execute([
+                'idGroupe' => $idGroupe,
+                'idEtud' => $idEtudiant
+            ]);
+        }
+    }
+
+    public function ajouter_groupe() {
+        // Vérification que les données sont présentes
+        if (!isset($_POST['nom_grp']) || !isset($_POST['etudiants'])) {
+            echo "Les données du formulaire sont manquantes.";
+            return;
+        }
     
-    public function creer_sae($titre, $description, $annee, $semestre, $date_depot, $heure_depot, $intervenants, $highlights) {
+        // Récupération et validation des données
+        $nomGroupe = trim($_POST['nom_grp']);
+        $modifiableParEtudiant = isset($_POST['modifiable_par_etudiant']) ? 1 : 0; // Si coché, 1 sinon 0
+        $etudiants = $_POST['etudiants'] ?? []; // Liste des étudiants sélectionnés
+    
+        // Vérification que le nom du groupe n'est pas vide
+        if (empty($nomGroupe)) {
+            echo "Le nom du groupe est requis.";
+            return;
+        }
+    
+        // Vérification que des étudiants ont été sélectionnés
+        if (empty($etudiants)) {
+            echo "Veuillez sélectionner au moins un étudiant.";
+            return;
+        }
+    
+        try {
+            // Ajout du groupe dans la base de données
+            $idGroupe = $this->addGroupe($nomGroupe, $modifiableParEtudiant);
+            $this->lierGroupe_SAE($idGroupe);
+    
+            // Si des étudiants sont associés, les lier au groupe
+            if (!empty($etudiants)) {
+                $this->lierEtudiantsAuGroupe($idGroupe, $etudiants);
+            }
+    
+            // Message de succès
+            echo "Groupe ajouté avec succès !";
+        } catch (PDOException $e) {
+            // Gestion des erreurs SQL
+            error_log("Erreur lors de l'ajout du groupe : " . $e->getMessage());
+            echo "Une erreur est survenue lors de l'ajout du groupe.";
+        }
+    }
+    
+
+    // AJOUTER UNE RESSOURCE
+
+    // AJOUTER UNE SOUTENANCE
+
+    public function ajouter_soutenance() {
         $errors = [];
 
-        if ($this->titre_existe($titre))
-            $errors['nom_groupe'] = "Ce titre est déjà attribuer à une autre SAE.";
+        $nom_grp = isset($_POST["soutenance_nom_grp"]) ? $_POST["soutenance_nom_grp"] : null;
+        $description = isset($_POST["soutenance_description"]) ? $_POST["soutenance_description"] : null;
+        $sae = isset($_POST["soutenance_titre_sae"]) ? $_POST["soutenance_titre_sae"] : null;
+        $date = isset($_POST["soutenance_dateSout"]) ? $_POST["soutenance_dateSout"] : null;
+        $de = isset($_POST["soutenance_heure_debut"]) ? $_POST["soutenance_heure_debut"] : null;
+        $a = isset($_POST["soutenance_heure_fin"]) ? $_POST["soutenance_heure_fin"] : null;
+        $lieu = isset($_POST["soutenance_lieu"]) ? $_POST["soutenance_lieu"] : null;
+        $jurys = isset($_POST["soutenance_jurys"]) ? $_POST["soutenance_jurys"] : null;
+    
+        if (!$this->groupe_existe($nomGroupe))
+            $errors['nom_grp'] = "Le groupe n'existe pas.";
         else 
-            $titre = $this->get_titre($titre)['titre'];
-
-        if (!$this->date_valide($annee))
-            $errors['annee'] = "L'année est déjà passée.";
+            $idGroupe = $this->get_groupe($nomGroupe)['idGroupe'];
+    
+        if (!$this->sae_existe($sae))
+            $errors['sae'] = "La SAE n'existe pas.";
         else
-            $annee = $this->get_annee($annee)['annee'];
-
-        if($semestre < 1 || $semestre > 6)
-            $errors['annee'] = "Saississez un semestre compris entre 1 et 6.";
-        else
-            $semestre = $this->get_semestre($semestre)['$semestre'];
-
-        foreach ($intervenants as $email_intervenant) {
-            if (!$this->intervenant_existe($email_intervenant)) {
-                $errors['intervenants'] = "Un des intervenants sélectionnés n'existe pas.";
+            $idProjet = $this->get_id_sae($sae)['idProjet'];
+        
+        if (empty($date) || !$this->date_valide($date))
+            $errors['dateSout'] = "La date est invalide ou déjà passée.";
+    
+        if (!empty($de) && !empty($lieu) && !empty($jurys)) {
+            if (!$this->heure_debut_disponible($de, $date, $lieu, $jurys))
+                $errors['heureDebut'] = "L'heure de début est déjà occupée pour cette salle ou par un jury.";
+        }
+    
+        if (!empty($a) && !empty($lieu)) {
+            if (!$this->heure_fin_disponible($a, $date, $lieu))
+                $errors['heureFin'] = "L'heure de fin empiète sur une autre soutenance dans cette salle.";
+        }
+    
+        foreach ($jurys as $jury_email) {
+            if (!$this->jury_existe($jury_email)) {
+                $errors['jurys'] = "Un des jurys sélectionnés n'existe pas.";
                 break;
             }
         }
-
+    
         if (!empty($errors))
             return $errors;
-
-        $id_projet = $this->addProjet($titre, $description, $annee, $semestre);
-
-        $this->addIntervenants($intervenants, $id_projet);
-        $this->addRessources($highlights, $id_projet);    
+    
+        $idGroupe = $this->get_groupe($nomGroupe)['idGroupe'];
+        $idProjet = $this->get_id_sae($sae)['idProjet'];
+        $idSout = $this->addSoutenance($description, $date, $de, $a, $lieu, $idGroupe, $idProjet);
+    
+        foreach ($jurys as $jury_email)
+            $this->addJuryToSoutenance($idSout, $jury_email);
+    
+        return true;
     }
 
-    private function get_id_intervenant($email) {
-        $req = "SELECT idEns FROM Enseignant WHERE email = ?";
-        $pdo_req = self::$bdd->query($req);
-        $pdo_req->execute([$email]);
+    // SUPPRIMER GROUPE
+
+    public function dissocier_groupe_sae($id_groupe) {
+        return $this->get_elements(
+            $this->requetes['dissocier_groupe_sae'],
+            $id_groupe
+        );   
+    }
+
+    public function dissocier_groupe_etudiant($id_groupe) {
+        return $this->get_elements(
+            $this->requetes['dissocier_groupe_etudiant'],
+            $id_groupe
+        );   
+    }
+
+    public function supprimer_groupe($id_groupe) {
+        return $this->get_elements(
+            $this->requetes['supprimer_groupe'],
+            $id_groupe
+        );   
+    }
+    // CREER UNE SAE
+
+    public function liste_enseignants() {
+        $req = $this->requetes['liste_enseignant'];
+        $pdo_req = self::$bdd->prepare($req);
+        $pdo_req->bindParam("email_resp", $_SESSION['login']);
+        $pdo_req->execute();
+        return $pdo_req->fetchAll();
+    }
+
+    public function get_id_enseignant($email) {
+        $req = $this->requetes['id_enseignant'];
+        $pdo_req = self::$bdd->prepare($req);
+        $pdo_req->execute(["email" => $email]);
+        $result = $pdo_req->fetch(PDO::FETCH_ASSOC);
+
+        return $result ? $result['idEns'] : null;
+    }
+
+    public function get_id_etudiant($email) {
+        $req = $this->requetes['id_etudiant'];
+        $pdo_req = self::$bdd->prepare($req);
+        $pdo_req->execute(["email" => $email]);
+        $result = $pdo_req->fetch(PDO::FETCH_ASSOC);
+
+        return $result ? $result['idEtud'] : null;
+    }
+
+    private function titre_existe($titre) {
+        $req = $this->requetes['get_titre_sae'];
+        $pdo_req = self::$bdd->prepare($req);
+        $pdo_req->execute([$titre]);
         return $pdo_req->fetch();
     }
 
+
     private function addProjet($titre, $description, $annee, $semestre) {
-        $req = "INSERT INTO Projet VALUES (?, ?, ?, ?)";
-        $pdo_req = self::$bdd->query($req);
+        $req = $this->requetes['inserer_projet'];
+        $pdo_req = self::$bdd->prepare($req);
         $pdo_req->execute([$titre, $description, $annee, $semestre]);
         return self::$bdd->lastInsertId();
     }
 
-    private function addIntervenants($intervenants, $idProjet) {
-        $req = "INSERT INTO estAssigneComme VALUES (?, ?, \"intervenant\")";
-        $pdo_req = self::$bdd->query($req);
-        foreach ($intervenants as $email_intervenant){
-            $id_intervenant = $this->get_id_intervenant($email_intervenant);
-            $pdo_req->execute([$idProjet, $id_intervenant]);
+
+    private function assigner_ens_comme($email, $id_projet, $role) {
+        $req = $this->requetes['inserer_enseignant'];
+        $pdo_req = self::$bdd->prepare($req);
+
+        $id_ens = $this->get_id_enseignant($email, $id_projet);
+        if ($id_ens !== null)
+            $pdo_req->execute([$id_ens, $id_projet, $role]);
+        else
+            echo "Erreur : L'ID de l'enseignant pour l'email $email est introuvable.";
+    }
+
+    private function addIntervenants($intervenants, $id_projet) {
+        for ($i = 0; $i < count($intervenants); $i++) {
+            $email_intervenant = $intervenants[$i];
+            assigner_ens_comme($email_intervenant, $id_projet, 'intervenant');
+        }
+    }
+    
+    private function addRessources($mise_en_avant, $idProjet) {
+        if (isset($_FILES['ressources'])) {
+            $files = $_FILES['ressources'];
+
+            foreach ($files['name'] as $key => $file) {
+                $file_basename = pathinfo($file, PATHINFO_FILENAME);
+                $file_extension = pathinfo($file, PATHINFO_EXTENSION);
+                $name_ressource = $file_basename . '_' . date("Ymd_His") . '.' . $file_extension;
+
+                $uploadDir = './uploads/';
+                if(!file_exists($uploadDir)){
+                    if (!mkdir($uploadDir, 0777, false)) {
+                        echo "Impossible de créer le fichier";
+            
+                    }
+                }
+                $destination = $uploadDir . $name_ressource;
+
+                if (move_uploaded_file($files['tmp_name'][$key], $destination)) {
+                    $url_ressource = 'http://' . $_SERVER['HTTP_HOST'] . '../' . $destination;
+
+                    $mise_en_avant_values = explode(',', $mise_en_avant);
+                    $est_mise_en_avant = isset($mise_en_avant_values[$key]) ? (int)$mise_en_avant_values[$key] : 0;
+
+                    $req = $this->requetes['inserer_ressource'];
+                    $pdo_req = self::$bdd->prepare($req);
+                    $pdo_req->execute([$name_ressource, $file_extension, $url_ressource, $est_mise_en_avant, $idProjet]);
+
+                } else {
+                    echo "Erreur lors du déplacement du fichier $fileName.<br>";
+                }
+            }            
         }
     }
 
-    
-    private function addRessource($highlight, $idProjet) {
-        foreach ($_FILES['ressources']['name'] as $key => $file) {
-            $file_basename = pathinfo($file, PATHINFO_FILENAME);
-            $file_extension = pathinfo($file, PATHINFO_EXTENSION);
-            $name_ressource = $file_basename . '_' . date("Ymd_His") . '.' . $file_extension;
-            $is_highlighted = in_array($key, $highlight) ? true : false;
-    
-            // Insertion dans la base de données
-            $req = "INSERT INTO Ressource VALUES (?, ?, ?, ?, ?)";
-            $pdo_req = self::$bdd->prepare($req);
-            $pdo_req->execute([$name_ressource, $file_extension, $url_ressource, $is_highlighted, $idProjet]);
-    
-            // Sauvegarde du fichier sur le serveur
-            // $target_dir = "uploads/ressources/";
-            // $target_file = $target_dir . $name_ressource;
-            // move_uploaded_file($_FILES['ressources']['tmp_name'][$key], $target_file);
+    public function creer_sae() {
+        $errors = [];
+
+        $titre = $_POST["titre"];
+		$description = $_POST["description"];
+		$annee = $_POST["annee"];
+        $semestre = $_POST['semestre'];
+
+        if(!$titre)
+            $errors['titre'] = "Veuillez nommer le nom de la SAE";
+        else if ($this->titre_existe($titre))
+            $errors['titre'] = "Ce titre est déjà attribuer à une autre SAE.";
+
+        if(!$description)
+            $errors['description'] = "Veuillez décrire la SAE";
+        
+        if(!$annee)
+            $errors['annee'] = "Veuillez donner une année pour la SAE";
+
+        if(!$semestre)
+            $errors['semestre'] = "Veuillez donner un semestre pour la SAE";
+        else if (is_array($semestre)) {
+            $semestre = $semestre[0];
+            $semestre = (int)$semestre;
         }
+        if (!empty($errors))
+            return $errors;
+
+        $annee = (int)$annee;
+
+        $id_projet = $this->addProjet($titre, $description, $annee, $semestre);
+        $this->assigner_ens_comme($_SESSION["login"],$id_projet, 'responsable');
     }
-
-
-    
-
-    
 }
 ?>

@@ -1,7 +1,7 @@
 <?php
 
-require_once PROJECT_ROOT . "/modules/mod_sae/modele_sae.php";
-require_once PROJECT_ROOT . "/modules/mod_sae/vue_sae.php";
+require_once  "../modules/mod_sae/modele_sae.php";
+require_once  "../modules/mod_sae/vue_sae.php";
 
 class ControleurSae {
 
@@ -25,23 +25,49 @@ class ControleurSae {
 				$this->form_creer_sae();
 				break;
 			case "creer_sae" :
-				if(isset($_POST["tokenCSRF"]) && $_POST["tokenCSRF"] == $_SESSION['token']){
+				// if(isset($_POST["tokenCSRF"]) && $_POST["tokenCSRF"] == $_SESSION['token']){
 					$this->creer_sae();
-				} else {
+				/* } else {
 					die("token incorrecte");
-				}
+				}*/
 				break;
 			case "acceder_sae":
 				if(isset($_GET['projet'])){
-					$this->acceder_sae($_GET['projet']);
+					$this->acceder_sae();
 				}
+				else {
+					die ("SAE introuvable");
+				}
+				break;
+			case "ajouter_soutenance":
+				// if(isset($_POST["tokenCSRF"]) && $_POST["tokenCSRF"] == $_SESSION['token']){
+				$this->ajouter_soutenance();
+				/* } else {
+					die("token incorrecte");
+				}*/
+				break;
+			case "ajouter_groupe":
+				// if(isset($_POST["tokenCSRF"]) && $_POST["tokenCSRF"] == $_SESSION['token']){
+				$this->ajouter_groupe();
+				/* } else {
+					die("token incorrecte");
+				}*/
+				break;
+			case "supprimer_groupe":
+					// if(isset($_POST["tokenCSRF"]) && $_POST["tokenCSRF"] == $_SESSION['token']){
+				$this->supprimer_groupe();
+				/* } else {
+					die("token incorrecte");
+				}*/
+				break;
 			default : 
 				die ("Action inexistante");
 		}
 	}
 
 	public function mes_saes() {
-		$liste = $this->modele->get_saes();
+		$id = ($_GET['menu'] == 'enseignant') ? $this->modele->get_id_enseignant($_SESSION['login']) :  $this->modele->get_id_etudiant($_SESSION['login']);
+		$liste = $this->modele->get_saes($id);
 		$this->vue->mes_saes($liste);
 	}
 
@@ -51,42 +77,67 @@ class ControleurSae {
 	}
 
 	public function creer_sae() {
-		$titre = isset($_POST["titre"]) ? $_POST["titre"] : null;
-		$description = isset($_POST["description"]) ? $_POST["description"] : null;
-		$annee = isset($_POST["annee"]) ? $_POST["annee"] : null;
-		$semestre = isset($_POST["semestre"]) ? $_POST["semestre"] : null;
-		$date_depot = isset($_POST["date_depot"]) ? $_POST["date_depot"] : null;
-		$heure_depot = isset($_POST["heure_depot"]) ? $_POST["heure_depot"] : null;
-		$intervenants = isset($_POST["intervenants"]) ? $_POST["intervenants"] : null;
-		$ressources = isset($_POST["ressources"]) ? $_POST["ressources"] : null;
-		$highlights = isset($_POST["highlight"]) ? $_POST["highlight"] : [];
-
-		// if (!$titre || !$description || !$annee || !$semestre || !$intervenants || !$ressources) {
-		// 	$this->vue->erreurParametresManquants();
-		// 	return;
-		// }
-
-		$erreurs = $this->modele->creer_sae(
-			$titre, 
-			$description, 
-			$annee, 
-			$semestre, 
-			$date_depot, 
-			$heure_depot, 
-			$intervenants, 
-			$ressources, 
-			$highlights
-		);
+		$erreurs = $this->modele->creer_sae();
 
 		if (is_array($erreurs) && !empty($erreurs)) {
 			$this->vue->form_creer_sae($erreurs); // Réaffiche le formulaire avec les erreurs et les données déjà saisies
-		} else {
-			$this->vue->confirmeAjout();
 		}
+		else
+			$this->vue->confirmeAjout();
+
 	}
 
-	public function acceder_sae($sae) {
-		$this->vue->acceder_sae($sae);
+	public function acceder_sae() {
+		$id_ens = $this->modele->get_id_enseignant($_SESSION['login']);
+		$sae = $this->modele->get_projet($_GET['projet']);
+
+		$enseignants = $this->modele->get_enseignants_sae($_GET['projet']);
+		$ressources = $this->modele->get_ressources_sae($_GET['projet']);
+		$groupes = $this->modele->get_groupes_sae($_GET['projet']);
+		$etudiants = $this->modele->get_etudiants_sans_grp($_GET['projet']);
+		// $rendus = $this->modele->get_rendus_sae($_GET['projet']);
+		$soutenances = $this->modele->get_soutenances_sae($_GET['projet']);
+
+		// if ($enseignants && $ressources && $groupes && $etudiants && $soutenances) {
+			$this->vue->acceder_sae(
+				$sae, 
+				$enseignants, 
+				$ressources, 
+				$groupes,
+				$etudiants,
+				// $rendus,
+				$soutenances
+			);
+		// }
+	}
+
+	public function ajouter_groupe() {
+		// $erreurs = 
+		$this->modele->ajouter_groupe();
+
+		// if (is_array($erreurs) && !empty($erreurs)) {
+		// 	$this->vue->form_ajouter_groupe($erreurs); // Réaffiche le formulaire avec les erreurs et les données déjà saisies
+		// }
+
+		header('Location: ./index.php?menu=enseignant&module=sae&action=acceder_sae&projet=' . $_GET['projet']);
+	}
+
+	public function supprimer_groupe() {
+		$this->modele->dissocier_groupe_sae($_POST["idGroupe"]);
+		$this->modele->dissocier_groupe_etudiant($_POST["idGroupe"]);
+		$this->modele->supprimer_groupe($_POST["idGroupe"]);
+		
+		header('Location: ./index.php?menu=enseignant&module=sae&action=acceder_sae&projet=' . $_GET['projet']);
+	}
+
+	public function ajouter_soutenance() {
+		$erreurs = $this->modele->ajouter_soutenance();
+
+		// if (is_array($erreurs) && !empty($erreurs)) {
+		// 	$this->vue->form_creer_sae($erreurs); // Réaffiche le formulaire avec les erreurs et les données déjà saisies
+		// }
+		// else
+		// 	$this->vue->confirmeAjout();
 	}
 }
 ?>

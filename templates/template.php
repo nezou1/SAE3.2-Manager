@@ -16,7 +16,7 @@
         <link rel="stylesheet" href="../assets/css/footer.css">
     </head>
     <style>
-        body {
+        /* body {
             margin: 0;
             font-family: Arial, sans-serif;
             background-color: #F7F1E9;
@@ -59,11 +59,17 @@
         }
 
         main {
-            display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
         }
+
+        .error-message {
+            color: red;
+            font-size: 0.875rem; // Taille légèrement réduite 
+            margin-top: 0.25rem; // Espace au-dessus du message
+            display: block; // Affiche le message sur une ligne séparée
+        }*/
     </style>
     <body>
         <header>

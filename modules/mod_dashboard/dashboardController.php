@@ -20,10 +20,10 @@ class ControleurDashboard {
 
         switch($this->menu){
             case "enseignant":
-                require_once PROJECT_ROOT . "/composants/menu/enseignants/composant_menu_enseignant.php";
+                require_once  "../composants/menu/enseignants/composant_menu_enseignant.php";
                 break;
             case "etudiant":
-                require_once PROJECT_ROOT . "/composants/menu/etudiants/composant_menu_etudiant.php";
+                require_once  "../composants/menu/etudiants/composant_menu_etudiant.php";
                 break;
             case "connexion":
                 require_once "../composants/menu/connexion/composant_menu_connexion.php";

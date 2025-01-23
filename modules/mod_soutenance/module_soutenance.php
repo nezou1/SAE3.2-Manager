@@ -1,6 +1,6 @@
 <?php
 
-require_once PROJECT_ROOT . "/modules/mod_soutenance/controleur_soutenance.php";
+require_once  "../modules/mod_soutenance/controleur_soutenance.php";
 
 class ModSoutenance extends ModuleGenerique{
 

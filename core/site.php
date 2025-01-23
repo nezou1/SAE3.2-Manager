@@ -10,16 +10,16 @@ class Site {
 	private $footer;
 
 	public function __construct() {
-		$this->moduleNom = isset($_GET['module']) ? $_GET['module'] : "inscription";
+		$this->moduleNom = isset($_GET['module']) ? $_GET['module'] : "connexion";
 		$this->menuNom = isset($_GET['menu']) ? $_GET['menu'] : "connexion";
 
 		switch($this->menuNom) {
 			case "enseignant":
 			case "etudiant":
-				require_once PROJECT_ROOT . "composants/menu/".$this->menuNom."s/composant_menu_".$this->menuNom.".php";
+				require_once  "../composants/menu/".$this->menuNom."s/composant_menu_".$this->menuNom.".php";
 				break;
 			case "connexion":
-				require_once PROJECT_ROOT . "composants/menu/".$this->menuNom."/composant_menu_".$this->menuNom.".php";
+				require_once  "../composants/menu/".$this->menuNom."../composant_menu_".$this->menuNom.".php";
 				break;
 			default :
 				die ("Menu inexistant");
@@ -37,7 +37,8 @@ class Site {
 			case "sae":
 			case "soutenance" :
 			case "depot":
-			case "liste":         
+			case "liste":     
+			case "groupeEtudiant":    
 			case "gestionnaireRessource":
 			case "groupe":  
 			case "rendu":  

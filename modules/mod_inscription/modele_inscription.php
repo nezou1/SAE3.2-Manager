@@ -1,6 +1,6 @@
 <?php
 
-require_once(PROJECT_ROOT . '/core/connexion.php');
+require_once( '../core/connexion.php');
 
 class ModeleInscription extends Connexion {
 
