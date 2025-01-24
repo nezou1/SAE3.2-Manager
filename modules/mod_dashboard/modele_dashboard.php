@@ -59,23 +59,6 @@ class ModeleDashboard extends Connexion {
         }
     }
 
-    /*public function getGroupesEtudiant() {
-        $bdd = Connexion::getConnexion();
-        $sqlId = "SELECT idEtud FROM Etudiant WHERE email = :email";
-        $idEtud = $bdd->prepare($sqlId);
-        $idEtud->execute(['email' => $_SESSION['login']]);
-        $idEtud = $idEtud->fetch(PDO::FETCH_ASSOC);
-        $idEtud = $idEtud['idEtud'];
-    
-        $sql = "SELECT idGroupe FROM estDansLeGroupe WHERE idEtud = :idEtud";
-        $stmt = $bdd->prepare($sql);
-        $stmt->execute(['idEtud' => $idEtud]);
-        $groupe = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        var_dump($groupe);
-        return $groupe['idGroupe'] ?? null;
-    }*/
-
     public function getGroupesEtudiant() {
         $bdd = Connexion::getConnexion();
         $sqlId = "SELECT idEtud FROM Etudiant WHERE email = :email";
@@ -92,19 +75,6 @@ class ModeleDashboard extends Connexion {
         return $groupes;
     }
 
-    /*public function getMembreGroupe($idGroupe) {
-        $bdd = Connexion::getConnexion();
-        // Requête pour récupérer les noms et prénoms des membres du groupe
-        $sql = "SELECT nom, prenom 
-                FROM Etudiant 
-                WHERE idEtud IN (SELECT idEtud FROM estDansLeGroupe WHERE idGroupe = :idGroupe)";
-        $stmt = $bdd->prepare($sql);
-        $stmt->execute(['idGroupe' => $idGroupe]);
-        $membres = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-        return $membres;
-    }*/
-
     public function getMembreGroupe($idGroupe) {
         $bdd = Connexion::getConnexion();
         // Requête pour récupérer les noms et prénoms des membres du groupe
@@ -117,7 +87,6 @@ class ModeleDashboard extends Connexion {
     
         return $membres;
     }
-
 
 
 }

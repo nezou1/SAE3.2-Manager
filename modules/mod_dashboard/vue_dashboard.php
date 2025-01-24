@@ -308,14 +308,14 @@ class VueDashboard extends VueGenerique {
         <h4 class="mt-4">Alertes</h4>
         <div class="card mb-3">
             <div class="card-body d-flex justify-content-between align-items-center">
-                <div><strong>Mercredi 15 Février</strong> - Réunion pédagogique</div>
-                <a href="details.php" class="btn btn-primary btn-sm">Voir</a>
+                <div><strong>Samedi 25 janvier</strong> - Soutenance de ppp</div>
+                <a href="index.php?menu=enseignant&module=soutenance&action=liste" class="btn btn-primary btn-sm">Voir</a>
             </div>
         </div>
         <div class="card mb-3">
             <div class="card-body d-flex justify-content-between align-items-center">
-                <div><strong>Vendredi 18 Février</strong> - Fin des évaluations SAE 3.1</div>
-                <a href="details.php" class="btn btn-primary btn-sm">Vioir</a>
+                <div><strong>Samedi 25 janvier</strong> - SAE dev refactoring</div>
+                <a href="index.php?menu=enseignant&module=soutenance&action=liste" class="btn btn-primary btn-sm">Voir</a>
             </div>
         </div>
         <?php
