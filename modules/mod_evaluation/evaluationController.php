@@ -1,4 +1,5 @@
 <?php
+
 require_once 'modele_evaluation.php';
 require_once 'vue_evaluation.php';
 
@@ -9,30 +10,53 @@ class EvaluationController
     private $vue;
 
     public function __construct() {
+        // Démarrer la session si elle n'est pas déjà active
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+
         $this->modele = new ModeleEvaluation();
         $this->vue = new VueEvaluation();
     }
 
     public function exec() {
+        // Activer l'affichage des erreurs pour le débogage
         ini_set('display_errors', 1);
         ini_set('display_startup_errors', 1);
         error_reporting(E_ALL);
 
+        // Vérification de l'action demandée dans l'URL
         $this->action = $_GET['action'] ?? 'evaluerSoutenance';
 
         switch ($this->action) {
             case 'evaluerSoutenance':
-                $_SERVER['REQUEST_METHOD'] === 'POST' ? $this->soumettreEvaluation() : $this->evaluerSoutenance();
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    $this->soumettreEvaluation();
+                } else {
+                    $this->evaluerSoutenance();
+                }
                 break;
+
             case 'evaluerRendu':
-                $_SERVER['REQUEST_METHOD'] === 'POST' ? $this->soumettreEvaluation() : $this->evaluerRendu();
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    $this->soumettreEvaluation();
+                } else {
+                    $this->evaluerRendu();
+                }
                 break;
+
+            case 'soumettreEvaluation':
+                $this->soumettreEvaluation();
+                break;
+
             case 'confirmeEvaluation':
                 $this->vue->confirmeEvaluation();
                 break;
+
             case 'afficherNotesEtudiantSoutenance':
                 $this->afficherNotesEtudiantSoutenance();
                 break;
+
             default:
                 die("Action non reconnue : " . htmlspecialchars($this->action));
         }
@@ -45,6 +69,7 @@ class EvaluationController
         }
 
         $soutenance = $this->modele->getSoutenanceById($idSoutenance);
+
         if (!$soutenance) {
             die("Aucune soutenance trouvée pour l'ID : " . htmlspecialchars($idSoutenance));
         }
@@ -59,6 +84,7 @@ class EvaluationController
         }
 
         $rendu = $this->modele->getRenduById($idRendu);
+
         if (!$rendu) {
             die("Aucun rendu trouvé pour l'ID : " . htmlspecialchars($idRendu));
         }
@@ -71,13 +97,14 @@ class EvaluationController
             die("Veuillez vous connecter.");
         }
 
+        // Vérification des données du formulaire
         $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
         $note = filter_input(INPUT_POST, 'note', FILTER_VALIDATE_FLOAT);
-        $commentaire = htmlspecialchars($_POST['commentaire'] ?? '');
+        $commentaire = htmlspecialchars($_POST['commentaire'], ENT_QUOTES, 'UTF-8');
         $coef = filter_input(INPUT_POST, 'coef', FILTER_VALIDATE_FLOAT);
         $type = $_POST['type'] ?? '';
 
-        if (!$id || !$note || !$coef || empty($commentaire)) {
+        if (!$id || !$note || !$commentaire || !$coef || empty($type)) {
             die("Tous les champs du formulaire sont requis.");
         }
 
