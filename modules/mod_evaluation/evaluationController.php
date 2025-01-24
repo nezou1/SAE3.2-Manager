@@ -1,5 +1,4 @@
 <?php
-
 require_once 'modele_evaluation.php';
 require_once 'vue_evaluation.php';
 
@@ -15,22 +14,18 @@ class EvaluationController
     }
 
     public function exec() {
-        $this->action = isset($_GET['action']) ? $_GET['action'] : 'evaluerSoutenance';
+        ini_set('display_errors', 1);
+        ini_set('display_startup_errors', 1);
+        error_reporting(E_ALL);
+
+        $this->action = $_GET['action'] ?? 'evaluerSoutenance';
 
         switch ($this->action) {
             case 'evaluerSoutenance':
-                if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                    $this->soumettreEvaluation();
-                } else {
-                    $this->evaluerSoutenance();
-                }
-                break;  
+                $_SERVER['REQUEST_METHOD'] === 'POST' ? $this->soumettreEvaluation() : $this->evaluerSoutenance();
+                break;
             case 'evaluerRendu':
-                if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                    $this->soumettreEvaluation();
-                } else {
-                    $this->evaluerRendu();
-                }
+                $_SERVER['REQUEST_METHOD'] === 'POST' ? $this->soumettreEvaluation() : $this->evaluerRendu();
                 break;
             case 'confirmeEvaluation':
                 $this->vue->confirmeEvaluation();
@@ -38,55 +33,76 @@ class EvaluationController
             case 'afficherNotesEtudiantSoutenance':
                 $this->afficherNotesEtudiantSoutenance();
                 break;
+            default:
+                die("Action non reconnue : " . htmlspecialchars($this->action));
         }
     }
 
     public function evaluerSoutenance() {
-        $idSoutenance = $_GET['id'];
+        $idSoutenance = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        if (!$idSoutenance) {
+            die("ID de soutenance invalide.");
+        }
+
         $soutenance = $this->modele->getSoutenanceById($idSoutenance);
-        $vue = new VueEvaluation();
-        $vue->afficherEvaluationSoutenance($soutenance);
+        if (!$soutenance) {
+            die("Aucune soutenance trouvée pour l'ID : " . htmlspecialchars($idSoutenance));
+        }
+
+        $this->vue->afficherEvaluationSoutenance($soutenance);
     }
 
     public function evaluerRendu() {
-        $idRendu = $_GET['id'];
+        $idRendu = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        if (!$idRendu) {
+            die("ID du rendu invalide.");
+        }
+
         $rendu = $this->modele->getRenduById($idRendu);
-        $vue = new VueEvaluation();
-        $vue->afficherEvaluationRendu($rendu);
-    }
+        if (!$rendu) {
+            die("Aucun rendu trouvé pour l'ID : " . htmlspecialchars($idRendu));
+        }
 
-    public function recupererIdEnseignant($email) {
-        $bdd = Connexion::getConnexion();
-        $sql = "SELECT idEns FROM Enseignant WHERE email = :email";
-        $stmt = $bdd->prepare($sql);
-        $stmt->execute(['email' => $email]);
-        return $stmt->fetch(PDO::FETCH_COLUMN);
-    }
-
-    public function recupererIdEtudiant($email) {
-        $bdd = Connexion::getConnexion();
-        $sql = "SELECT idEtud FROM Etudiant WHERE email = :email";
-        $stmt = $bdd->prepare($sql);
-        $stmt->execute(['email' => $email]);
-        return $stmt->fetch(PDO::FETCH_COLUMN);
+        $this->vue->afficherEvaluationRendu($rendu);
     }
 
     public function soumettreEvaluation() {
-        $id = $_POST['id'];
-        $type = $_POST['type'];
-        $note = $_POST['note'];
-        $commentaire = $_POST['commentaire'];
-        $coef = $_POST['coef'];
-        $idEns = $this->recupererIdEnseignant($_SESSION['login']); // Assurez-vous que l'ID de l'enseignant est stocké dans la session
+        if (!isset($_SESSION['login'])) {
+            die("Veuillez vous connecter.");
+        }
+
+        $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+        $note = filter_input(INPUT_POST, 'note', FILTER_VALIDATE_FLOAT);
+        $commentaire = htmlspecialchars($_POST['commentaire'] ?? '');
+        $coef = filter_input(INPUT_POST, 'coef', FILTER_VALIDATE_FLOAT);
+        $type = $_POST['type'] ?? '';
+
+        if (!$id || !$note || !$coef || empty($commentaire)) {
+            die("Tous les champs du formulaire sont requis.");
+        }
+
+        $idEns = $this->modele->recupererIdEnseignant($_SESSION['login']);
+        if (!$idEns) {
+            die("Erreur lors de la récupération de l'enseignant.");
+        }
+
         $this->modele->soumettreEvaluation($id, $type, $note, $commentaire, $coef, $idEns);
         header('Location: index.php?module=evaluation&action=confirmeEvaluation');
+        exit;
     }
 
     public function afficherNotesEtudiantSoutenance() {
-        $idEtudiant = $this->recupererIdEtudiant($_SESSION['login']); // Assurez-vous que l'ID de l'étudiant est stocké dans la session
+        if (!isset($_SESSION['login'])) {
+            die("Veuillez vous connecter.");
+        }
+
+        $idEtudiant = $this->modele->recupererIdEtudiant($_SESSION['login']);
+        if (!$idEtudiant) {
+            die("Aucune donnée trouvée pour cet étudiant.");
+        }
+
         $notes = $this->modele->getNotesEtudiantSoutenance($idEtudiant);
         $this->vue->afficherNotesEtudiantSoutenance($notes);
     }
-
 }
 ?>

@@ -1,64 +1,66 @@
 <?php
-class ModeleEvaluation extends Connexion
-{
+require_once('../core/connexion.php');
+
+class ModeleEvaluation {
+    private $bdd;
+
+    public function __construct() {
+        $this->bdd = Connexion::getConnexion();
+    }
+
     public function getSoutenanceById($idSoutenance) {
-        $bdd = Connexion::getConnexion();
         $sql = "SELECT * FROM Soutenance WHERE idSoutenance = :idSoutenance";
-        $stmt = $bdd->prepare($sql);
-        $stmt->execute(['idSoutenance' => $idSoutenance]);
+        $stmt = $this->bdd->prepare($sql);
+        $stmt->execute(['idSoutenance' => intval($idSoutenance)]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public function getRenduById($idRendu) {
-        $bdd = Connexion::getConnexion();
         $sql = "SELECT * FROM Rendu WHERE idRendu = :idRendu";
-        $stmt = $bdd->prepare($sql);
-        $stmt->execute(['idRendu' => $idRendu]);
+        $stmt = $this->bdd->prepare($sql);
+        $stmt->execute(['idRendu' => intval($idRendu)]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function evaluationExists($id, $type) {
-        $bdd = Connexion::getConnexion();
-        if ($type == 'soutenance') {
-            $sql = "SELECT COUNT(*) FROM Evaluation WHERE idSoutenance = :id";
-        } else {
-            $sql = "SELECT COUNT(*) FROM Evaluation WHERE idRendu = :id";
-        }
-        $stmt = $bdd->prepare($sql);
-        $stmt->execute(['id' => $id]);
-        return $stmt->fetchColumn() > 0;
-    }
-
     public function soumettreEvaluation($id, $type, $note, $commentaire, $coef, $idEns) {
-        if ($this->evaluationExists($id, $type)) {
-            echo "Une évaluation existe déjà pour ce projet.";
-        }
-        $bdd = Connexion::getConnexion();
-        if ($type == 'soutenance') {
-            $sql = "INSERT INTO Evaluation (note, commentaire, coef, idEns, idSoutenance) VALUES (:note, :commentaire, :coef, :idEns, :id)";
-        } else {
-            $sql = "INSERT INTO Evaluation (note, commentaire, coef, idEns, idRendu) VALUES (:note, :commentaire, :coef, :idEns, :id)";
-        }
-        $stmt = $bdd->prepare($sql);
+        $sql = ($type === 'soutenance') ?
+            "INSERT INTO Evaluation (note, commentaire, coef, idEns, idEval) VALUES (:note, :commentaire, :coef, :idEns, :id)" :
+            "INSERT INTO Evaluation (note, commentaire, coef, idEns) VALUES (:note, :commentaire, :coef, :idEns)";
+
+        $stmt = $this->bdd->prepare($sql);
         $stmt->execute([
-            'note' => $note,
-            'commentaire' => $commentaire,
-            'coef' => $coef,
-            'idEns' => $idEns,
-            'id' => $id
+            'note' => floatval($note),
+            'commentaire' => htmlspecialchars($commentaire),
+            'coef' => floatval($coef),
+            'idEns' => intval($idEns),
+            'id' => intval($id)
         ]);
     }
 
     public function getNotesEtudiantSoutenance($idEtudiant) {
-        $bdd = Connexion::getConnexion();
         $sql = "SELECT s.description, e.note, e.commentaire, e.coef
                 FROM Evaluation e
-                JOIN Soutenance s ON e.idSoutenance = s.idSoutenance
+                JOIN Soutenance s ON e.idEval = s.idSoutenance
                 JOIN estDansLeGroupe edg ON s.idGroupe = edg.idGroupe
                 WHERE edg.idEtud = :idEtudiant";
-        $stmt = $bdd->prepare($sql);
-        $stmt->execute(['idEtudiant' => $idEtudiant]);
+
+        $stmt = $this->bdd->prepare($sql);
+        $stmt->execute(['idEtudiant' => intval($idEtudiant)]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function recupererIdEnseignant($email) {
+        $sql = "SELECT idEns FROM Enseignant WHERE email = :email";
+        $stmt = $this->bdd->prepare($sql);
+        $stmt->execute(['email' => htmlspecialchars($email)]);
+        return $stmt->fetch(PDO::FETCH_COLUMN);
+    }
+
+    public function recupererIdEtudiant($email) {
+        $sql = "SELECT idEtud FROM Etudiant WHERE email = :email";
+        $stmt = $this->bdd->prepare($sql);
+        $stmt->execute(['email' => htmlspecialchars($email)]);
+        return $stmt->fetch(PDO::FETCH_COLUMN);
     }
 }
 ?>

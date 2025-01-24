@@ -41,7 +41,6 @@ class Site {
 			case "groupeEtudiant":    
 			case "gestionnaireRessource":
 			case "groupe":  
-			case "rendu":  
 			case "evaluation":   
 				require_once "../modules/mod_".$this->moduleNom."/module_".$this->moduleNom.".php";
 				break;
