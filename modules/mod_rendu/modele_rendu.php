@@ -24,34 +24,28 @@ class ModeleRendu extends Connexion
         $bdd = Connexion::getConnexion();
         $idEns = $this->recupererIdEnseignant($email)['idEns'];
         $sql = "SELECT r.* FROM Rendu r
-                INNER JOIN Projet p ON r.idProjet = p.idProjet
-                INNER JOIN estAssigneComme eac ON p.idProjet = eac.idProjet
+                INNER JOIN Depot d ON r.idDepot = d.idDepot
+                INNER JOIN estAssigneComme eac ON d.idProjet = eac.idProjet
                 WHERE eac.idEns = :idEns";
         $stmt = $bdd->prepare($sql);
         $stmt->execute(['idEns' => $idEns]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function soumettreEvaluation($id, $type, $note, $commentaire, $coef, $idEns) {
+    public function creerDepot($descriptif, $dateAttendu, $idProjet) {
         $bdd = Connexion::getConnexion();
-        if ($type == 'soutenance') {
-            $sql = "INSERT INTO Evaluation (note, commentaire, coef, idEns, idSoutenance) VALUES (:note, :commentaire, :coef, :idEns, :id)";
-        } else {
-            $sql = "INSERT INTO Evaluation (note, commentaire, coef, idEns, idRendu) VALUES (:note, :commentaire, :coef, :idEns, :id)";
-        }
+        $sql = "INSERT INTO Depot (descriptif, dateAttendu, idProjet) VALUES (:descriptif, :dateAttendu, :idProjet)";
         $stmt = $bdd->prepare($sql);
         $stmt->execute([
-            'note' => $note,
-            'commentaire' => $commentaire,
-            'coef' => $coef,
-            'idEns' => $idEns,
-            'id' => $id
+            'descriptif' => $descriptif,
+            'dateAttendu' => $dateAttendu,
+            'idProjet' => $idProjet
         ]);
     }
 
     public function getRenduById($idRendu) {
         $bdd = Connexion::getConnexion();
-        $sql = "SELECT * FROM Rendu WHERE idRendu = :idRendu";
+        $sql = "SELECT * FROM Rendu WHERE idDepot = :idRendu";
         $stmt = $bdd->prepare($sql);
         $stmt->execute(['idRendu' => $idRendu]);
         return $stmt->fetch(PDO::FETCH_ASSOC);

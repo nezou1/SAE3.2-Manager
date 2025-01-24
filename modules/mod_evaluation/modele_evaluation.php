@@ -11,7 +11,7 @@ class ModeleEvaluation extends Connexion
 
     public function getRenduById($idRendu) {
         $bdd = Connexion::getConnexion();
-        $sql = "SELECT * FROM Rendu WHERE idRendu = :idRendu";
+        $sql = "SELECT * FROM Rendu WHERE idDepot = :idRendu";
         $stmt = $bdd->prepare($sql);
         $stmt->execute(['idRendu' => $idRendu]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -20,9 +20,9 @@ class ModeleEvaluation extends Connexion
     public function evaluationExists($id, $type) {
         $bdd = Connexion::getConnexion();
         if ($type == 'soutenance') {
-            $sql = "SELECT COUNT(*) FROM Evaluation WHERE idSoutenance = :id";
+            $sql = "SELECT COUNT(*) FROM Evaluation WHERE idEval = :id AND idSoutenance IS NOT NULL";
         } else {
-            $sql = "SELECT COUNT(*) FROM Evaluation WHERE idRendu = :id";
+            $sql = "SELECT COUNT(*) FROM Evaluation WHERE idEval = :id AND idDepot IS NOT NULL";
         }
         $stmt = $bdd->prepare($sql);
         $stmt->execute(['id' => $id]);
@@ -30,22 +30,18 @@ class ModeleEvaluation extends Connexion
     }
 
     public function soumettreEvaluation($id, $type, $note, $commentaire, $coef, $idEns) {
-        if ($this->evaluationExists($id, $type)) {
-            echo "Une évaluation existe déjà pour ce projet.";
-        }
         $bdd = Connexion::getConnexion();
         if ($type == 'soutenance') {
-            $sql = "INSERT INTO Evaluation (note, commentaire, coef, idEns, idSoutenance) VALUES (:note, :commentaire, :coef, :idEns, :id)";
+            $sql = "INSERT INTO Evaluation (note, commentaire, coef, idEns) VALUES (:note, :commentaire, :coef, :idEns)";
         } else {
-            $sql = "INSERT INTO Evaluation (note, commentaire, coef, idEns, idRendu) VALUES (:note, :commentaire, :coef, :idEns, :id)";
+            $sql = "INSERT INTO Evaluation (note, commentaire, coef, idEns) VALUES (:note, :commentaire, :coef, :idEns)";
         }
         $stmt = $bdd->prepare($sql);
         $stmt->execute([
             'note' => $note,
             'commentaire' => $commentaire,
             'coef' => $coef,
-            'idEns' => $idEns,
-            'id' => $id
+            'idEns' => $idEns
         ]);
     }
 
@@ -53,7 +49,7 @@ class ModeleEvaluation extends Connexion
         $bdd = Connexion::getConnexion();
         $sql = "SELECT s.description, e.note, e.commentaire, e.coef
                 FROM Evaluation e
-                JOIN Soutenance s ON e.idSoutenance = s.idSoutenance
+                JOIN Soutenance s ON e.idEval = s.idEval
                 JOIN estDansLeGroupe edg ON s.idGroupe = edg.idGroupe
                 WHERE edg.idEtud = :idEtudiant";
         $stmt = $bdd->prepare($sql);

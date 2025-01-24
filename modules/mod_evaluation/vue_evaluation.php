@@ -35,7 +35,6 @@ class VueEvaluation extends VueGenerique
         <div class="container mt-5">
             <h1>Évaluation du Rendu</h1>
             <form method="POST" action="index.php?module=evaluation&action=soumettreEvaluation">
-                <input type="hidden" name="id" value="<?= $rendu['idRendu'] ?>">
                 <input type="hidden" name="type" value="rendu">
                 <div class="mb-3">
                     <label for="note" class="form-label">Note</label>
@@ -62,7 +61,6 @@ class VueEvaluation extends VueGenerique
             <h1>Évaluation soumise</h1>
             <p>Votre évaluation a bien été soumise.</p>
         </div>
-        <button type="button" class="btn btn-primary" href='index.php?module=rendu'>Retour</button>
         <?php
     }
 

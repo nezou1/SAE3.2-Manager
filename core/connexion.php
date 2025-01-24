@@ -14,7 +14,13 @@ class Connexion {
         }
     }
 
+    /*public static function getConnexion() {
+        return self::$bdd;
+    }*/
     public static function getConnexion() {
+        if (self::$bdd === null) {
+            self::initConnexion();
+        }
         return self::$bdd;
     }
 }

@@ -80,7 +80,7 @@
         <main class="main">
             <?=$module_html?>
         </main>
-        <footer style="bottom: 0; width: 100%;">
+        <footer style="position: fixed; bottom: 0; left: 0;">
             <?php echo $footer->getAffichage();?>
         </footer>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

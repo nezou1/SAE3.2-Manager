@@ -33,7 +33,7 @@ class VueRendu extends VueGenerique
                                     <td><?= htmlspecialchars($soutenance['heureDebut']) ?></td>
                                     <td><?= htmlspecialchars($soutenance['heureFin']) ?></td>
                                     <td>
-                                        <a href="index.php?module=evaluation&action=evaluerSoutenance&id=<?= $soutenance['idSoutenance'] ?>" class="btn btn-primary">Évaluer</a>
+                                        <a href="index.php?module=evaluation&action=evaluerSoutenance&id=<?= $soutenance['idSoutenance'] ?>&menu=enseignant" class="btn btn-primary">Évaluer</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -46,23 +46,25 @@ class VueRendu extends VueGenerique
                 <table class="table table-striped table-bordered">
                     <thead>
                         <tr>
-                            <th>Description</th>
+                            <th>Titre</th>
                             <th>Date</th>
+                            <th>URL</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php if (empty($rendus)): ?>
                             <tr>
-                                <td colspan="3">Aucun rendu trouvé.</td>
+                                <td colspan="4">Aucun rendu trouvé.</td>
                             </tr>
                         <?php else: ?>
                             <?php foreach ($rendus as $rendu): ?>
                                 <tr>
-                                    <td><?= htmlspecialchars($rendu['descriptif']) ?></td>
+                                    <td><?= htmlspecialchars($rendu['titre_rendu']) ?></td>
                                     <td><?= htmlspecialchars($rendu['dateEnvoyee']) ?></td>
+                                    <td><?= htmlspecialchars($rendu['url_rendu']) ?></td>
                                     <td>
-                                        <a href="index.php?module=evaluation&action=evaluerRendu&id=<?= $rendu['idRendu'] ?>" class="btn btn-primary">Évaluer</a>
+                                        <a href="index.php?module=evaluation&action=evaluerRendu&id=<?= $rendu['idDepot'] ?>&menu=enseignant" class="btn btn-primary">Évaluer</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -72,35 +74,28 @@ class VueRendu extends VueGenerique
             </div>
             <div class="d-flex justify-content-between mt-4">
                 <a href="index.php?module=soutenance" class="btn btn-primary">Ajouter une Soutenance</a>
-                <a href="index.php?module=rendu&action=creerRendu" class="btn btn-primary">Ajouter un Rendu</a>
+                <a href="index.php?module=rendu&action=creerDepot&menu=enseignant" class="btn btn-primary">Ajouter un Dépôt</a>
             </div>
         </div>
         <?php
     }
 
-    public function creerRendu() {
+    public function creerDepot() {
         ?>
         <div class="container mt-5">
-            <h1>Créer un Rendu</h1>
-            <form method="POST" action="index.php?module=rendu&action=creerRendu">
+            <h1>Créer un Dépôt</h1>
+            <form method="POST" action="index.php?module=rendu&action=creerDepot">
                 <div class="mb-3">
-                    <label for="titre" class="form-label">Titre</label>
-                    <input type="text" class="form-control" id="titre" name="titre" required>
+                    <label for="descriptif" class="form-label">Descriptif</label>
+                    <input type="text" class="form-control" id="descriptif" name="descriptif" required>
                 </div>
                 <div class="mb-3">
-                    <label for="description" class="form-label">Description</label>
-                    <textarea class="form-control" id="description" name="description" required></textarea>
+                    <label for="dateAttendu" class="form-label">Date Attendue</label>
+                    <input type="date" class="form-control" id="dateAttendu" name="dateAttendu" required>
                 </div>
                 <div class="mb-3">
-                    <label for="date" class="form-label">Date de rendu</label>
-                    <input type="date" class="form-control" id="date" name="date" required>
-                </div>
-                <div class="mb-3">
-                    <label for="options" class="form-label">Options</label>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="fileUpload" name="fileUpload">
-                        <label class="form-check-label" for="fileUpload">Souhaitez-vous une zone de téléchargement ?</label>
-                    </div>
+                    <label for="idProjet" class="form-label">ID du Projet</label>
+                    <input type="number" class="form-control" id="idProjet" name="idProjet" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Créer</button>
             </form>

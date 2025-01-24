@@ -79,7 +79,7 @@ class EvaluationController
         $coef = $_POST['coef'];
         $idEns = $this->recupererIdEnseignant($_SESSION['login']); // Assurez-vous que l'ID de l'enseignant est stocké dans la session
         $this->modele->soumettreEvaluation($id, $type, $note, $commentaire, $coef, $idEns);
-        header('Location: index.php?module=evaluation&action=confirmeEvaluation');
+        header('Location: index.php?module=evaluation&action=confirmeEvaluation&menu=enseignant');
     }
 
     public function afficherNotesEtudiantSoutenance() {

@@ -15,13 +15,26 @@ class VueCompMenuEnseignant extends VueCompGenerique {
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="index.php?menu=enseignant&module=sae">Mes SAE</a>
+                            <a class="nav-link" href="index.php?menu=enseignant&module=sae&menu=enseignant">Mes SAE</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="index.php?menu=enseignant&module=sae&action=form_creer_sae">Créer une SAE</a>
+                            <a class="nav-link" href="index.php?menu=enseignant&module=sae&action=form_creer_sae&menu=enseignant">Créer une SAE</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="index.php?menu=enseignant&module=rendu">Evaluation</a>
+                            <a class="nav-link" href="index.php?menu=enseignant&module=rendu&menu=enseignant">Evaluation</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownSoutenance" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Soutenance
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownSoutenance">
+                                <li>
+                                    <a class="dropdown-item" href="index.php?menu=enseignant&module=soutenance&action=form_ajout">Ajouter une soutenance</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="index.php?menu=enseignant&module=soutenance&action=liste">Liste des soutenances</a>
+                                </li>
+                            </ul>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="index.php?menu=connexion&module=connexion&action=logout&menu=connexion">Déconnexion</a>

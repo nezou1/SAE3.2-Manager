@@ -69,7 +69,7 @@ class VueDashboard extends VueGenerique {
                             <div class="card text-center">
                                 <div class="card-body">
                                     <h5>SAE Manager</h5>
-                                    <a href="projet.php" class="btn btn-outline-dark">Voir le projet</a>
+                                    <a href="index.php?menu=etudiant&module=sae" class="btn btn-primary">Voir le projet</a>
                                 </div>
                             </div>
                         </div>
@@ -77,7 +77,7 @@ class VueDashboard extends VueGenerique {
                             <div class="card text-center">
                                 <div class="card-body">
                                     <h5>Refactoring & Design Pattern</h5>
-                                    <a href="projet.php" class="btn btn-outline-dark">Voir le projet</a>
+                                    <a href="index.php?menu=etudiant&module=sae" class="btn btn-primary">Voir le projet</a>
                                 </div>
                             </div>
                         </div>
@@ -98,7 +98,7 @@ class VueDashboard extends VueGenerique {
                     <h4 class="mt-4">Alertes</h4>
                     <?php
                     for ($i = 0; $i < 3; $i++) {
-                        $this->alerte("R3.01 - Dépôt TP4", "Jeudi 17 Septembre");
+                        $this->alerte("Vous avez une soutenance - Ici", "Veuillez regarder");
                     } 
                     ?>                    
                 </div>
@@ -129,7 +129,7 @@ class VueDashboard extends VueGenerique {
         <div class="card mb-3">
             <div class="card-body d-flex justify-content-between align-items-center">
                 <div><strong> <?= $date ?> </strong> - <?= $message?> </div>
-                <a href="depot.php" class="btn btn-outline-primary btn-sm">Déposer</a>
+                <a href="depot.php" class="btn btn-primary btn-sm">Déposer</a>
             </div>
         </div>
         <?php
@@ -190,9 +190,9 @@ class VueDashboard extends VueGenerique {
                 <!-- Colonne gauche : Projets et ressources -->
                 <div class="col-lg-8">
                     <?php
-                    $this->afficherProjets();  // Section Projets SAE
-                    $this->afficherRessources();// Section Ressources
-                    $this->raccourcisEnseignant();  // Nouvelle section Raccourcis
+                    $this->afficherProjets();  
+                    $this->afficherRessources();
+                    $this->raccourcisEnseignant();  
                     
                     ?>
                 </div>
@@ -201,8 +201,8 @@ class VueDashboard extends VueGenerique {
                 <h4>Calendrier</h4>
                 <?php $this->calendrier(); ?>
                     <?php
-                    $this->afficherRendus();  // Section Rendus en attente
-                    $this->afficherAlertes();  // Section Alertes
+                    $this->afficherRendus();  
+                    $this->afficherAlertes();  
                     ?>
                 </div>
             </div>
@@ -210,7 +210,6 @@ class VueDashboard extends VueGenerique {
         <?php
     }
 
-    // Section Mes Cours (sous forme de cartes horizontales défilantes)
     private function afficherCours() {
         ?>
         <h4 class="mb-3">Pages récemment consultées</h4>
@@ -239,7 +238,6 @@ class VueDashboard extends VueGenerique {
         <?php
     }
 
-    // Section Projets SAE
     private function afficherProjets() {
         ?>
         <h4 class="mt-5">Projets SAE Créés</h4>
@@ -249,7 +247,7 @@ class VueDashboard extends VueGenerique {
                     <div class="card-body">
                         <h5>SAE Manager</h5>
                         <p>Deadline : 20/03/2025</p>
-                        <a href="projet_gestion.php" class="btn btn-outline-dark">Gérer le projet</a>
+                        <a href="./index.php?menu=enseignant&module=sae&action=mes_saes" class="btn btn-primary">Gérer le projet</a>
                     </div>
                 </div>
             </div>
@@ -258,7 +256,7 @@ class VueDashboard extends VueGenerique {
                     <div class="card-body">
                         <h5>Refactoring & Design Pattern</h5>
                         <p>Deadline : 25/03/2025</p>
-                        <a href="projet_gestion.php" class="btn btn-outline-dark">Gérer le projet</a>
+                        <a href="./index.php?menu=enseignant&module=sae&action=mes_saes" class="btn btn-primary">Gérer le projet</a>
                     </div>
                 </div>
             </div>
@@ -266,7 +264,7 @@ class VueDashboard extends VueGenerique {
                 <div class="card text-center">
                     <div class="card-body">
                         <h5>Ajouter un projet</h5>
-                        <a href="./index.php?menu=enseignant&module=sae&action=form_creer_sae" class="btn btn-outline-dark">
+                        <a href="./index.php?menu=enseignant&module=sae&action=mes_saes" class="btn btn-primary">
                             <i class="fas fa-plus"> + </i>
                         </a>
                     </div>
@@ -277,14 +275,13 @@ class VueDashboard extends VueGenerique {
         <?php
     }
 
-    // Autres sections (Alertes, Rendus, Ressources) restent inchangées
     private function afficherRessources() {
         ?>
         <h4>Ressources</h4>
         <div class="card text-center">
             <div class="card-body">
                 <h5>Accedez au gestionnaire de ressource</h5>
-                <a href="./index.php?module=gestionnaireRessource&action=exec&menu=enseignant" class="btn btn-outline-primary">Consulter</a>
+                <a href="./index.php?module=sae&action=mes_saes&menu=enseignant" class="btn btn-primary">Consulter</a>
             </div>
         </div>
         <?php
@@ -296,11 +293,11 @@ class VueDashboard extends VueGenerique {
         <ul class="list-group">
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 Dépôt TP1 - Étudiant A
-                <a href="corriger.php" class="btn btn-outline-primary btn-sm">Corriger</a>
+                <a href="./index.php?module=rendu&action=accueilEval&menu=enseignant" class="btn btn-primary btn-sm">Corriger</a>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 User Story - Étudiant B
-                <a href="corriger.php" class="btn btn-outline-primary btn-sm">Corriger</a>
+                <a href="./index.php?module=rendu&action=accueilEval&menu=enseignant" class="btn btn-primary btn-sm">Corriger</a>
             </li>
         </ul>
         <?php
@@ -312,13 +309,13 @@ class VueDashboard extends VueGenerique {
         <div class="card mb-3">
             <div class="card-body d-flex justify-content-between align-items-center">
                 <div><strong>Mercredi 15 Février</strong> - Réunion pédagogique</div>
-                <a href="details.php" class="btn btn-outline-secondary btn-sm">Détails</a>
+                <a href="details.php" class="btn btn-primary btn-sm">Voir</a>
             </div>
         </div>
         <div class="card mb-3">
             <div class="card-body d-flex justify-content-between align-items-center">
                 <div><strong>Vendredi 18 Février</strong> - Fin des évaluations SAE 3.1</div>
-                <a href="details.php" class="btn btn-outline-secondary btn-sm">Détails</a>
+                <a href="details.php" class="btn btn-primary btn-sm">Vioir</a>
             </div>
         </div>
         <?php
@@ -333,7 +330,7 @@ class VueDashboard extends VueGenerique {
                     <div class="card-body">
                         <h5 class="card-title">Vue d'ensemble sur les groupes</h5>
                         <p class="text-muted">Consultez les informations sur les groupes et les projets associés.</p>
-                        <a href="./index.php?module=groupe&menu=enseignant" class="btn btn-outline-primary">Voir les groupes</a>
+                        <a href="./index.php?module=groupe&menu=enseignant" class="btn btn-primary">Voir les groupes</a>
                     </div>
                 </div>
             </div>
@@ -342,7 +339,7 @@ class VueDashboard extends VueGenerique {
                     <div class="card-body">
                         <h5 class="card-title">Liste des étudiants</h5>
                         <p class="text-muted">Accédez à la liste des étudiants inscrits.</p>
-                        <a href="./index.php?module=liste&action=listeEtudiants&menu=enseignant" class="btn btn-outline-primary">Voir les étudiants</a>
+                        <a href="./index.php?module=liste&action=listeEtudiants&menu=enseignant" class="btn btn-primary">Voir les étudiants</a>
                     </div>
                 </div>
             </div>
@@ -351,7 +348,7 @@ class VueDashboard extends VueGenerique {
                     <div class="card-body">
                         <h5 class="card-title">Liste des enseignants intervenants</h5>
                         <p class="text-muted">Découvrez la liste des enseignants impliqués dans les projets.</p>
-                        <a href="./index.php?module=liste&action=listeEnseignants&menu=enseignant" class="btn btn-outline-primary">Voir les enseignants</a>
+                        <a href="./index.php?module=liste&action=listeEnseignants&menu=enseignant" class="btn btn-primary">Voir les enseignants</a>
                     </div>
                 </div>
             </div>
@@ -361,14 +358,11 @@ class VueDashboard extends VueGenerique {
 
     public function afficherListeEtudiants() {
         try {
-            // Connexion à la base de données via getConnexion()
             $bdd = $this->getConnexion();
     
-            // Requête SQL pour récupérer les étudiants
             $sql = "SELECT idEtud, nom, prenom, email FROM Etudiant";
             $result = $bdd->query($sql);
     
-            // Affichage du tableau HTML des étudiants
             ?>
             <div class="container mt-5">
                 <h2 class="mb-4">Liste des étudiants</h2>
