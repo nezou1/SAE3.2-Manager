@@ -23,16 +23,16 @@ class ControleurConnexion {
                 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $this->modele->login();
                 } else {
-                    $this->vue->get_connexion(); // Affiche le formulaire si aucune soumission
+                    $this->vue->get_connexion(); 
                 }
                 break;
             case 'logout':
                 $this->logout();
                 break;
             case 'success':
-                $this->vue->loginSuccess(); // Affiche un message de succès
+                $this->vue->loginSuccess(); 
             default:
-                $this->vue->get_connexion(); // Affiche le formulaire par défaut
+                $this->vue->get_connexion(); 
                 break;
         }
     }

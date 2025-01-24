@@ -35,7 +35,7 @@ class VueListe extends VueGenerique {
         </script>
         
         <div class="container mt-5">
-            <h2 class="mb-4">Liste des étudiants</h2>
+            <h2 class="mb-4">Voici la liste souhaité</h2>
             <input class="form-control mb-4" id="searchInput" type="text" placeholder="Rechercher par nom ou prénom...">
             <table class="table table-bordered" id="etudiantTable">
                 <thead>
