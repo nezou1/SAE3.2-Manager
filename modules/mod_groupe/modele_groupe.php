@@ -3,10 +3,9 @@
 require_once('../core/connexion.php');
 
 class ModeleGroupe extends Connexion {
-    private $bdd;
 
     public function __construct() {
-        $this->bdd = Connexion::getConnexion(); }
+        $bdd = Connexion::getConnexion(); }
 
     public function addGroupe($nom, $modifiableParEtudiant) {
         $sql = "INSERT INTO Groupe (nom, modifiable_par_etudiant) VALUES (:nom, :modifiable_par_etudiant)";

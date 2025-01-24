@@ -69,7 +69,7 @@ class VueDashboard extends VueGenerique {
                             <div class="card text-center">
                                 <div class="card-body">
                                     <h5>SAE Manager</h5>
-                                    <a href="projet.php" class="btn btn-outline-dark">Voir le projet</a>
+                                    <a href="projet.php" class="btn btn-primary">Voir le projet</a>
                                 </div>
                             </div>
                         </div>
@@ -77,7 +77,7 @@ class VueDashboard extends VueGenerique {
                             <div class="card text-center">
                                 <div class="card-body">
                                     <h5>Refactoring & Design Pattern</h5>
-                                    <a href="projet.php" class="btn btn-outline-dark">Voir le projet</a>
+                                    <a href="projet.php" class="btn btn-primary">Voir le projet</a>
                                 </div>
                             </div>
                         </div>
@@ -284,7 +284,7 @@ class VueDashboard extends VueGenerique {
         <div class="card text-center">
             <div class="card-body">
                 <h5>Accedez au gestionnaire de ressource</h5>
-                <a href="./index.php?module=gestionnaireRessource&action=exec&menu=enseignant" class="btn btn-outline-primary">Consulter</a>
+                <a href="./index.php?module=sae&action=mes_saes&menu=enseignant" class="btn btn-primary">Consulter</a>
             </div>
         </div>
         <?php
@@ -296,11 +296,11 @@ class VueDashboard extends VueGenerique {
         <ul class="list-group">
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 Dépôt TP1 - Étudiant A
-                <a href="corriger.php" class="btn btn-outline-primary btn-sm">Corriger</a>
+                <a href="corriger.php" class="btn btn-primary btn-sm">Corriger</a>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 User Story - Étudiant B
-                <a href="corriger.php" class="btn btn-outline-primary btn-sm">Corriger</a>
+                <a href="corriger.php" class="btn btn-primary btn-sm">Corriger</a>
             </li>
         </ul>
         <?php
@@ -333,7 +333,7 @@ class VueDashboard extends VueGenerique {
                     <div class="card-body">
                         <h5 class="card-title">Vue d'ensemble sur les groupes</h5>
                         <p class="text-muted">Consultez les informations sur les groupes et les projets associés.</p>
-                        <a href="./index.php?module=groupe&menu=enseignant" class="btn btn-outline-primary">Voir les groupes</a>
+                        <a href="./index.php?module=groupe&menu=enseignant" class="btn btn-primary">Voir les groupes</a>
                     </div>
                 </div>
             </div>
@@ -342,7 +342,7 @@ class VueDashboard extends VueGenerique {
                     <div class="card-body">
                         <h5 class="card-title">Liste des étudiants</h5>
                         <p class="text-muted">Accédez à la liste des étudiants inscrits.</p>
-                        <a href="./index.php?module=liste&action=listeEtudiants&menu=enseignant" class="btn btn-outline-primary">Voir les étudiants</a>
+                        <a href="./index.php?module=liste&action=listeEtudiants&menu=enseignant" class="btn btn-primary">Voir les étudiants</a>
                     </div>
                 </div>
             </div>
@@ -351,7 +351,7 @@ class VueDashboard extends VueGenerique {
                     <div class="card-body">
                         <h5 class="card-title">Liste des enseignants intervenants</h5>
                         <p class="text-muted">Découvrez la liste des enseignants impliqués dans les projets.</p>
-                        <a href="./index.php?module=liste&action=listeEnseignants&menu=enseignant" class="btn btn-outline-primary">Voir les enseignants</a>
+                        <a href="./index.php?module=liste&action=listeEnseignants&menu=enseignant" class="btn btn-primary">Voir les enseignants</a>
                     </div>
                 </div>
             </div>
